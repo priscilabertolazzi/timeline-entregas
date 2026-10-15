@@ -3,9 +3,9 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.68 (rascunho para refinamento) |
+| Versão | 0.68 |
 | Data | 15/10/2026 |
-| Status | Em elaboração |
+| Status | Referência: visão completa do produto. O escopo construído é o do `requisitos-mvp.md`. |
 | Escopo do documento | Regras e requisitos de negócio. Decisões técnicas (arquitetura, API, banco de dados) ficam no Documento Técnico. |
 
 ---
