@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.5 |
+| Versão | 0.6 |
 | Data | 15/10/2026 |
 
 Este arquivo tem duas partes:
@@ -35,7 +35,9 @@ O Contexto e o Estilo são curtos porque apontam para os documentos: assim o Cla
 **Regras de uso**
 
 - **Uma tarefa por sessão.** Abra o Claude Code na pasta do projeto no início de cada tarefa e feche ao terminar. Uma sessão nova começa limpa e relê o `CLAUDE.md`.
-- **Sequência de cada tarefa:** A1 (início de sessão) → prompt da tarefa → prompts de continuação conforme a situação (A2 a A10) → A11 (registro) → A12 (commit). No início de cada etapa, use também o A15 (regra do corte).
+- **Sequência de cada tarefa:** A1 (início de sessão) → prompt da tarefa → prompts de continuação conforme a situação (A2 a A10) → A11 (registro e commit, num único pedido). No início de cada etapa, use também o A15 (regra do corte). Nas tarefas T-08, T-13 e T-15, depois do A11, faça a revisão independente (A13 e A14).
+- **Dois níveis de detalhe** (processo, seção 4.2): nas tarefas de regra (T-04, T-11, T-15 e T-17), o Claude Code apresenta plano e relatório completos; nas demais, em até 10 linhas. O `CLAUDE.md` já instrui isso, então os prompts das tarefas não mudam.
+- **Prompts opcionais:** A6 e A7 só quando houver dúvida; o relatório do fim da tarefa já traz o essencial.
 - **Copie o prompt inteiro** e troque só o que está entre `< >`.
 - **Antes de aprovar o plano**, confira os itens "Confira no plano" da tarefa.
 - **Registro:** os pedidos que se encaixam na seção 13.2 do processo vão para a Parte 2 deste arquivo, com o texto que você realmente enviou.
@@ -122,9 +124,9 @@ OBJETIVO: Conferir os testes antes de você implementar o código.
 RESPOSTA: Uma tabela com os testes falhando: nome do teste, critério ou regra coberto e o cenário em uma frase em português. Diga se a lista é igual à do plano aprovado e, se não for, o que mudou.
 ```
 
-### A6 — Pedir cenários extras (R-02, continuação)
+### A6 — Pedir cenários extras (R-02, continuação, opcional)
 
-Exemplos de cenários: data igual ao limite entre duas etapas, data atual no último dia de uma etapa, aplicação sem versões.
+Use só quando tiver dúvida sobre um cenário. Exemplos de cenários: data igual ao limite entre duas etapas, data atual no último dia de uma etapa, aplicação sem versões.
 
 ```
 OBJETIVO: Confirmar, antes de eu aceitar a tarefa, estes cenários:
@@ -133,7 +135,9 @@ OBJETIVO: Confirmar, antes de eu aceitar a tarefa, estes cenários:
 RESPOSTA: Para cada cenário, o teste existente que o cobre ou uma demonstração. Se algum não estiver coberto, proponha o teste e aguarde minha aprovação.
 ```
 
-### A7 — Relatório de verificação (R-03 a R-05, continuação)
+### A7 — Relatório de verificação (R-03 a R-05, continuação, opcional)
+
+O relatório do fim da tarefa já traz esses itens. Use só se faltar algum.
 
 ```
 OBJETIVO: Saber se a tarefa está tecnicamente pronta.
@@ -168,25 +172,29 @@ OBJETIVO: Decidir sobre <o teste ou o critério> que você indicou como errado. 
 RESPOSTA: Um exemplo concreto mostrando qual regra conflita com qual, e as opções, com o efeito de cada uma no comportamento do sistema.
 ```
 
-### A11 — Registro da sessão (continuação)
+### A11 — Registro e commit (continuação)
+
+Um único pedido no fim da tarefa, depois de conferir o resultado e a mensagem de commit proposta no relatório.
 
 ```
-OBJETIVO: Registrar esta sessão.
-Tempo real: <X h>.
-O que a revisão capturou: <o que eu percebi ao conferir, ou "nada">.
-RESPOSTA: O rascunho da entrada do docs/diario.md, no modelo do próprio diário, com a estimativa sem IA e uma frase de justificativa. Se algum pedido desta sessão se encaixar na seção 13.2 do processo, também o rascunho da entrada na Parte 2 do prompts/prompts-claude-code.md. Marque a tarefa no docs/tarefas.md e proponha a mensagem de commit.
+OBJETIVO: Concluir a tarefa. Tempo real: <X h>. O que a revisão capturou: <o que eu percebi ao conferir, ou "nada">. A mensagem de commit que você propôs está aprovada.
+RESPOSTA: Registre a sessão no docs/diario.md, com a estimativa sem IA e uma frase de justificativa; se algum pedido desta sessão se encaixar na seção 13.2 do processo, registre-o na Parte 2 do prompts/prompts-claude-code.md; marque a tarefa no docs/tarefas.md. Depois, faça o commit, integre o branch ao main e envie ao GitHub. Responda em até cinco linhas, com a lista dos arquivos alterados.
 ```
 
-### A12 — Confirmar o commit (continuação)
+Na última tarefa de uma etapa sem revisão independente (T-10, T-14, T-16 e T-19), acrescente ao fim da RESPOSTA: `Por fim, crie a tag <v0.X.0> e envie ao GitHub.`
+
+### A12 — Ajustar a mensagem de commit (continuação, se necessário)
+
+Use antes do A11, só se a mensagem proposta não estiver boa.
 
 ```
-OBJETIVO: Concluir a tarefa com a mensagem de commit aprovada.
-RESPOSTA: Faça o commit, integre o branch ao main e envie ao GitHub. Depois, me diga como conferir no GitHub.
+OBJETIVO: Ajustar a mensagem de commit: <o que mudar>.
+RESPOSTA: A nova mensagem, sem fazer o commit.
 ```
 
 ### A13 — Revisão independente (nova sessão)
 
-Na última tarefa de cada etapa, antes da tag. Feche a sessão da tarefa, abra uma nova na pasta do projeto e envie:
+Só nas tarefas T-08, T-13 e T-15, depois do A11 e antes da tag, e na T-22, antes da release. Feche a sessão da tarefa, abra uma nova na pasta do projeto e envie:
 
 ```
 CONTEXTO: Projeto Timeline de Entregas, fim da etapa <N — nome> do docs/tarefas.md. Você não participou da implementação: esta é uma revisão independente.
@@ -204,14 +212,14 @@ De volta à sessão da tarefa:
 ```
 OBJETIVO: Tratar os problemas apontados pela revisão independente desta etapa:
 <cole a lista>
-RESPOSTA: Para cada problema, uma explicação em linguagem simples e a indicação de corrigir agora ou deixar como melhoria; depois, o plano de correção. Nenhum teste existente pode ser alterado sem minha aprovação.
+RESPOSTA: Para cada problema, uma explicação em linguagem simples e a indicação de corrigir agora ou deixar como melhoria; depois, o plano de correção e a mensagem de commit das correções. Nenhum teste existente pode ser alterado sem minha aprovação.
 ```
 
 Depois das correções:
 
 ```
-OBJETIVO: Marcar o fim da etapa.
-RESPOSTA: Crie a tag <v0.X.0> e envie ao GitHub.
+OBJETIVO: Marcar o fim da etapa. A mensagem de commit das correções está aprovada.
+RESPOSTA: Acrescente à entrada desta tarefa no docs/diario.md, no campo "O que a revisão humana capturou", o que a revisão independente encontrou. Depois, faça o commit, integre ao main, crie a tag <v0.X.0> e envie ao GitHub. Responda em até cinco linhas.
 ```
 
 ### A15 — Início de etapa (regra do corte)
@@ -445,7 +453,7 @@ Antes do plano, descreva cada tela em palavras (campos, botões e mensagens) par
 
 **Confira no plano:** a descrição das telas corresponde ao que você usaria no dia a dia; os nomes dos campos são os do glossário (ex.: "Início do andamento", "Fim da prorrogação").
 
-Depois: A13, A14 e a tag `v0.2.0`.
+No A11, inclua a tag `v0.2.0`. Esta etapa não tem revisão independente.
 
 ## Etapa 3 — API da timeline (T-11 a T-13)
 
@@ -547,7 +555,7 @@ OBJETIVO: Corrigir a parte <N>: eu vejo <o que aparece> e esperava <o que deveri
 RESPOSTA: A causa em linguagem simples e a correção, sem seguir para a próxima parte antes da minha conferência.
 ```
 
-Depois: A13, A14 e a tag `v0.4.0`.
+No A11, inclua a tag `v0.4.0`. Esta etapa não tem revisão independente.
 
 ### T-15 — API da tabela de status das aplicações (TDD)
 
@@ -576,7 +584,7 @@ AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pe
 RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
 ```
 
-Depois: A13, A14 e a tag `v0.6.0`.
+No A11, inclua a tag `v0.6.0`. Esta etapa não tem revisão independente.
 
 ## Etapa 7 — Congelamento (T-17 a T-19)
 
@@ -625,7 +633,7 @@ AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pe
 RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
 ```
 
-Depois: A13, A14 e a tag `v0.7.0`.
+No A11, inclua a tag `v0.7.0`. Esta etapa não tem revisão independente.
 
 ## Entrega (T-20 a T-22) e incremento
 
@@ -1002,3 +1010,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.3 | 15/10/2026 | Roteiro reescrito no modelo CO-STAR explícito; registro dos pedidos P-15 a P-17. |
 | 0.4 | 15/10/2026 | Verificações das APIs pela página de documentação no navegador, sem VS Code (T-06, T-08, T-20 e A8). |
 | 0.5 | 15/10/2026 | Registro dos pedidos P-18 e P-19 (T-03). |
+| 0.6 | 15/10/2026 | Processo mais leve (`processo-desenvolvimento.md` versão 0.9): registro e commit num único pedido (A11), ajuste da mensagem de commit só quando necessário (A12), A6 e A7 opcionais, dois níveis de detalhe nas regras de uso e revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (A13, A14 e tarefas T-10, T-14, T-16 e T-19). |

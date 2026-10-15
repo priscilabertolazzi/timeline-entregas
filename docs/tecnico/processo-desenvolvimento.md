@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.8 |
+| Versão | 0.9 |
 | Data | 15/10/2026 |
 | Ferramenta principal | Claude Code |
 
@@ -44,7 +44,7 @@ Os termos técnicos usados aqui estão explicados na seção 15.
 | Build, testes, lint e revisão técnica | Roda pessoalmente os comandos da "Sua verificação" | Roda tudo e relata o resultado |
 | Verificação pelo comportamento | Faz, pelos critérios de aceite | Mostra como conferir, com o comando exato para o PowerShell e o resultado esperado |
 | Comandos do Git (branch, commit, merge, envio ao GitHub) | Confirma a mensagem de commit e o envio | Propõe e executa depois da confirmação |
-| Diário e registro de prompts | Completa e revisa | Rascunha ao fim de cada sessão (seção 13) |
+| Diário e registro de prompts | Informa o tempo real e o que a revisão capturou; revisa depois e ajusta, se quiser | Registra ao fim de cada tarefa (seção 13) |
 
 ---
 
@@ -78,25 +78,23 @@ flowchart LR
     D --> E[Autoverificação<br/>build, testes, lint<br/>e revisão técnica]
     E --> F[Verificação da autora<br/>Sua verificação<br/>e R-01 a R-05]
     F -- ajustes --> D
-    F -- ok --> G[Registro no diário<br/>e no tarefas.md]
-    G --> H[Commit e merge no main<br/>após confirmação]
+    F -- ok --> G[Registro, commit e merge<br/>num único pedido da autora]
 ```
 
 1. **Pedido:** a autora indica a tarefa do `tarefas.md`, pelo modelo da seção 6.
 2. **Leitura:** o assistente lê a tarefa e as regras e critérios de aceite citados nela.
-3. **Plano:** o assistente apresenta o plano no formato da seção 4.1, sem alterar nenhum arquivo.
+3. **Plano:** o assistente apresenta o plano no formato da seção 4.1, completo ou resumido conforme o nível da tarefa (seção 4.2), sem alterar nenhum arquivo.
 4. **Aprovação:** a autora confere o plano (seção 4.1) e aprova ou pede correções.
 5. **Branch:** o assistente cria o branch da tarefa (ex.: `feat/calculo-timeline`).
 6. **Implementação:** em passos pequenos. Nas tarefas marcadas como TDD, os testes vêm primeiro (seção 8).
 7. **Autoverificação:** o assistente roda o build, os testes e o lint, e faz a revisão técnica (R-03 e R-04 da seção 7.2). Depois relata o que verificou e o que não conseguiu verificar.
-8. **Demonstração:** o assistente mostra à autora como conferir o resultado, conforme a "Sua verificação" da tarefa, com o comando exato e o resultado esperado.
-9. **Verificação da autora:** a autora executa a "Sua verificação" e aplica o checklist R-01 a R-05 (seção 7.2). Se algo não bate, ela relata no modelo da seção 9.2, e o ciclo volta ao passo 6.
-10. **Registro:** o assistente rascunha a entrada do diário e, se o pedido for relevante, a do registro de prompts. A autora completa os campos que são dela (seção 13). O assistente marca a tarefa no `tarefas.md`.
-11. **Integração:** o assistente propõe a mensagem de commit (seção 10). Depois da confirmação da autora, faz o commit, integra o branch ao `main` e envia ao GitHub. Como o registro vem antes do commit, o diário e o `tarefas.md` entram no mesmo commit da tarefa.
+8. **Demonstração:** o assistente mostra à autora como conferir o resultado, conforme a "Sua verificação" da tarefa, com o comando exato e o resultado esperado, e propõe a mensagem de commit (seção 10).
+9. **Verificação da autora:** a autora executa a "Sua verificação" e aplica o checklist R-01 a R-05 (seção 7.2). Quando a verificação só repete comandos que o assistente já rodou e relatou, ela pode aceitar o relatório. Se algo não bate, ela relata no modelo da seção 9.2, e o ciclo volta ao passo 6.
+10. **Registro e integração:** num único pedido, a autora informa o tempo real e o que a revisão capturou e aprova a mensagem de commit. O assistente registra a entrada do diário e, se o pedido for relevante, a do registro de prompts (seção 13); marca a tarefa no `tarefas.md`; faz o commit, integra o branch ao `main` e envia ao GitHub. O diário e o `tarefas.md` entram no mesmo commit da tarefa; um ajuste posterior da autora no diário entra no commit seguinte.
 
 ### 4.1 O plano: o que contém e o que a autora confere
 
-O plano é escrito para a autora: em linguagem simples, com os dados fictícios dos critérios de aceite.
+O plano é escrito para a autora: em linguagem simples, com os dados fictícios dos critérios de aceite. Nas tarefas de regra, ele traz todas as partes abaixo em detalhe; nas demais, as mesmas partes, resumidas em até 10 linhas (seção 4.2).
 
 | Parte do plano | Conteúdo | Exemplo (T-11, cálculo da timeline) |
 |---|---|---|
@@ -114,6 +112,19 @@ O plano é escrito para a autora: em linguagem simples, com os dados fictícios 
 - Há alguma pergunta de negócio que eu preciso responder antes?
 - Entendi o plano? Se não, peço que o assistente explique de outro jeito antes de aprovar.
 
+### 4.2 Dois níveis de detalhe
+
+O limite do projeto é de cerca de 30 horas, e cada resposta longa do assistente consome tempo e uso do modelo. Por isso, o rigor completo fica nas tarefas em que um erro vira um teste errado: as **tarefas de regra**, marcadas como TDD no `tarefas.md`.
+
+| Item | Tarefas de regra (T-04, T-11, T-15 e T-17) | Demais tarefas |
+|---|---|---|
+| Plano | Completo, no formato da seção 4.1 | As mesmas partes, em até 10 linhas |
+| Conferência dos testes antes do código | Sim (seção 8) | Não se aplica |
+| Relatório final (passos 7 e 8) | Completo, com a lista dos testes e o critério de cada um | Em até 10 linhas |
+| Registro e commit | Num único pedido (passo 10) | Num único pedido (passo 10) |
+
+Em todas as tarefas, as respostas são curtas e não repetem o conteúdo dos documentos. Os pedidos de cenários extras e de relatório de verificação separado (A6 e A7 do roteiro de prompts) são opcionais, para quando a autora tiver dúvida.
+
 ---
 
 ## 5. Definição de pronto
@@ -124,7 +135,7 @@ Uma tarefa está pronta quando:
 - [ ] Todos os testes passam, incluindo testes novos para as regras e critérios da tarefa.
 - [ ] Nenhum teste existente foi alterado ou removido sem aprovação explícita da autora.
 - [ ] O lint não tem apontamentos.
-- [ ] A autora executou a "Sua verificação" da tarefa e aplicou o checklist R-01 a R-05 (seção 7.2).
+- [ ] A autora executou a "Sua verificação" da tarefa, ou aceitou o relatório quando a verificação só repetia comandos já rodados pelo assistente, e aplicou o checklist R-01 a R-05 (seção 7.2).
 - [ ] O README foi atualizado, se a tarefa mudou instalação, execução, uso ou testes.
 - [ ] O `tarefas.md` foi marcado.
 - [ ] A entrada do diário foi registrada e, se o pedido foi relevante, também a do registro de prompts.
@@ -200,7 +211,7 @@ Aplicado em toda tarefa, antes do commit.
 
 Como a autora não lê o código, uma segunda revisão técnica é feita por uma **nova sessão do Claude Code**, aberta só para isso. Essa sessão não participou da implementação, então não traz as suposições de quem escreveu o código. É como pedir a um colega que revise o trabalho de outro.
 
-- **Quando:** na última tarefa de cada degrau do `tarefas.md`, antes da tag, e na T-22, antes da release `v1.0.0`.
+- **Quando:** no fim das etapas de API, depois do commit e antes da tag: T-08 (etapa 1), T-13 (etapa 3) e T-15 (etapa 5). E na T-22, antes da release `v1.0.0`, sobre o código inteiro. As etapas de telas e de congelamento não têm revisão própria: as regras ficam nas APIs, e a revisão da T-22 cobre todo o código. Assim, são quatro revisões no lugar de oito.
 - **Como:** a autora abre uma nova sessão do Claude Code na pasta do projeto e envia o pedido abaixo.
 
 ```
@@ -212,7 +223,7 @@ indicando o arquivo, a regra ou convenção não seguida e a correção sugerida
 ```
 
 - **Depois:** a autora leva a lista para a sessão da tarefa. O assistente explica cada problema e corrige, seguindo as regras de sempre: testes não são alterados sem aprovação, e a refatoração começa pela análise de impacto. O que a revisão encontrou vai para o diário, no campo "O que a revisão humana capturou", indicando que veio da revisão independente.
-- **Tempo:** cerca de 20 minutos por degrau, dentro da margem das estimativas.
+- **Tempo:** cerca de 20 minutos por revisão, dentro da margem das estimativas.
 
 ---
 
@@ -325,7 +336,7 @@ Refs: RN-14, RN-25, CA-02, CA-07
 | Risco | Mitigação no projeto |
 |---|---|
 | Código plausível, porém incorreto; bibliotecas ou métodos inexistentes | Build e testes obrigatórios antes de concluir. Testes derivados dos critérios de aceite. Verificação da autora pelo comportamento (R-02). |
-| A autora não lê o código, e um problema técnico pode passar sem ser notado | Testes como contrato, lint, restrições do banco (`arquitetura.md`, seção 6), autoverificação do assistente (R-03 e R-04) e revisão independente ao final de cada fase (seção 7.3). Essa limitação é relatada com transparência na seção sobre uso de IA do README. |
+| A autora não lê o código, e um problema técnico pode passar sem ser notado | Testes como contrato, lint, restrições do banco (`arquitetura.md`, seção 6), autoverificação do assistente (R-03 e R-04) e revisão independente no fim das etapas de API e antes da entrega (seção 7.3). Essa limitação é relatada com transparência na seção sobre uso de IA do README. |
 | Versões de dependências inexistentes ou desatualizadas | Dependências adicionadas apenas pelas ferramentas oficiais (ADR-09) e com aprovação da autora. O assistente explica para que serve cada uma e confirma que é gratuita. |
 | Vazamento de código ou dados sensíveis | Nenhum código, documento ou dado de terceiros no projeto. Dados de exemplo fictícios. Segredos fora do repositório. Conferência da autora no R-03 e no item C-11 do checklist de release. |
 | Código fora dos padrões de qualidade | Convenções explícitas nos `CLAUDE.md`, lint, revisão R-04, tarefa de refatoração (T-13) e revisão independente. |
@@ -448,3 +459,4 @@ Executado na T-22, antes da publicação da versão final (`v1.0.0`). O assisten
 | 0.6 | 15/10/2026 | Pedidos no modelo CO-STAR explícito, com os seis elementos em cada pedido de tarefa e só Objetivo e Resposta nos pedidos de continuação (seções 3 e 6). |
 | 0.7 | 15/10/2026 | Verificações das APIs pela página de documentação da API, no navegador, no lugar do arquivo de exemplos no VS Code (seções 9.2 e 15). |
 | 0.8 | 15/10/2026 | Seção 10: a regra das mensagens de commit diz que a descrição usa o verbo no infinitivo (ex.: calcular, iniciar, corrigir), como nos exemplos; antes dizia "no imperativo". O `CLAUDE.md` da raiz recebeu o mesmo ajuste. |
+| 0.9 | 15/10/2026 | Processo mais leve, para caber no limite de horas: dois níveis de detalhe, com plano e relatório completos só nas tarefas de regra (T-04, T-11, T-15 e T-17) e resumidos nas demais (seções 4.1 e 4.2); registro e commit num único pedido da autora (seções 2.2 e 4); a autora pode aceitar o relatório quando a "Sua verificação" só repete comandos já rodados (seções 4 e 5); revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (seções 7.3 e 11). O `CLAUDE.md` da raiz recebeu os mesmos ajustes. |
