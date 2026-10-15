@@ -293,7 +293,7 @@ A "Prorrogação da homologação" (vermelho claro) é cor da timeline (RN-06) e
 | RF-17 | O usuário pode visualizar o status report congelado de qualquer semana, em modo somente leitura. | RN-29, RN-30 |
 | RF-21 | Ao salvar a versão com sucesso, o sistema volta para a lista de aplicações, com o aviso "Alterações salvas.". Se o salvamento for recusado, o usuário permanece na tela da versão, com as mensagens. | RN-10, CA-45 |
 | RF-22 | A lista de aplicações e a tela da versão mostram a fase e a situação em etiquetas coloridas. | RN-36, CA-47 |
-| RF-23 | A barra de título mostra o nome "Timeline de Entregas (MVP)" e a versão do sistema (a tag da última entrega, ex.: v0.2.0). | CA-48 |
+| RF-23 | A barra de título mostra o nome "Timeline de Entregas (MVP)" e a versão do sistema (a tag da entrega, ex.: v1.0.0). | CA-48 |
 | RF-24 | A lista de aplicações mostra a data de entrega de cada versão em dd/mm/aaaa e, quando a versão não tem datas, "TBD". | RN-13, CA-49 |
 
 ---
@@ -567,9 +567,9 @@ Os cenários abaixo usam dados fictícios. Datas não citadas em um cenário est
 - **E** a v1 da Beta mostra "Desenvolvimento" em azul claro e "Risco" em laranja claro (cores da RN-36).
 
 **CA-48: Título e versão do sistema na tela**
-- **Dado** que a última entrega do sistema tem a tag v0.2.0
+- **Dado** que a entrega do sistema tem a tag v1.0.0
 - **Quando** o usuário abre qualquer tela
-- **Então** a barra de título mostra "Timeline de Entregas (MVP)" e "v0.2.0".
+- **Então** a barra de título mostra "Timeline de Entregas (MVP)" e "v1.0.0".
 
 **CA-49: Data de entrega na lista de aplicações**
 - **Dado** que a versão v1 da aplicação Alfa tem data de entrega em 23/10/2026 e a versão v2 está em Backlog, sem datas
