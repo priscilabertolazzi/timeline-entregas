@@ -1,4 +1,5 @@
 using Timeline.Api;
+using Timeline.Application.Exemplo;
 using Timeline.Infrastructure;
 using TimelineEntregas.Host;
 
@@ -13,6 +14,8 @@ if (builder.Configuration["ASPNETCORE_URLS"] is null && builder.Configuration["U
 
 builder.Services.AddTimelineInfrastructure(ConexaoBanco.Montar(builder.Configuration));
 builder.Services.AddHostedService<MigracoesNaInicializacao>();
+builder.Services.AddScoped<CarregarDadosDeExemplo>();
+builder.Services.AddHostedService<CargaDeExemploNaInicializacao>();
 builder.Services.AddTimelineApi();
 
 var app = builder.Build();

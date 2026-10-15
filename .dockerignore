@@ -1,0 +1,10 @@
+# Fora da imagem: compilações locais, segredos e arquivos que não fazem parte da API.
+**/bin
+**/obj
+.git
+.env
+frontend
+docs
+tmp
+prompts
+http

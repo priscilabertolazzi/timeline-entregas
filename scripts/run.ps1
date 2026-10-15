@@ -1,5 +1,5 @@
-﻿# Execução: sobe o banco pelo Docker Compose e informa o endereço.
-# A API e as telas entram nas tarefas T-08 e T-09.
+﻿# Execução: sobe banco e API pelo Docker Compose e informa os endereços.
+# As telas entram na tarefa T-09.
 # Uso: powershell -ExecutionPolicy Bypass -File scripts\run.ps1
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path -Parent $PSScriptRoot)
@@ -9,17 +9,23 @@ if (-not (Test-Path .env)) {
     exit 1
 }
 
-docker compose up -d --wait db
+docker compose up -d --build --wait db api
 if ($LASTEXITCODE -ne 0) {
-    Write-Host 'Não consegui subir o banco. Se a mensagem acima diz que a porta não está disponível, outro programa já usa a porta do banco.' -ForegroundColor Yellow
-    Write-Host 'Troque o valor de DB_PORT no arquivo .env (por exemplo, para 5433) e rode este script de novo.' -ForegroundColor Yellow
+    Write-Host 'Não consegui subir o sistema. Se a mensagem acima diz que uma porta não está disponível, outro programa já usa essa porta.' -ForegroundColor Yellow
+    Write-Host 'Troque o valor de DB_PORT ou de API_PORT no arquivo .env (por exemplo, para 5433 ou 8081) e rode este script de novo.' -ForegroundColor Yellow
     exit $LASTEXITCODE
 }
 
-# Lê a porta do .env, com o mesmo padrão do docker-compose.yml.
-$porta = '5432'
-$linha = Select-String -Path .env -Pattern '^DB_PORT=(.+)$' | Select-Object -Last 1
-if ($linha) { $porta = $linha.Matches[0].Groups[1].Value.Trim() }
+# Lê as portas do .env, com os mesmos padrões do docker-compose.yml.
+function Ler-Porta($nome, $padrao) {
+    $linha = Select-String -Path .env -Pattern "^$nome=(.+)$" | Select-Object -Last 1
+    if ($linha) { return $linha.Matches[0].Groups[1].Value.Trim() }
+    return $padrao
+}
+$portaDb = Ler-Porta 'DB_PORT' '5432'
+$portaApi = Ler-Porta 'API_PORT' '8080'
 
-Write-Host "Banco de dados pronto em localhost:$porta."
+Write-Host "Banco de dados pronto em localhost:$portaDb."
+Write-Host "API pronta em http://localhost:$portaApi (abre a página de documentação)."
+Write-Host "Lista de aplicações: http://localhost:$portaApi/api/aplicacoes"
 Write-Host 'Para parar: docker compose down (os dados ficam guardados).'

@@ -309,6 +309,32 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 08 — 15/10/2026 — T-08, Docker da API, fuso horário e dados de exemplo
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-08 — Docker da API, fuso horário e dados de exemplo |
+| Regras e critérios | RN-19, CA-23; ADR-25, ADR-30 e ADR-37 |
+| Modelo usado | Claude Sonnet 5.5, no plano e na implementação. No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | Não informado. |
+| Estimativa sem IA | 3 h (proposta do assistente: Dockerfile em duas etapas, serviço no Compose, carga de exemplo com datas relativas, teste de um ano inteiro e atualização dos scripts e do README) |
+
+**O que foi pedido:** Dockerfile e serviço `api` com o fuso pela variável `TZ`, a página de documentação também no Docker, a carga dos dados de exemplo com datas relativas ao dia da carga e um teste que simula a carga em cada dia de um ano. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-24.
+
+**Resultado:** branch `feat/docker-api-dados-exemplo`. `backend/Dockerfile` (duas etapas, com `tzdata`), `.dockerignore`, serviço `api` no `docker-compose.yml`, caso de uso `CarregarDadosDeExemplo` na `Application`, serviço de inicialização no `Host`, `run.ps1` e `run.sh` subindo banco e API. 147 testes passando (6 novos), lint limpo, e a API conferida de verdade no Docker (data com fuso -03, quatro aplicações carregadas).
+
+**Primeira tentativa:** certa. O único tropeço foi de ferramenta (um comando de edição com Python, que não existe no computador), refeito sem afetar o código.
+
+**Lacuna encontrada nos requisitos:** a seção 12.1 da `arquitetura.md` cita as aplicações Alfa, Beta, Gama e Delta, mas não lista versões, fases nem datas. O assistente propôs um quadro e a autora aprovou; o quadro foi registrado na seção 12.1 (`arquitetura.md` 0.16).
+
+**O que a revisão humana capturou:** nada.
+
+**Riscos mitigados:** dados de exemplo que envelhecem (teste de um ano inteiro, incluindo 29/02); data errada entre 21h e meia-noite (fuso pela `TZ` e `tzdata` na imagem); carga duplicada (só carrega com o banco vazio); senha em código (tudo pelo `.env`).
+
+**Aprendizados:** quando um documento remete a "um conjunto" de dados, conferir se ele existe antes de planejar. Revisão independente e tag `v0.1.0` ficam para depois do commit.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -352,3 +378,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.9 | 15/10/2026 | Registrada a Sessão 05 (T-05), com o pedido P-21. |
 | 0.10 | 15/10/2026 | Registrada a Sessão 06 (T-06), com o pedido P-22. |
 | 0.11 | 15/10/2026 | Registrada a Sessão 07 (T-07), com o pedido P-23 e a lacuna da lista de aplicações sem as versões. |
+| 0.12 | 15/10/2026 | Registrada a Sessão 08 (T-08), com o pedido P-24 e a lacuna do conjunto de dados de exemplo. |

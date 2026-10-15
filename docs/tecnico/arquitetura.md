@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.15 |
+| Versão | 0.16 |
 | Data | 15/10/2026 |
 | Status | Em elaboração |
 | Documento base | `docs/negocio/requisitos-mvp.md` (versão 0.6) |
@@ -620,6 +620,18 @@ O `docker-compose.yml` define os serviços abaixo, mais o serviço `ferramentas`
 | `api` | A API. Ao iniciar, aplica as migrations pendentes e, se o banco estiver vazio e a variável de carga estiver ligada, cria dados fictícios de exemplo (aplicações Alfa, Beta, Gama e Delta), com datas calculadas a partir do dia da carga, para que a timeline do semestre atual nunca apareça vazia (ADR-25). |
 | `web` | As telas, servidas por um servidor web, que também repassa as chamadas `/api` para a API. Incluído quando a primeira tela for construída. |
 
+**Dados de exemplo** (carga quando o banco está vazio; datas em dias a partir do dia da carga, D):
+
+| Aplicação | Versão | Fase | Situação | Andamento | Homologação | Entrega |
+|---|---|---|---|---|---|---|
+| Alfa | v0 | Produção | Entregue | D−110 a D−60 | D−59 a D−30 | D−20 |
+| Alfa | v1 | Homologação | On track | D−40 a D−10 | D−9 a D+8 | D+10 |
+| Beta | v1 | Desenvolvimento | Risco | D−15 a D+25 | D+26 a D+40 | D+45 |
+| Gama | v1 | Testes | On track | D−30 a D+5 | D+6 a D+20 | D+25 |
+| Delta | (nenhuma) | | | | | |
+
+A v1 da Alfa sempre atravessa o dia da carga, e a Delta fica sem versões (CA-23). O teste `CarregarDadosDeExemploTests` simula a carga em cada dia de um ano e confere que todas as versões respeitam as regras (ADR-37).
+
 **Desenvolvimento:** o banco roda pelo Docker Compose; a API e o frontend rodam diretamente pelo `dotnet` e pelo `npm`, com recarga automática a cada alteração. O frontend repassa as chamadas `/api` para a API pelo `proxy.conf.json`. No computador da autora, o SDK do .NET está instalado (T-01), e o assistente usa os comandos `dotnet` diretamente.
 
 ### 12.2 Scripts e atalhos
@@ -703,6 +715,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | ADR-34 | A migration é aplicada por um serviço de inicialização do `Host`, e não no `Program.cs`; a conexão é montada com as variáveis `POSTGRES_*`, `DB_PORT` e `DB_HOST`; `criado_em` e as colunas de comparação existem só no banco; as migrations geradas ficam fora da verificação de padrão do lint | O serviço roda só quando a API inicia, e não quando a ferramenta de migrations carrega o programa para criar uma migration. A conexão reaproveita as variáveis do `.env`, sem senha no código. O `Domain` continua sem conhecer o banco. O código gerado pela ferramenta não é reformatado à mão. | Migrate no `Program.cs` (a ferramenta de migrations o executaria); string de conexão única em outra variável (senha repetida no `.env`); `criado_em` na entidade (campo sem regra de negócio no `Domain`). |
 | ADR-35 | Padrão das APIs de cadastro (T-06): uma classe por caso de uso na `Application`, que lança exceções de erro esperado (entrada inválida, não encontrado, conflito) com as mensagens do catálogo; um único tratador de erros na `Api` converte essas exceções, a `RegraNegocioException` e qualquer erro inesperado em Problem Details, com o `title` e a lista `mensagens`; `ThrowOnBadRequest` ligado, para o JSON ilegível devolver a MSG-42; a ordem das listas é feita na `Application`; os casos de uso são registrados pela própria `Api` (a `Application` não depende de pacote de injeção de dependências); a `Api` publica o OpenAPI e a página Scalar; novo projeto de testes `Timeline.Api.Tests`, sem pacote extra, para o tratador de erros; `API_PORT` define a porta, e a API só aceita chamadas do próprio computador | Um só caminho para os erros, com o texto exato do catálogo, que serve de modelo às próximas APIs; erro inesperado nunca mostra detalhes internos (seção 10); a `Application` continua sem pacotes. | Tratar erros em cada endpoint (repetição); erros como valores de retorno (mais código em cada caso de uso); testes de integração com servidor em memória (exigem pacote fora da lista aprovada). |
 | ADR-36 | Padrão das APIs de versões (T-07): datas, fase e situação chegam como texto e são convertidas na `Application`, que devolve a MSG-12, a MSG-26 ou a MSG-10 (se o .NET convertesse, um valor torto daria a MSG-42); fase e situação saem como texto (`Homologacao`, `OnTrack`); a situação enviada igual à atual não conta como alteração, e vazia mantém a atual; observação vazia remove a observação; `/datas` sem corpo é recusado com a MSG-42, para não apagar as datas por engano; a regra que pode falhar roda antes de qualquer alteração; o `TimeProvider` do sistema é registrado pela `Api`, com o fuso do ambiente (`TZ`); a lista de aplicações traz o resumo das versões, e `ListarAplicacoes` usa os dois repositórios | Respostas sempre com as mensagens do catálogo, e a data atual vinda de um relógio injetado, como a seção 5.6 pede; a tela da T-10 recebe a lista já com as versões. | Converter datas e fase pelo próprio .NET (mensagem genérica no lugar da MSG-12 e da MSG-26); um endpoint à parte só para listar versões; deixar a lista com versões para a T-10. |
+| ADR-37 | A carga dos dados de exemplo é um caso de uso da `Application` (`CarregarDadosDeExemplo`), chamado por um serviço de inicialização do `Host` depois das migrations; a imagem da API é construída em duas etapas (SDK e execução) com o pacote `tzdata` e o contexto na raiz do projeto | O caso de uso usa os repositórios e o `TimeProvider`, então o teste roda sem banco, simulando a carga em cada dia de um ano (ADR-25). A imagem final leva só o necessário para executar. | Carga por SQL ou por script (sem testar as regras das datas); imagem única com o SDK (maior). |
 
 ---
 
@@ -737,3 +750,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.13 | 15/10/2026 | Catálogo de mensagens completo aprovado pela autora (seções 7.6 e 14). |
 | 0.14 | 15/10/2026 | T-06: MSG-42 aprovada (7.6, 14); formato do Problem Details com `title` e `mensagens` e respostas padrão do .NET (7.4); projeto `Timeline.Api.Tests` (4, 11); ADR-35. O cabeçalho do documento foi corrigido para a versão do histórico. |
 | 0.15 | 15/10/2026 | T-07: lista de aplicações com o resumo das versões (7.2); ADR-36. |
+| 0.16 | 15/10/2026 | T-08: conjunto dos dados de exemplo (12.1); imagem Docker da API e serviço `api` (12.1); ADR-37. |

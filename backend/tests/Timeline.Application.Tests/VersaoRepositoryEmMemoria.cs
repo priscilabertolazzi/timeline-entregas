@@ -13,6 +13,13 @@ internal sealed class VersaoRepositoryEmMemoria : IVersaoRepository
     private readonly List<Versao> _versoes = [];
     private long _ultimoId;
 
+    /// <summary>Apaga tudo e recomeça os identificadores.</summary>
+    public void Limpar()
+    {
+        _versoes.Clear();
+        _ultimoId = 0;
+    }
+
     /// <summary>Versões gravadas, na ordem de cadastro.</summary>
     public IReadOnlyList<Versao> Gravadas => _versoes;
 

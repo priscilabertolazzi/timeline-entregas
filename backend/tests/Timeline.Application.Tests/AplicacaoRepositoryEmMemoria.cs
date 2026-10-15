@@ -13,6 +13,13 @@ internal sealed class AplicacaoRepositoryEmMemoria : IAplicacaoRepository
     private readonly List<Aplicacao> _aplicacoes = [];
     private long _ultimoId;
 
+    /// <summary>Apaga tudo e recomeça os identificadores.</summary>
+    public void Limpar()
+    {
+        _aplicacoes.Clear();
+        _ultimoId = 0;
+    }
+
     /// <summary>Quando ligado, simula dois cadastros simultâneos: a checagem prévia não vê o nome, mas o banco recusa.</summary>
     public bool BancoRecusaDuplicidadeNaGravacao { get; set; }
 
