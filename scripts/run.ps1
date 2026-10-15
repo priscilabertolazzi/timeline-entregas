@@ -1,5 +1,4 @@
 ﻿# Execução: sobe banco e API pelo Docker Compose e informa os endereços.
-# As telas entram na tarefa T-09.
 # Uso: powershell -ExecutionPolicy Bypass -File scripts\run.ps1
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path -Parent $PSScriptRoot)
@@ -9,10 +8,10 @@ if (-not (Test-Path .env)) {
     exit 1
 }
 
-docker compose up -d --build --wait db api
+docker compose up -d --build --wait db api web
 if ($LASTEXITCODE -ne 0) {
     Write-Host 'Não consegui subir o sistema. Se a mensagem acima diz que uma porta não está disponível, outro programa já usa essa porta.' -ForegroundColor Yellow
-    Write-Host 'Troque o valor de DB_PORT ou de API_PORT no arquivo .env (por exemplo, para 5433 ou 8081) e rode este script de novo.' -ForegroundColor Yellow
+    Write-Host 'Troque o valor de DB_PORT, de API_PORT ou de WEB_PORT no arquivo .env (por exemplo, para 5433, 8081 ou 4201) e rode este script de novo.' -ForegroundColor Yellow
     exit $LASTEXITCODE
 }
 
@@ -24,8 +23,10 @@ function Ler-Porta($nome, $padrao) {
 }
 $portaDb = Ler-Porta 'DB_PORT' '5432'
 $portaApi = Ler-Porta 'API_PORT' '8080'
+$portaWeb = Ler-Porta 'WEB_PORT' '4200'
 
 Write-Host "Banco de dados pronto em localhost:$portaDb."
 Write-Host "API pronta em http://localhost:$portaApi (abre a página de documentação)."
 Write-Host "Lista de aplicações: http://localhost:$portaApi/api/aplicacoes"
+Write-Host "Telas prontas em http://localhost:$portaWeb."
 Write-Host 'Para parar: docker compose down (os dados ficam guardados).'

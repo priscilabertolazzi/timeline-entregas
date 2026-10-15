@@ -1093,6 +1093,26 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** "exatamente como no conjunto da seção 12.1" apontava para um conjunto que não existia; a regra de parar e perguntar diante de lacunas evitou dados inventados sem aprovação. O teste de um ano inteiro garante que a carga nunca quebra por causa da data.
 
+### P-25 — 15/10/2026 — T-09
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, etapa 2 (telas de cadastro). Tarefa T-09 do docs/tarefas.md: Projeto Angular.
+> Referências: arquitetura.md, seções 8 e 12; frontend/CLAUDE.md.
+> Pontos de atenção:
+> - Dependências só as da seção 12.3 (Angular, Angular Material, angular-eslint), pelo npm, sem escrever versões.
+> - Repasse de /api pelo proxy.conf.json em desenvolvimento e pelo servidor das telas no Docker (ADR-21).
+> OBJETIVO: Criar o projeto Angular com Angular Material, locale pt-BR, tema com as cores dos grupos visuais, testes e lint; incluir o serviço web no docker-compose.yml; e fazer os scripts test e lint incluírem o frontend, em container.
+> ESTILO: Siga as convenções do CLAUDE.md e do frontend/CLAUDE.md, com os termos do glossário nas telas e as mensagens exibidas exatamente como vêm da API.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
+
+**Resultado:** o assistente fez a conta da regra do corte (A15) antes do plano: 5,6 h a 15 h contra 26 h, cabe. O plano trouxe duas decisões técnicas (Node.js no container de ferramentas e nginx para servir as telas), aprovadas e registradas como ADR-38. Implementou, rodou tudo em container e conferiu telas e API no Docker e no `npm start`.
+
+**Funcionou de primeira?** Quase: um teste novo precisou de correção, e o gerador trouxe o `prettier`, fora da lista aprovada, que foi retirado (ver Sessão 09 do diário).
+
+**Por que é relevante:** "dependências só as da seção 12.3" fez o assistente conferir o que o gerador instalou e explicar cada pacote extra, em vez de aceitá-los em silêncio.
+
 ---
 
 ## Histórico do documento
@@ -1110,3 +1130,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.9 | 15/10/2026 | Registro do pedido P-22 (T-06). |
 | 0.10 | 15/10/2026 | Registro do pedido P-23 (T-07). |
 | 0.11 | 15/10/2026 | Registro do pedido P-24 (T-08). |
+| 0.12 | 15/10/2026 | Registro do pedido P-25 (T-09). |

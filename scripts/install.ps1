@@ -1,4 +1,4 @@
-﻿# Instalação: cria o .env (se não existir) e baixa as imagens e os pacotes do backend.
+﻿# Instalação: cria o .env (se não existir) e baixa as imagens e os pacotes do backend e do frontend.
 # Uso: powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 $ErrorActionPreference = 'Stop'
 Set-Location (Split-Path -Parent $PSScriptRoot)
@@ -21,6 +21,10 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host 'Baixando os pacotes do backend...'
 docker compose run --rm -T ferramentas restore
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Write-Host 'Baixando os pacotes do frontend...'
+docker compose run --rm -T ferramentas-web restore
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 Write-Host 'Instalação concluída.'

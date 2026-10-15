@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.17 |
+| Versão | 0.19 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -164,7 +164,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 ## Etapa 2 — Telas de cadastro
 
-### [ ] T-09 — Projeto Angular (1 h)
+### [x] T-09 — Projeto Angular (1 h)
 - Workspace Angular com Angular Material, locale `pt-BR`, tema com as cores dos grupos visuais, testes e lint.
 - Repasse de `/api` para a API em desenvolvimento (`proxy.conf.json`) e serviço `web` no `docker-compose.yml`, com o servidor das telas repassando `/api` (`arquitetura.md`, seções 8 e 12).
 - Scripts `test` e `lint` incluindo o frontend; README atualizado.
@@ -318,3 +318,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.16 | 15/10/2026 | T-06 marcada como concluída. |
 | 0.17 | 15/10/2026 | T-07 marcada como concluída; a lista de aplicações passou a trazer as versões. |
 | 0.18 | 15/10/2026 | T-08 marcada como concluída (a tag `v0.1.0` fica para depois da revisão independente). |
+| 0.19 | 15/10/2026 | T-09 marcada como concluída. |

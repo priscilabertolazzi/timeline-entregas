@@ -1,5 +1,5 @@
 #!/bin/sh
-# Instalação: cria o .env (se não existir) e baixa as imagens e os pacotes do backend.
+# Instalação: cria o .env (se não existir) e baixa as imagens e os pacotes do backend e do frontend.
 set -eu
 cd "$(dirname "$0")/.."
 
@@ -20,5 +20,8 @@ docker compose --profile ferramentas pull
 
 echo "Baixando os pacotes do backend..."
 docker compose run --rm -T ferramentas restore
+
+echo "Baixando os pacotes do frontend..."
+docker compose run --rm -T ferramentas-web restore
 
 echo "Instalação concluída."

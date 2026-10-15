@@ -335,6 +335,37 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 09 — 15/10/2026 — T-09, Projeto Angular
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-09 — Projeto Angular |
+| Regras e critérios | Nenhuma RN ou CA; `arquitetura.md`, seções 8 e 12, ADR-21, ADR-24 e ADR-38 |
+| Modelo usado | Claude Sonnet 5.5, no plano e na implementação. No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | Não medido por inteiro; a verificação da autora levou 10 min. |
+| Estimativa sem IA | 2 h (proposta do assistente: um desenvolvedor experiente criaria o projeto, configuraria tema, idioma e repasse da API, escreveria o Dockerfile e o servidor web, e adaptaria os quatro scripts para rodar o frontend em container) |
+
+**O que foi pedido:** criar o projeto Angular com Angular Material, idioma pt-BR, tema com as cores dos grupos visuais, testes e lint; incluir o serviço `web` no `docker-compose.yml`; fazer `test` e `lint` incluírem o frontend, em container. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-25.
+
+**Resultado:** branch `feat/projeto-angular`. Projeto em `frontend/` com a lista de aplicações como página inicial, tema das cinco cores (forte e claro) em `src/tema.scss`, `proxy.conf.json` para o desenvolvimento, `Dockerfile` (Node.js e nginx) e serviço `web`; serviço `ferramentas-web` para testes e lint do frontend em container. 3 testes do frontend e 147 do backend passando, lint limpo, `npm audit` sem vulnerabilidades. Conferido de verdade: telas e `/api` pelo nginx no Docker e pelo `npm start`. `arquitetura.md` na versão 0.17 (ADR-38).
+
+**Primeira tentativa:** precisou de ajustes, descritos abaixo.
+
+**Ajustes necessários e por quê:**
+
+- Um dos 3 testes novos falhou na primeira rodada: o teste não abria a página inicial antes de esperar a chamada à API. Corrigido no próprio teste novo.
+- O gerador do Angular incluiu o `prettier`, que não está na lista da seção 12.3; foi retirado. Os pacotes que acompanham as ferramentas aprovadas (`eslint`, `typescript-eslint`, o executor de testes e o `@angular/cdk`) ficaram.
+- Uma instalação foi feita por engano na raiz do projeto; os arquivos foram apagados antes de qualquer commit.
+- A porta 4300 estava ocupada por outro programa do computador da autora; o teste do servidor de desenvolvimento usou outra porta, sem mexer no programa.
+
+**O que a revisão humana capturou:** nada. A autora conferiu a página inicial com Alfa, Beta, Gama e Delta.
+
+**Riscos mitigados:** dependência fora da lista (`prettier` retirado, extras explicados à autora); versões de pacotes escritas pelo `npm`, não de memória; instalação limpa garantida por `npm ci` em container; telas e API na mesma origem, sem CORS; nenhum teste existente alterado.
+
+**Aprendizados:** conferir o que o gerador de projeto traz de dependências além da lista aprovada. Antes de usar uma porta para teste, ver se ela está livre. Rodar comandos sempre a partir da pasta certa evita instalações no lugar errado.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -379,3 +410,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.10 | 15/10/2026 | Registrada a Sessão 06 (T-06), com o pedido P-22. |
 | 0.11 | 15/10/2026 | Registrada a Sessão 07 (T-07), com o pedido P-23 e a lacuna da lista de aplicações sem as versões. |
 | 0.12 | 15/10/2026 | Registrada a Sessão 08 (T-08), com o pedido P-24 e a lacuna do conjunto de dados de exemplo. |
+| 0.13 | 15/10/2026 | Registrada a Sessão 09 (T-09), com o pedido P-25. |

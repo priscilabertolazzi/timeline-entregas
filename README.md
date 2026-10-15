@@ -45,7 +45,7 @@ O Docker precisa estar **aberto e funcionando** antes dos comandos abaixo.
 
 > **Limitação conhecida:** o Docker Desktop é gratuito para uso pessoal e em empresas pequenas, mas exige assinatura em empresas de maior porte. Há alternativas gratuitas, como o Docker Engine no WSL 2.
 
-Só para **desenvolver** (alterar o código), instale também o SDK do .NET 10 (dotnet.microsoft.com) e, a partir da etapa das telas, o Node.js em versão LTS (nodejs.org). Os scripts de teste e de lint **não** exigem o SDK instalado.
+Só para **desenvolver** (alterar o código), instale também o SDK do .NET 10 (dotnet.microsoft.com) e o Node.js em versão LTS (nodejs.org). Os scripts de teste e de lint **não** exigem o SDK nem o Node.js instalados.
 
 ## 6. Dependências e ambiente
 
@@ -71,9 +71,9 @@ cd timeline-entregas
 
 Em Linux e macOS, sem o `make`, use `sh scripts/install.sh`, `sh scripts/run.sh`, `sh scripts/test.sh` e `sh scripts/lint.sh`. No Windows, os arquivos `.sh` também rodam pelo Git Bash.
 
-- **Instalar** cria o arquivo `.env` a partir do `.env.example` (se ele ainda não existir) e baixa as imagens do Docker e os pacotes do backend. A primeira vez leva alguns minutos e precisa de internet.
-- **Executar** sobe o banco de dados (PostgreSQL) e a API, e informa os endereços. A API abre em `http://localhost:8080` (página de documentação) e, com o banco vazio, já vem com as aplicações de exemplo Alfa, Beta, Gama e Delta (veja `http://localhost:8080/api/aplicacoes`). O fuso horário da API vem da variável `TZ` do `.env` (padrão `America/Sao_Paulo`); `SEED_DADOS_EXEMPLO=false` desliga os dados de exemplo. As telas entram nas próximas tarefas. Para parar: `docker compose down` (os dados ficam guardados).
-- Se o **Executar** avisar que a porta não está disponível, outro programa (por exemplo, um PostgreSQL já instalado) usa a porta 5432. Troque o valor de `DB_PORT` no arquivo `.env` (por exemplo, para `5433`) e rode de novo.
+- **Instalar** cria o arquivo `.env` a partir do `.env.example` (se ele ainda não existir) e baixa as imagens do Docker e os pacotes do backend e do frontend. A primeira vez leva alguns minutos e precisa de internet.
+- **Executar** sobe o banco de dados (PostgreSQL), a API e as telas, e informa os endereços. As telas abrem em `http://localhost:4200` (porta `WEB_PORT` do `.env`) e, por enquanto, mostram a lista de aplicações. A API abre em `http://localhost:8080` (página de documentação) e, com o banco vazio, já vem com as aplicações de exemplo Alfa, Beta, Gama e Delta (veja `http://localhost:8080/api/aplicacoes`). O fuso horário da API vem da variável `TZ` do `.env` (padrão `America/Sao_Paulo`); `SEED_DADOS_EXEMPLO=false` desliga os dados de exemplo. Para parar: `docker compose down` (os dados ficam guardados).
+- Se o **Executar** avisar que a porta não está disponível, outro programa (por exemplo, um PostgreSQL já instalado) usa a porta 5432. Troque o valor de `DB_PORT` (ou de `API_PORT` e `WEB_PORT`, se for uma delas) no arquivo `.env` (por exemplo, `DB_PORT` para `5433`) e rode de novo.
 - O arquivo `.env` guarda a configuração local, inclusive a senha do banco, e **nunca é versionado**. O `.env.example` traz só valores fictícios.
 - **A API e o banco:** ao iniciar, a API cria sozinha as tabelas `aplicacao` e `versao` no banco (schema `timeline`) e atualiza o que faltar. Ela lê a conexão das mesmas variáveis do `.env` (`POSTGRES_*` e `DB_PORT`). Para rodá-la no seu computador, em vez de no Docker, com o banco já no ar (antes, pare a API do Docker com `docker compose stop api`), use o bloco abaixo.
 
