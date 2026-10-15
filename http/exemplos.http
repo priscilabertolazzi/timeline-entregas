@@ -233,3 +233,43 @@ DELETE {{api}}/versoes/V0
 
 ### 36. Exclui de novo a mesma versão. Esperado: 404 "Versão não encontrada."
 DELETE {{api}}/versoes/V0
+
+### 37. Salvamento único da tela da versão (ADR-39): grava rótulo, situação, observação, fase e as sete datas de uma vez. Troque V1. Esperado: 200
+PUT {{api}}/versoes/V1/completo
+Content-Type: application/json
+
+{
+  "rotulo": "v1",
+  "situacao": "Risco",
+  "observacao": "Acesso sendo liberado em lotes.",
+  "fase": "Homologacao",
+  "datas": {
+    "inicioAndamento": "2026-09-01",
+    "fimAndamento": "2026-09-25",
+    "inicioHomologacao": "2026-10-01",
+    "fimHomologacao": "2026-10-13",
+    "inicioProrrogacao": "2026-10-13",
+    "fimProrrogacao": "2026-10-25",
+    "dataEntrega": "2026-10-28"
+  }
+}
+
+### 38. CA-32: prorrogação até 25/10 sem mudar a entrega (20/10). Esperado: 422 "O fim da prorrogação não pode ser posterior à data de entrega." e nada é salvo
+PUT {{api}}/versoes/V1/completo
+Content-Type: application/json
+
+{
+  "rotulo": "v1",
+  "situacao": "Risco",
+  "observacao": "Acesso sendo liberado em lotes.",
+  "fase": "Homologacao",
+  "datas": {
+    "inicioAndamento": "2026-09-01",
+    "fimAndamento": "2026-09-25",
+    "inicioHomologacao": "2026-10-01",
+    "fimHomologacao": "2026-10-13",
+    "inicioProrrogacao": "2026-10-13",
+    "fimProrrogacao": "2026-10-25",
+    "dataEntrega": "2026-10-20"
+  }
+}

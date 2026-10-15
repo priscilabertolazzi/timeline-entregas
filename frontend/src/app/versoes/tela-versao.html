@@ -1,0 +1,90 @@
+<a mat-button routerLink="/">← Lista de aplicações</a>
+
+@if (versao(); as v) {
+  <header class="cabecalho">
+    <div class="titulo">
+      <h1>{{ nomeAplicacao() }} · {{ v.rotulo }}</h1>
+      <span class="etiqueta">{{ rotuloFase(v.fase) }}</span>
+      <span class="etiqueta" [class.risco]="v.situacao === 'Risco'">{{ rotuloSituacao(v.situacao) }}</span>
+    </div>
+    <button mat-button type="button" class="perigo" (click)="excluir()">Excluir versão</button>
+  </header>
+
+  <form [formGroup]="formulario" (ngSubmit)="salvar()">
+    <mat-card class="bloco" appearance="outlined">
+      <h2>Dados da versão</h2>
+      <div class="linha">
+        <mat-form-field>
+          <mat-label>Rótulo da versão</mat-label>
+          <input matInput formControlName="rotulo" autocomplete="off" />
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Fase</mat-label>
+          <mat-select formControlName="fase">
+            @for (fase of fases; track fase.valor) {
+              <mat-option [value]="fase.valor">{{ fase.rotulo }}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+        @if (formulario.controls.situacao.enabled) {
+          <mat-form-field>
+            <mat-label>Situação</mat-label>
+            <mat-select formControlName="situacao">
+              <mat-option value="OnTrack">On track</mat-option>
+              <mat-option value="Risco">Risco</mat-option>
+            </mat-select>
+          </mat-form-field>
+        } @else {
+          <mat-form-field>
+            <mat-label>Situação</mat-label>
+            <input matInput disabled [value]="situacaoAutomatica()" />
+          </mat-form-field>
+        }
+      </div>
+      <mat-form-field class="largo">
+        <mat-label>Observação</mat-label>
+        <textarea matInput formControlName="observacao" rows="3"></textarea>
+      </mat-form-field>
+    </mat-card>
+
+    <mat-card class="bloco" appearance="outlined">
+      <h2>Datas</h2>
+      <div class="grade-datas">
+        @for (grupo of gruposDeDatas; track grupo.titulo) {
+          <div class="grupo">{{ grupo.titulo }}</div>
+          @for (campo of grupo.campos; track campo.nome) {
+            <mat-form-field>
+              <mat-label>{{ campo.rotulo }}</mat-label>
+              <input
+                matInput
+                readonly
+                class="campo-calendario"
+                [formControlName]="campo.nome"
+                [matDatepicker]="calendario"
+                placeholder="dd/mm/aaaa"
+                (click)="calendario.open()"
+              />
+              <span matIconSuffix class="sufixos">
+                @if (temData(campo.nome)) {
+                  <button type="button" class="limpar" (click)="limpar(campo.nome)" [attr.aria-label]="'Limpar ' + campo.rotulo">×</button>
+                }
+                <mat-datepicker-toggle [for]="calendario" />
+              </span>
+              <mat-datepicker #calendario />
+            </mat-form-field>
+          }
+        }
+      </div>
+    </mat-card>
+
+    <!-- Barra fixa no pé da tela: o Salvar e as mensagens da API ficam sempre à vista, mesmo com o formulário longo. -->
+    <div class="barra-salvar">
+      <app-aviso-erros [mensagens]="erros()" />
+      <button mat-flat-button type="submit" [disabled]="salvando()">Salvar</button>
+    </div>
+  </form>
+} @else if (erros().length > 0) {
+  <app-aviso-erros [mensagens]="erros()" />
+} @else {
+  <mat-progress-bar mode="indeterminate" aria-label="Carregando" />
+}

@@ -31,6 +31,7 @@ public static class TimelineApiExtensions
         services.AddScoped<AlterarVersao>();
         services.AddScoped<AlterarFaseVersao>();
         services.AddScoped<AlterarDatasVersao>();
+        services.AddScoped<AlterarVersaoCompleta>();
         services.AddScoped<ExcluirVersao>();
 
         // Data atual vinda do relógio injetado, nunca lida direto (arquitetura.md, seção 5.6). O fuso é o
