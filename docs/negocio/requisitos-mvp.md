@@ -3,9 +3,9 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.7 (rascunho para refinamento) |
+| Versão | 0.6 |
 | Data | 15/10/2026 |
-| Status | Em elaboração |
+| Status | Versão de entrega (v1.0.0). Construídos nesta versão: cadastro de aplicações e versões, com datas, fases, situação e observação (RF-01, RF-03 a RF-05, RF-09, RF-10, RF-14). Os demais requisitos seguem como próximos passos. |
 | Documento de origem | `docs/negocio/requisitos-negocio.md` (visão completa do produto, versão 0.68) |
 
 ---
@@ -132,7 +132,7 @@ A ordem das versões define:
 
 No MVP, a ordem é sempre a cronológica. A ordenação manual é uma evolução futura (seção 12).
 
-**RN-04: Exclusão.** *Aplica-se a: cadastro.* No MVP, aplicações e versões são excluídas definitivamente, após confirmação do usuário. Excluir uma aplicação exclui também todas as suas versões. Itens excluídos deixam de aparecer na lista de aplicações, na timeline, na tabela de status das aplicações e nos contadores, mas continuam nos status reports já congelados (RN-29). O arquivamento, com restauração, previsto no documento completo, é uma evolução futura (seção 12).
+**RN-04: Exclusão.** *Aplica-se a: cadastro.* No MVP, aplicações e versões são excluídas definitivamente, após confirmação do usuário. Excluir uma aplicação exclui também todas as suas versões. Itens excluídos deixam de aparecer na lista de aplicações, na timeline, na tabela de status das aplicações e nos contadores, mas continuam nos status reports já congelados (RN-29). O arquivamento, com restauração, previsto no documento completo, é uma evolução futura (seção 12). A confirmação diz o nome da aplicação (ou da versão) e avisa que a exclusão não pode ser desfeita; na aplicação, avisa também que todas as suas versões serão excluídas.
 
 ### 7.2 Fases
 
@@ -166,6 +166,7 @@ Fora essas situações, fase e datas são independentes: mudar uma não altera a
 - Uma vez em Homologação, a versão **não retorna** a fases anteriores. A etapa de homologação já contempla as correções e os desenvolvimentos necessários, que mantêm a versão em Homologação; se o prazo for estendido, o usuário altera o fim da homologação ou registra uma prorrogação (RN-24), conforme o combinado no projeto.
 - Novos pacotes de correção liberados para homologação não alteram o início da homologação. O usuário pode mencioná-los na observação (RN-22).
 - Uma versão em Produção não muda mais de fase.
+- Na tela da versão, o campo Fase fica desabilitado para uma versão em Produção e, para uma versão em Homologação, oferece apenas Homologação e Produção. O sistema continua recusando as mudanças proibidas, com as mensagens da regra.
 
 ### 7.3 Datas
 
@@ -185,7 +186,7 @@ Não existe distinção entre data prevista e data realizada: enquanto o evento 
 
 **RN-10: Coerência cronológica.** *Aplica-se a: cadastro.* Quando informadas, as datas devem respeitar a ordem: início do andamento ≤ fim do andamento ≤ início da homologação ≤ fim da homologação ≤ início da prorrogação ≤ fim da prorrogação ≤ data de entrega. As etapas não se sobrepõem, mas pode haver intervalos entre elas. O sistema não deve aceitar datas fora dessa ordem. As datas da versão, incluindo as da prorrogação, são alteradas e salvas em conjunto, num único salvamento: se qualquer uma violar esta ordem, nenhuma alteração é salva.
 
-**RN-13: Versão sem previsão (TBD).** *Aplica-se a: timeline e tabela de status das aplicações.* TBD significa que a versão ainda não tem datas (RN-09). Na **timeline**, ela não tem barra: aparece apenas como um rótulo (ex.: "v1.2 (TBD)") em uma coluna "Sem previsão", localizada à direita do último mês do eixo, na linha da sua aplicação. Na **tabela de status das aplicações**, a coluna de data de entrega mostra "TBD".
+**RN-13: Versão sem previsão (TBD).** *Aplica-se a: timeline e tabela de status das aplicações.* TBD significa que a versão ainda não tem datas (RN-09). Na **timeline**, ela não tem barra: aparece apenas como um rótulo (ex.: "v1.2 (TBD)") em uma coluna "Sem previsão", localizada à direita do último mês do eixo, na linha da sua aplicação. Na **tabela de status das aplicações**, a coluna de data de entrega mostra "TBD". Na **lista de aplicações**, a coluna "Data de entrega" de cada versão mostra a data em dd/mm/aaaa ou "TBD" (RF-24).
 
 ### 7.4 Composição da timeline
 
@@ -228,9 +229,11 @@ Quando nenhuma versão aparece na timeline, o eixo de meses e a coluna "Sem prev
 | Versão em Produção | Entregue (automática) |
 | Demais fases | On track ou Risco, informada pelo usuário. Valor inicial: On track, inclusive quando a versão sai novamente do Backlog. |
 
+Na tela da versão, a situação automática aparece já ao escolher a fase, em campo só de leitura: "Não iniciado" ao escolher Backlog e "Entregue" ao escolher Produção. Quando a situação é Risco, a observação é obrigatória (RN-22).
+
 No MVP, a situação On track ou Risco é sempre definida pelo usuário. A sugestão automática de Risco é uma evolução futura (seção 12).
 
-**RN-22: Observação.** *Aplica-se a: cadastro.* Cada versão possui uma observação em texto livre, editável a qualquer momento pelo usuário. **Quando a situação da versão for Risco, a observação é obrigatória:** o sistema não salva uma versão em Risco sem observação (texto só com espaços conta como vazio). A tabela de status das aplicações mostra a observação atual, na coluna "Observação"; ela não aparece na timeline. O histórico de observações é uma evolução futura (seção 12).
+**RN-22: Observação.** *Aplica-se a: cadastro.* Cada versão possui uma observação em texto livre, editável a qualquer momento pelo usuário. **Quando a situação da versão for Risco, a observação é obrigatória:** o sistema não salva uma versão em Risco sem observação (texto só com espaços conta como vazio), e informa "Informe a observação quando a situação for Risco." A tabela de status das aplicações mostra a observação atual, na coluna "Observação"; ela não aparece na timeline. O histórico de observações é uma evolução futura (seção 12).
 
 ### 7.6 Contadores
 
@@ -238,7 +241,7 @@ No MVP, a situação On track ou Risco é sempre definida pelo usuário. A suges
 
 ### 7.7 Planejamento e acompanhamento
 
-**RN-24: Prorrogação da homologação.** *Aplica-se a: cadastro.* A prorrogação é uma decisão de acompanhamento do projeto, registrada **intencionalmente** pelo usuário: ele informa o início e o fim da prorrogação, a partir do fim da homologação. Alterar as datas da homologação **nunca** gera prorrogação automaticamente; a homologação permanece roxa, refletindo os combinados do projeto. Uma nova prorrogação só pode ser registrada para versões em Homologação. Uma prorrogação já registrada pode ser alterada ou removida a qualquer momento, inclusive depois que a versão passa para Produção (ex.: para corrigir o fim da prorrogação de uma versão já entregue).
+**RN-24: Prorrogação da homologação.** *Aplica-se a: cadastro.* A prorrogação é uma decisão de acompanhamento do projeto, registrada **intencionalmente** pelo usuário: ele informa o início e o fim da prorrogação, a partir do fim da homologação. Alterar as datas da homologação **nunca** gera prorrogação automaticamente; a homologação permanece roxa, refletindo os combinados do projeto. Uma nova prorrogação só pode ser registrada para versões em Homologação; quando o usuário passa a fase para Homologação e informa a prorrogação **no mesmo salvamento**, vale a fase de destino e a prorrogação é aceita (CA-44). Uma prorrogação já registrada pode ser alterada ou removida a qualquer momento, inclusive depois que a versão passa para Produção (ex.: para corrigir o fim da prorrogação de uma versão já entregue).
 
 **RN-25: Realizado e previsto.** *Aplica-se a: timeline.* Na timeline, a data atual divide cada trecho da barra: a parte até a data atual, inclusive, é desenhada em tom forte (realizado), e a parte posterior, em tom claro (previsto). Um marco de entrega na própria data atual fica em tom forte. As linhas pontilhadas dos intervalos não são divididas em tons. Cada etapa mantém sua cor nos dois tons; o mesmo vale para o marco de entrega. Há duas exceções: a barra de uma versão em Produção é desenhada inteiramente em tom forte (RN-15), e a de uma versão em Backlog, inteiramente em cinza claro (RN-16).
 
@@ -253,6 +256,21 @@ No MVP, a situação On track ou Risco é sempre definida pelo usuário. A suges
 **RN-29: Preservação do congelado.** *Aplica-se a: status report congelado.* Um status report congelado não é alterado automaticamente por mudanças posteriores no cadastro (datas, fases, observações, exclusões) e não pode ser editado campo a campo nem excluído pelo usuário. A única forma de mudá-lo é substituí-lo por um novo congelamento (RN-28). Aplicações e versões excluídas depois do congelamento continuam aparecendo nas semanas em que existiam, até que a semana seja substituída.
 
 **RN-30: Histórico de Status Reports.** *Aplica-se a: status report congelado.* Na tela Histórico de Status Reports, o usuário consulta a lista de semanas, da mais recente para a mais antiga, desde a primeira semana congelada até a semana atual. Enquanto nenhuma semana tiver sido congelada, a lista mostra apenas a semana atual, que pode ser congelada. Cada semana congelada é identificada pela semana de referência, pelo intervalo de datas da semana, pela data de referência e pelo momento do congelamento (ex.: "Semana 42/2026 — 12/10 a 18/10/2026 — referência 13/10/2026 — congelado em 14/10/2026"). Uma semana que não foi congelada aparece na lista com a indicação "Sem status report congelado", pois seus dados não foram salvos (ex.: "Semana 40/2026 — 28/09 a 04/10/2026 — Sem status report congelado"). O usuário visualiza qualquer semana congelada em modo somente leitura, com indicação clara de que se trata de um status report congelado e de sua data de referência.
+
+### 7.9 Telas de cadastro
+
+**RN-36: Etiquetas de fase e situação.** *Aplica-se a: cadastro (lista de aplicações e tela da versão).* A fase e a situação de cada versão aparecem em etiquetas coloridas:
+
+| Etiqueta | Cor |
+|---|---|
+| Backlog, Não iniciado | Cinza claro |
+| Análise, Desenvolvimento, Testes | Azul claro |
+| Homologação | Roxo claro |
+| On track | Verde claro |
+| Produção, Entregue | Verde escuro |
+| Risco | Laranja claro |
+
+A "Prorrogação da homologação" (vermelho claro) é cor da timeline (RN-06) e não aparece como etiqueta nas telas de cadastro. As cores ficam definidas num único lugar do tema.
 
 ---
 
@@ -273,6 +291,10 @@ No MVP, a situação On track ou Risco é sempre definida pelo usuário. A suges
 | RF-15 | O usuário pode congelar o status report da semana atual e recongelar o da semana atual ou de semanas anteriores já congeladas. | RN-27, RN-28, RN-29 |
 | RF-16 | O usuário pode consultar o Histórico de Status Reports, com a lista de semanas. | RN-30 |
 | RF-17 | O usuário pode visualizar o status report congelado de qualquer semana, em modo somente leitura. | RN-29, RN-30 |
+| RF-21 | Ao salvar a versão com sucesso, o sistema volta para a lista de aplicações, com o aviso "Alterações salvas.". Se o salvamento for recusado, o usuário permanece na tela da versão, com as mensagens. | RN-10, CA-45 |
+| RF-22 | A lista de aplicações e a tela da versão mostram a fase e a situação em etiquetas coloridas. | RN-36, CA-47 |
+| RF-23 | A barra de título mostra o nome "Timeline de Entregas (MVP)" e a versão do sistema (a tag da última entrega, ex.: v0.2.0). | CA-48 |
+| RF-24 | A lista de aplicações mostra a data de entrega de cada versão em dd/mm/aaaa e, quando a versão não tem datas, "TBD". | RN-13, CA-49 |
 
 ---
 
@@ -512,6 +534,49 @@ Os cenários abaixo usam dados fictícios. Datas não citadas em um cenário est
 - **Então** o sistema aceita a alteração
 - **E**, para a versão v0 da aplicação Beta, em Produção e sem prorrogação, o sistema não aceita o registro de uma nova prorrogação e informa que a prorrogação só pode ser registrada para versões em Homologação.
 
+**CA-43: Observação obrigatória em Risco**
+- **Dado** que a versão v1 da aplicação Beta está em Desenvolvimento, sem observação
+- **Quando** o usuário altera a situação para Risco, sem escrever a observação (ou com um texto só de espaços), e salva
+- **Então** o sistema não aceita e informa "Informe a observação quando a situação for Risco."
+- **E**, se o usuário escrever a observação "Dependência de outra equipe." e salvar, o sistema aceita
+- **E** uma versão em On track pode ficar sem observação.
+
+**CA-44: Prorrogação ao passar para Homologação**
+- **Dado** que a versão v0.2 da aplicação CRM está em Backlog, com as cinco datas informadas
+- **Quando** o usuário altera a fase para Homologação, informa a prorrogação de 19/10/2026 a 23/10/2026, com data de entrega em 26/10/2026, e salva uma única vez
+- **Então** o sistema aceita: a versão fica em Homologação, com a prorrogação registrada
+- **E**, se o usuário alterar a fase para Desenvolvimento no lugar de Homologação, o sistema não aceita e informa que a prorrogação só pode ser registrada para versões em Homologação.
+
+**CA-45: Salvar volta para a lista de aplicações**
+- **Dado** que o usuário está na tela da versão v1 da aplicação Alfa
+- **Quando** salva alterações aceitas pelo sistema
+- **Então** o sistema volta para a lista de aplicações e mostra "Alterações salvas."
+- **E**, se o sistema não aceitar o salvamento, o usuário permanece na tela da versão, com as mensagens, sem nenhuma alteração salva.
+
+**CA-46: Campos Fase e Situação na tela da versão**
+- **Dado** que a versão v1 da aplicação Alfa está em Produção
+- **Quando** o usuário abre a tela da versão
+- **Então** o campo Fase aparece desabilitado e a Situação aparece como "Entregue", só para leitura
+- **E**, para uma versão em Homologação, o campo Fase oferece apenas Homologação e Produção
+- **E**, ao escolher a fase Backlog, a Situação passa a mostrar "Não iniciado" e, ao escolher Produção, "Entregue", sem ser possível editá-la.
+
+**CA-47: Etiquetas de fase e situação**
+- **Dado** que a aplicação Alfa tem a versão v1 em Homologação, On track, e a aplicação Beta tem a versão v1 em Desenvolvimento, em Risco
+- **Quando** o usuário abre a lista de aplicações
+- **Então** a v1 da Alfa mostra "Homologação" em roxo claro e "On track" em verde claro
+- **E** a v1 da Beta mostra "Desenvolvimento" em azul claro e "Risco" em laranja claro (cores da RN-36).
+
+**CA-48: Título e versão do sistema na tela**
+- **Dado** que a última entrega do sistema tem a tag v0.2.0
+- **Quando** o usuário abre qualquer tela
+- **Então** a barra de título mostra "Timeline de Entregas (MVP)" e "v0.2.0".
+
+**CA-49: Data de entrega na lista de aplicações**
+- **Dado** que a versão v1 da aplicação Alfa tem data de entrega em 23/10/2026 e a versão v2 está em Backlog, sem datas
+- **Quando** o usuário abre a lista de aplicações
+- **Então** a v1 mostra "23/10/2026" na coluna "Data de entrega"
+- **E** a v2 mostra "TBD".
+
 ---
 
 ## 11. Premissas e restrições
@@ -553,4 +618,3 @@ O MVP foi desenhado para crescer sem retrabalho: o cadastro já guarda todas as 
 | 0.4 | 14/10/2026 | Versão em Produção somente com data de entrega até a data atual (RN-07, CA-39); intervalos pontilhados também em Produção (RN-06, RN-15, CA-03); rótulo dentro da barra (RN-14, RN-18). Alinhada à versão 0.66 do documento completo. |
 | 0.5 | 14/10/2026 | Tela de consulta às semanas anteriores renomeada para Histórico de Status Reports e incluída no glossário (escopo, RN-28, RN-30, RF-16, CA-26, CA-30). Alinhada à versão 0.67 do documento completo. |
 | 0.6 | 15/10/2026 | Revisão de arquitetura: avanço para qualquer fase seguinte, sem passar pelas intermediárias (RN-08, CA-40); nomes e rótulos comparados sem diferença entre maiúsculas e minúsculas e sem os espaços das pontas (RN-01, RN-02, CA-33, CA-34); prorrogação já registrada pode ser alterada ou removida também em Produção (RN-24, CA-42); Histórico de Status Reports antes do primeiro congelamento (RN-30, CA-41); "versões ativas", termo do arquivamento, substituído por "versões cadastradas" (CA-28, CA-29). Alinhada à versão 0.68 do documento completo. |
-| 0.7 | 15/10/2026 | T-10: observação obrigatória quando a situação for Risco (RN-22), decisão da autora; MSG-43 no catálogo. |

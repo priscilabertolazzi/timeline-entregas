@@ -3,9 +3,11 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.20 |
+| Versão | 0.21 |
 | Data | 15/10/2026 |
-| Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
+| Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.19) |
+
+> **Situação na v1.0.0:** concluídas as etapas 0 a 2 (T-01 a T-10). A autora decidiu encerrar o desenvolvimento depois da etapa 2 e seguir para a entrega (T-20 a T-22). As tarefas T-11 a T-19 ficam como próximos passos, listados no README.
 
 Roteiro de desenvolvimento em tarefas pequenas. Cada tarefa segue o ciclo e a definição de pronto do `docs/tecnico/processo-desenvolvimento.md`.
 
@@ -322,3 +324,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.18 | 15/10/2026 | T-08 marcada como concluída (a tag `v0.1.0` fica para depois da revisão independente). |
 | 0.19 | 15/10/2026 | T-09 marcada como concluída. |
 | 0.20 | 15/10/2026 | T-10 marcada como concluída: a tela da versão passou a ter um só botão Salvar, com a operação única na API (ADR-39); inclui as pendências da T-09. Tag `v0.1.0` criada por decisão da autora antes da revisão independente da T-08, que segue pendente. |
+| 0.21 | 15/10/2026 | Preparação da entrega: decisão da autora de encerrar o desenvolvimento depois da etapa 2 e seguir para a entrega; referência à `arquitetura.md` atualizada para a versão 0.19. |
