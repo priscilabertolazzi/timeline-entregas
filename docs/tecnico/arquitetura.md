@@ -666,6 +666,8 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | Relógio falso da Microsoft (`Microsoft.Extensions.TimeProvider.Testing`) | Fixar a data atual nos testes | MIT |
 | Geração do documento OpenAPI (`Microsoft.AspNetCore.OpenApi`) e página de visualização (Scalar) | Gerar a documentação da API e consultá-la no navegador (ADR-30) | MIT e MIT |
 | Angular, Angular Material e angular-eslint | Telas e lint do frontend | MIT |
+| Vitest e jsdom (o executor de testes do Angular 22 e um simulador de navegador, trazidos pelo gerador do projeto Angular) | Rodar os testes das telas, sem abrir navegador | MIT e MIT (conferido nos pacotes instalados, aprovado pela autora em 15/10/2026) |
+| `@angular/cdk`, `eslint`, `typescript-eslint` e `@eslint/js` (instalados junto com o Angular Material e o angular-eslint) | Base dos componentes e do lint do frontend | MIT (conferido nos pacotes instalados) |
 
 ### 12.4 Empacotamento e reprodutibilidade
 
