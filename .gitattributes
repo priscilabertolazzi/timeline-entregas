@@ -1,0 +1,17 @@
+# Normaliza a quebra de linha dos arquivos de texto
+* text=auto
+
+# Scripts do Linux e do macOS: sempre quebra de linha do Linux (LF)
+*.sh text eol=lf
+Makefile text eol=lf
+
+# Scripts do Windows: quebra de linha do Windows (CRLF)
+*.ps1 text eol=crlf
+
+# Arquivos binários
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary

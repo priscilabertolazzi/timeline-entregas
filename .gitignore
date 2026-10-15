@@ -1,0 +1,42 @@
+# Segredos e configuração local (nunca versionar)
+.env
+.env.*
+!.env.example
+
+# .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.userprefs
+TestResults/
+*.log
+*.dbmdl
+
+# Angular e Node
+node_modules/
+.angular/
+dist/
+coverage/
+npm-debug.log*
+
+# IDEs e editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Sistema operacional
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Claude Code (configuração local)
+.claude/settings.local.json
+
+# Temporários
+tmp/
+temp/
+*.tmp
