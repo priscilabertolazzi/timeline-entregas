@@ -148,9 +148,10 @@ public sealed class Versao
 
     /// <summary>
     /// Define a situação informada, On track ou Risco, só fora de Backlog e de Produção
-    /// (RN-21, RF-10).
+    /// (RN-21, RF-10). É interno de propósito: sozinho, não confere a RN-22 (Risco exige observação);
+    /// quem altera a situação é <see cref="AlterarDados"/> ou <see cref="Alterar"/>.
     /// </summary>
-    public void AlterarSituacao(Situacao nova)
+    internal void AlterarSituacao(Situacao nova)
     {
         // Valor diferente de On track ou Risco é recusado antes, na Application, com a MSG-10.
         if (nova is not (Situacao.OnTrack or Situacao.Risco))
@@ -168,8 +169,10 @@ public sealed class Versao
 
     /// <summary>
     /// Substitui a observação (RN-22). O limite de tamanho é verificado na Application, com a MSG-09.
+    /// É interno de propósito: sozinho, não confere que uma versão em Risco continua com observação;
+    /// quem altera a observação é <see cref="AlterarDados"/> ou <see cref="Alterar"/>.
     /// </summary>
-    public void AlterarObservacao(string? texto)
+    internal void AlterarObservacao(string? texto)
     {
         Observacao = texto;
     }

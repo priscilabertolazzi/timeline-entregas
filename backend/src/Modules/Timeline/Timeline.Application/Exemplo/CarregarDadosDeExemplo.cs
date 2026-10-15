@@ -48,15 +48,11 @@ public sealed class CarregarDadosDeExemplo(IAplicacaoRepository aplicacoes, IVer
             var versao = new Versao(ids[modelo.Aplicacao], modelo.Rotulo);
             versao.AlterarDatas(modelo.DatasEm(hoje), relogio);
             versao.AlterarFase(modelo.Fase, relogio);
-            if (modelo.Situacao != Situacao.OnTrack)
-            {
-                versao.AlterarSituacao(modelo.Situacao);
-            }
-
-            if (modelo.Observacao is not null)
-            {
-                versao.AlterarObservacao(modelo.Observacao);
-            }
+            // Situação e observação pelo caminho que confere a RN-22 (Risco exige observação).
+            versao.AlterarDados(
+                versao.Rotulo,
+                modelo.Situacao == Situacao.OnTrack ? null : modelo.Situacao,
+                modelo.Observacao);
 
             await versoes.AdicionarAsync(versao, cancellationToken);
         }
