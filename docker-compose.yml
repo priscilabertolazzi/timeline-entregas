@@ -1,0 +1,44 @@
+# Banco de dados e ferramentas de teste. A API e as telas entram nas tarefas T-08 e T-09.
+# Os valores vêm do arquivo .env (modelo em .env.example). Os padrões abaixo só evitam avisos
+# nos comandos que não usam o banco, como test e lint.
+name: timeline-entregas
+
+services:
+  db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-timeline}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      POSTGRES_DB: ${POSTGRES_DB:-timeline_entregas}
+    ports:
+      # Só o próprio computador alcança o banco.
+      - "127.0.0.1:${DB_PORT:-5432}:5432"
+    volumes:
+      - timeline-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  # Container com o SDK do .NET, usado por install, test e lint (ADR-24, ADR-31).
+  # Só roda quando chamado pelos scripts (perfil "ferramentas"), nunca com "docker compose up".
+  ferramentas:
+    profiles: ["ferramentas"]
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    entrypoint: ["sh", "/origem/scripts/ferramentas-container.sh"]
+    environment:
+      DOTNET_NOLOGO: "1"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+    volumes:
+      # O código entra somente para leitura; o container trabalha numa cópia.
+      - ./backend:/origem/backend:ro
+      - ./global.json:/origem/global.json:ro
+      - ./.editorconfig:/origem/.editorconfig:ro
+      - ./scripts/ferramentas-container.sh:/origem/scripts/ferramentas-container.sh:ro
+      - timeline-nuget-cache:/root/.nuget/packages
+
+volumes:
+  timeline-db-data:
+  timeline-nuget-cache:

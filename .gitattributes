@@ -1,5 +1,6 @@
-# Normaliza a quebra de linha dos arquivos de texto
-* text=auto
+# Arquivos de texto: quebra de linha do Linux (LF) em qualquer sistema, como no .editorconfig.
+# Sem isso, o Git no Windows baixaria os arquivos com CRLF e o lint (dotnet format) reprovaria.
+* text=auto eol=lf
 
 # Scripts do Linux e do macOS: sempre quebra de linha do Linux (LF)
 *.sh text eol=lf

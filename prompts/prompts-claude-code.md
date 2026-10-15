@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.4 |
+| Versão | 0.5 |
 | Data | 15/10/2026 |
 
 Este arquivo tem duas partes:
@@ -955,6 +955,42 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** a autora identificou que o modelo CO-STAR, usado de forma distribuída nos documentos, não aparecia nos prompts. Com os elementos explícitos, cada pedido mostra o modelo e continua curto, porque os elementos permanentes apontam para os documentos.
 
+### P-18 — 15/10/2026 — T-03
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, preparação. Tarefa T-03 do docs/tarefas.md: Esqueleto da solução, banco e scripts.
+> Referências: arquitetura.md, seções 4 (estrutura), 9 (configuração), 12.2 (scripts) e 12.3 (dependências previstas, já aprovadas).
+> Pontos de atenção:
+> - Dependências só da lista da seção 12.3, adicionadas pelas ferramentas oficiais, sem escrever versões.
+> - Os scripts test e lint rodam em container (ADR-24).
+> - Os scripts .sh precisam funcionar no Linux e no macOS.
+> OBJETIVO: Criar o global.json, a solução e os projetos do módulo Timeline com as referências entre camadas, o docker-compose.yml com o banco, os scripts install, run, test e lint (.ps1 e .sh) e o Makefile, e atualizar o README com pré-requisitos, instalação e comandos.
+> ESTILO: Siga as convenções do CLAUDE.md e do backend/CLAUDE.md, com os nomes do glossário e as mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
+> Confirme que os scripts test e lint funcionam sem depender do SDK instalado.
+
+**Resultado:** o assistente apresentou o plano sem alterar arquivos e perguntou sobre o pacote `Microsoft.AspNetCore.OpenApi`, que o Scalar precisa e que não estava na seção 12.3. Depois da aprovação, criou o esqueleto do backend, o banco no Docker Compose e os oito scripts. A frase final do pedido virou um experimento: `test.ps1` e `lint.ps1` rodaram com o `dotnet` fora do caminho do terminal e passaram.
+
+**Funcionou de primeira?** O plano, sim. A implementação precisou de três ajustes: a porta 5432 já ocupada por outro PostgreSQL, a quebra de linha do Windows que reprovava o lint numa cópia limpa e os acentos dos `.ps1` (ver Sessão 03 do diário). Nenhum deles mudou o pedido.
+
+**Por que é relevante:** evitou um risco: o assistente parou e pediu aprovação em vez de adicionar um pacote fora da lista. A última frase ("Confirme que... sem depender do SDK instalado") transformou uma promessa do documento em algo provado por experimento, e não só afirmado.
+
+### P-19 — 15/10/2026 — T-03
+
+**Pedido (na íntegra):**
+> OBJETIVO: Responder às perguntas e aprovar o plano.
+> 1. Aprovado o pacote Microsoft.AspNetCore.OpenApi. Inclua-o na lista de dependências previstas da seção 12.3 do arquitetura.md.
+> 2. Crie o teste de estrutura, sem nenhuma dependência nova, conferindo que o Domain não depende de nenhuma outra camada. Ele deve rodar pelo scripts\test.ps1.
+> RESPOSTA: As decisões técnicas estão de acordo; registre-as no arquitetura.md. Pode criar o branch e implementar.
+
+**Resultado:** pacote adicionado e registrado na seção 12.3; dois testes de estrutura no `Domain.Tests`; decisões técnicas registradas no `arquitetura.md` (ADR-31 e ADR-32).
+
+**Funcionou de primeira?** Sim.
+
+**Por que é relevante:** a autora respondeu às perguntas do plano com decisões numeradas e já disse onde registrá-las. Sem o teste de estrutura, a tarefa terminaria com "0 testes", sem prova de que o caminho de testes funciona de ponta a ponta.
+
 ---
 
 ## Histórico do documento
@@ -965,3 +1001,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.2 | 15/10/2026 | Registro dos pedidos da conversa de planejamento, desde o primeiro (P-01 a P-14). |
 | 0.3 | 15/10/2026 | Roteiro reescrito no modelo CO-STAR explícito; registro dos pedidos P-15 a P-17. |
 | 0.4 | 15/10/2026 | Verificações das APIs pela página de documentação no navegador, sem VS Code (T-06, T-08, T-20 e A8). |
+| 0.5 | 15/10/2026 | Registro dos pedidos P-18 e P-19 (T-03). |

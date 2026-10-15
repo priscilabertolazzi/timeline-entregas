@@ -34,7 +34,18 @@
 
 ## 5. Pré-requisitos
 
-*Vai conter: o que precisa estar instalado para usar o projeto (Git e Docker) e o que mais só é necessário para desenvolver.*
+Para **usar e avaliar** o projeto, basta instalar:
+
+| Ferramenta | Para quê | Onde obter |
+|---|---|---|
+| Git | Baixar o projeto | git-scm.com |
+| Docker (com Docker Compose) | Rodar o banco e executar os testes e o lint em container | docker.com |
+
+O Docker precisa estar **aberto e funcionando** antes dos comandos abaixo.
+
+> **Limitação conhecida:** o Docker Desktop é gratuito para uso pessoal e em empresas pequenas, mas exige assinatura em empresas de maior porte. Há alternativas gratuitas, como o Docker Engine no WSL 2.
+
+Só para **desenvolver** (alterar o código), instale também o SDK do .NET 10 (dotnet.microsoft.com) e, a partir da etapa das telas, o Node.js em versão LTS (nodejs.org). Os scripts de teste e de lint **não** exigem o SDK instalado.
 
 ## 6. Dependências e ambiente
 
@@ -42,7 +53,28 @@
 
 ## 7. Instalação e execução local
 
-*Vai conter: o passo a passo para baixar o projeto, instalar e executar, com os comandos exatos para Windows (PowerShell) e para Linux e macOS.*
+**1. Baixar o projeto** (em qualquer sistema; no Windows, escolha uma pasta fora do OneDrive e sem espaços no caminho):
+
+```bash
+git clone <endereço do repositório> timeline-entregas
+cd timeline-entregas
+```
+
+**2. Os quatro comandos do projeto**
+
+| Ação | Windows (PowerShell) | Linux e macOS |
+|---|---|---|
+| Instalar | `powershell -ExecutionPolicy Bypass -File scripts\install.ps1` | `make install` |
+| Executar | `powershell -ExecutionPolicy Bypass -File scripts\run.ps1` | `make run` |
+| Testar | `powershell -ExecutionPolicy Bypass -File scripts\test.ps1` | `make test` |
+| Verificar o padrão do código | `powershell -ExecutionPolicy Bypass -File scripts\lint.ps1` | `make lint` |
+
+Em Linux e macOS, sem o `make`, use `sh scripts/install.sh`, `sh scripts/run.sh`, `sh scripts/test.sh` e `sh scripts/lint.sh`. No Windows, os arquivos `.sh` também rodam pelo Git Bash.
+
+- **Instalar** cria o arquivo `.env` a partir do `.env.example` (se ele ainda não existir) e baixa as imagens do Docker e os pacotes do backend. A primeira vez leva alguns minutos e precisa de internet.
+- **Executar** sobe o banco de dados (PostgreSQL) e informa o endereço, por exemplo `localhost:5432`. Por enquanto só o banco sobe; a API e as telas entram nas próximas tarefas. Para parar: `docker compose down` (os dados ficam guardados).
+- Se o **Executar** avisar que a porta não está disponível, outro programa (por exemplo, um PostgreSQL já instalado) usa a porta 5432. Troque o valor de `DB_PORT` no arquivo `.env` (por exemplo, para `5433`) e rode de novo.
+- O arquivo `.env` guarda a configuração local, inclusive a senha do banco, e **nunca é versionado**. O `.env.example` traz só valores fictícios.
 
 ## 8. Uso e exemplos
 
@@ -58,7 +90,19 @@
 
 ## 11. Testes
 
-*Vai conter: como rodar os testes e o lint, e o que cada tipo de teste cobre.*
+**Como rodar**
+
+| Ação | Windows (PowerShell) | Linux e macOS |
+|---|---|---|
+| Testes do backend | `powershell -ExecutionPolicy Bypass -File scripts\test.ps1` | `make test` |
+| Padrão do código | `powershell -ExecutionPolicy Bypass -File scripts\lint.ps1` | `make lint` |
+
+Os dois rodam dentro de um container, que já traz o SDK do .NET: não é preciso instalar o .NET no computador. O container trabalha numa cópia do código, então os arquivos do seu computador não são alterados.
+
+**O que cada tipo de teste cobre** (será completado ao longo das tarefas)
+
+- **Estrutura (já existe):** confere que o `Domain` não depende de nenhuma outra camada, de pacotes nem de frameworks de infraestrutura.
+- **Regras do `Domain` e da `Application`:** um teste por critério de aceite, a partir da T-04.
 
 ## 12. Como a IA foi usada no desenvolvimento
 

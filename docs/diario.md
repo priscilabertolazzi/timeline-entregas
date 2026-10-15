@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão do modelo | 0.5 |
+| Versão do modelo | 0.6 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -160,6 +160,39 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 03 — 15/10/2026 — T-03, Esqueleto da solução, banco e scripts
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-03 — Esqueleto da solução, banco e scripts |
+| Regras e critérios | Nenhuma RN ou CA; `arquitetura.md`, seções 4, 9, 12.2 e 12.3, e ADR-24 |
+| Modelo usado | Claude Sonnet 5.5, no Claude Code (área Code do aplicativo Claude) |
+| Tempo real | *(a preencher pela autora)* |
+| Estimativa sem IA | 3 h (proposta do assistente: um desenvolvedor experiente montaria 7 projetos, 8 scripts e a composição do Docker, e testaria tudo em container) |
+
+**O que foi pedido:** criar o `global.json`, a solução e os projetos do módulo Timeline com as referências entre camadas, o `docker-compose.yml` com o banco, os scripts `install`, `run`, `test` e `lint` (`.ps1` e `.sh`), o `Makefile` e a atualização do README. Pedidos completos na Parte 2 do `prompts/prompts-claude-code.md`, itens P-18 e P-19.
+
+**Resultado:** branch `chore/esqueleto-solucao`. Backend com as quatro camadas, o Host e dois projetos de teste, ligados como no `arquitetura.md`; dependências previstas adicionadas pelas ferramentas oficiais, com a licença de cada uma conferida; banco PostgreSQL 17 sobe pelo Docker Compose; scripts de teste e lint rodam em container, sem o SDK no computador; um teste de estrutura confere que o `Domain` não depende de nenhuma outra camada. `arquitetura.md` na versão 0.10 (ADR-31 e ADR-32) e `tarefas.md` na versão 0.12.
+
+**Primeira tentativa:** precisou de ajustes: três problemas, descritos abaixo.
+
+**Ajustes necessários e por quê:**
+
+- O lint reprovava numa cópia limpa do projeto no Windows: o Git baixava os arquivos com a quebra de linha do Windows (CRLF), e o `.editorconfig` exige a do Linux (LF). Achado ao simular uma instalação limpa (checkout dos arquivos do Git numa pasta nova). Corrigido no `.gitattributes` (`* text=auto eol=lf`, mantendo CRLF só nos `.ps1`), e o lint e os testes passaram na cópia limpa.
+- A porta 5432 já estava ocupada por um PostgreSQL instalado no computador da autora, e o banco do projeto não subiu. A porta passou a ser configurável por `DB_PORT` (no `.env` local, 5433), e o script `run` agora explica o erro em português.
+- O primeiro teste de reprovação do teste de estrutura usou uma referência que já existia (o `Application` já depende do `Domain`) e falhou por outro motivo. Foi repetido com uma referência ao framework web, e o teste reprovou como esperado.
+
+**O que a revisão humana capturou:** *(rascunho do assistente; a autora completa)*
+
+- A autora aprovou o pacote `Microsoft.AspNetCore.OpenApi`, que não estava na lista da seção 12.3 e que o Scalar precisa, e pediu um teste de estrutura sem dependência nova, para a tarefa não terminar com "0 testes".
+- A autora pediu a confirmação de que `test` e `lint` não dependem do SDK instalado. Isso foi provado rodando os dois com o `dotnet` fora do caminho do terminal.
+
+**Riscos mitigados:** pacote fora da lista aprovada (pedida a aprovação e registrada no `arquitetura.md`); pacote extra que o modelo de projeto de teste traz (`coverlet`, removido); versões de pacotes escritas pelas ferramentas oficiais, sem versão de memória; `.env` fora do Git (confirmado pelo `.gitignore`); banco aberto só para o próprio computador; senha do banco só no `.env`.
+
+**Aprendizados:** testar o teste: um teste só é confiável depois de ser visto reprovando, com o erro certo. Pedir que o assistente prove a promessa do documento ("sem depender do SDK") com um experimento, e não só afirmar.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -167,7 +200,7 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | Etapa | Tempo real | Estimativa sem IA | Sessões | Acertos na primeira tentativa |
 |---|---|---|---|---|
 | Planejamento | *(a preencher)* | 16 h | 1 | 15 de 17 pedidos |
-| 0. Preparação | | 4,0 h (T-01 a T-03) | 2 (T-01 e T-02; T-03 pendente) | |
+| 0. Preparação | | 4,0 h (T-01 a T-03) | 3 (T-01, T-02 e T-03) | |
 | 1. APIs de cadastro | | | | |
 | 2. Telas de cadastro | | | | |
 | 3. API da timeline | | | | |
@@ -197,3 +230,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.3 | 15/10/2026 | Registrada a Sessão 00 (planejamento); resumo acumulado organizado pelas etapas do `tarefas.md` 0.8; destaques para o README com os primeiros exemplos. |
 | 0.4 | 15/10/2026 | Sessão 00 atualizada com os pedidos P-15 a P-17 e o ajuste dos prompts ao modelo CO-STAR. |
 | 0.5 | 15/10/2026 | Registradas as Sessões 01 (T-01) e 02 (T-02); resumo acumulado da Etapa 0 iniciado. |
+| 0.6 | 15/10/2026 | Registrada a Sessão 03 (T-03), com os pedidos P-18 e P-19; resumo acumulado da Etapa 0 atualizado. |

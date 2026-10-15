@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.11 |
+| Versão | 0.12 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -107,7 +107,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** o repositório aparece no GitHub com os documentos e com os arquivos `.gitignore`, `.gitattributes` e `.editorconfig`, e o arquivo `.env` não aparece.
 
-### [ ] T-03 — Esqueleto da solução, banco e scripts (1 h)
+### [x] T-03 — Esqueleto da solução, banco e scripts (1 h)
 - `global.json`, solução e projetos do módulo Timeline (Domain, Application, Infrastructure, Api), Host e projetos de teste, com as referências entre camadas (`arquitetura.md`, seção 4).
 - Dependências previstas do backend (`arquitetura.md`, seção 12.3), adicionadas pelas ferramentas oficiais.
 - `docker-compose.yml` com o serviço `db` (PostgreSQL), lendo as variáveis do `.env`.
@@ -310,3 +310,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.9 | 15/10/2026 | T-01: Claude Code pela área Code do aplicativo Claude para computador, sem instalação separada; verificação pela abertura da pasta do projeto, no lugar do comando `claude --version`. |
 | 0.10 | 15/10/2026 | A autora não usa o VS Code: retirados o VS Code e a extensão REST Client da T-01; as verificações das APIs passam a ser feitas pela página de documentação da API (Scalar), publicada já na T-06; na T-20, o Claude Code executa o arquivo de exemplos e mostra o resultado. |
 | 0.11 | 15/10/2026 | T-01 e T-02 marcadas como concluídas. |
+| 0.12 | 15/10/2026 | T-03 marcada como concluída. |

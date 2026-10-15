@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.9 |
+| Versão | 0.10 |
 | Data | 15/10/2026 |
 | Status | Em elaboração |
 | Documento base | `docs/negocio/requisitos-mvp.md` (versão 0.6) |
@@ -84,7 +84,8 @@ As três partes sobem juntas com um único comando, pelo Docker Compose (seção
 │   ├── install.ps1   install.sh
 │   ├── run.ps1       run.sh
 │   ├── test.ps1      test.sh
-│   └── lint.ps1      lint.sh
+│   ├── lint.ps1      lint.sh
+│   └── ferramentas-container.sh          # Roda dentro do container de ferramentas (ADR-31)
 ├── prompts/
 │   └── prompts-claude-code.md            # Roteiro de prompts e registro dos pedidos ao assistente de código
 ├── docs/
@@ -98,10 +99,11 @@ As três partes sobem juntas com um único comando, pelo Docker Compose (seção
 ├── backend/
 │   ├── CLAUDE.md
 │   ├── TimelineEntregas.sln
+│   ├── Directory.Build.props             # Configuração comum dos projetos: .NET 10, nulos e avisos como erro
 │   ├── .config/dotnet-tools.json         # Ferramenta de migrations do EF Core
 │   ├── Dockerfile
 │   ├── src/
-│   │   ├── Host/                         # Program.cs, composição dos módulos e configuração
+│   │   ├── Host/                         # Projeto TimelineEntregas.Host: Program.cs, composição dos módulos e configuração
 │   │   └── Modules/Timeline/
 │   │       ├── Timeline.Domain/          # Entidades, enums, regras e cálculo da timeline
 │   │       ├── Timeline.Application/     # Casos de uso, DTOs, validação de entrada, interfaces
@@ -515,13 +517,14 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
 **Em resumo:** senhas e configurações locais ficam num arquivo que nunca vai para o GitHub. O repositório traz apenas um modelo desse arquivo, com valores fictícios.
 
 - Nenhuma credencial ou string de conexão é versionada.
-- O `docker-compose.yml` lê as variáveis de um arquivo `.env`, que está no `.gitignore`. O repositório contém o `.env.example`, com os nomes das variáveis e valores fictícios: usuário, senha e nome do banco; portas da API e do frontend; fuso horário (`TZ`); carga de dados de exemplo.
+- O `docker-compose.yml` lê as variáveis de um arquivo `.env`, que está no `.gitignore`. O repositório contém o `.env.example`, com os nomes das variáveis e valores fictícios: usuário, senha e nome do banco; portas do banco, da API e do frontend; fuso horário (`TZ`); carga de dados de exemplo.
 
   | Variável | Para quê | Valor no `.env.example` |
   |---|---|---|
   | `POSTGRES_USER` | Usuário do banco | `timeline` |
   | `POSTGRES_PASSWORD` | Senha do banco | valor fictício, a trocar localmente |
   | `POSTGRES_DB` | Nome do banco | `timeline_entregas` |
+  | `DB_PORT` | Porta do banco no computador (só o próprio computador acessa). Troque se a porta já estiver em uso, por exemplo por outro PostgreSQL instalado | `5432` |
   | `API_PORT` | Porta da API no computador | `8080` |
   | `WEB_PORT` | Porta das telas no computador | `4200` |
   | `TZ` | Fuso horário da API | `America/Sao_Paulo` |
@@ -560,6 +563,7 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
 | Unitário — Domain | Regras da `Versao`, cálculo da timeline, da tabela de status das aplicações e das semanas | **TDD**: os critérios de aceite são escritos como testes antes da implementação, com a data atual fixada. |
 | Unitário — Application | Casos de uso, validação de entrada, unicidade, congelamento | Testes após a implementação, com repositórios em memória: classes simples escritas no próprio projeto de teste, sem o provedor em memória do EF Core. |
 | Unitário — Frontend | Distribuição em sub-linhas e conversão de datas em posições | Testes após a implementação. |
+| Estrutura — Domain | Regra de dependência entre camadas (seção 4): o `Domain` não referencia outras camadas, pacotes nem frameworks de infraestrutura | Dois testes, criados na T-03, sem dependência extra: um lê o `.csproj` do `Domain`; o outro, as referências do código compilado. |
 | Integração — API e banco | Endpoints principais com PostgreSQL real | Incremento, se houver tempo. |
 
 **Critérios de aceite por nível**
@@ -598,11 +602,11 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
 
 ### 12.1 Docker Compose
 
-O `docker-compose.yml` define três serviços:
+O `docker-compose.yml` define os serviços abaixo, mais o serviço `ferramentas`, que só roda quando chamado pelos scripts `install`, `test` e `lint` (perfil `ferramentas`, ADR-31):
 
 | Serviço | Conteúdo |
 |---|---|
-| `db` | PostgreSQL, com os dados guardados num volume do Docker. |
+| `db` | PostgreSQL, versão principal 17 (ADR-32), com os dados guardados num volume do Docker. A porta fica aberta só para o próprio computador. |
 | `api` | A API. Ao iniciar, aplica as migrations pendentes e, se o banco estiver vazio e a variável de carga estiver ligada, cria dados fictícios de exemplo (aplicações Alfa, Beta, Gama e Delta), com datas calculadas a partir do dia da carga, para que a timeline do semestre atual nunca apareça vazia (ADR-25). |
 | `web` | As telas, servidas por um servidor web, que também repassa as chamadas `/api` para a API. Incluído quando a primeira tela for construída. |
 
@@ -634,7 +638,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | Ferramentas de design do EF Core e ferramenta `dotnet-ef` | Criar e aplicar as migrations | MIT |
 | xUnit, executor do xUnit e SDK de testes da Microsoft | Escrever e rodar os testes | Apache 2.0 e MIT |
 | Relógio falso da Microsoft (`Microsoft.Extensions.TimeProvider.Testing`) | Fixar a data atual nos testes | MIT |
-| Página de visualização do OpenAPI (Scalar) | Consultar a documentação da API no navegador (ADR-30) | MIT |
+| Geração do documento OpenAPI (`Microsoft.AspNetCore.OpenApi`) e página de visualização (Scalar) | Gerar a documentação da API e consultá-la no navegador (ADR-30) | MIT e MIT |
 | Angular, Angular Material e angular-eslint | Telas e lint do frontend | MIT |
 
 ### 12.4 Empacotamento e reprodutibilidade
@@ -683,6 +687,8 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | ADR-28 | Versão do formato gravada em cada congelado | Congelados antigos continuam legíveis se o formato evoluir (RN-29). | Sem versão (risco de não abrir congelados antigos). |
 | ADR-29 | Endpoints no estilo Minimal APIs | Estilo atual do ASP.NET Core, com menos código. | Controllers. |
 | ADR-30 | Documentação OpenAPI publicada em todos os ambientes, com página de visualização | O sistema é local (RNF-01), e quem avalia consulta a API pelo navegador. | Documentação só em desenvolvimento (invisível no Docker). |
+| ADR-31 | Serviço `ferramentas` no Docker Compose (imagem do SDK do .NET, perfil `ferramentas`), usado por `install`, `test` e `lint`; o container trabalha numa cópia do código, sem `bin` e `obj` | Um só lugar define a imagem do SDK e como montar o código, igual no Windows, no Linux e no macOS (ADR-24). A cópia evita misturar arquivos de compilação do computador com os do container e arquivos de root na pasta do projeto. | `docker run` em cada script (imagem repetida em quatro scripts e caminhos diferentes por sistema); montar a pasta para escrita (mistura de arquivos e permissões). |
+| ADR-32 | PostgreSQL de versão principal 17, porta publicada só para o próprio computador e configurável por `DB_PORT` | Versão estável e madura, com o volume no caminho padrão da imagem. Quem já tem outro PostgreSQL instalado (porta 5432 ocupada) só troca `DB_PORT` no `.env`. | Versão 18 (mudou o caminho do volume); porta fixa (conflita com PostgreSQL já instalado); porta aberta para a rede. |
 
 ---
 
@@ -711,3 +717,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.7 | 15/10/2026 | Dependências previstas aprovadas pela autora (seções 12.3 e 14). Corrigida a introdução do catálogo de mensagens, que o dava como aprovado antes da revisão (seção 7.6). |
 | 0.8 | 15/10/2026 | Seção 4: o `prompts/prompts-claude-code.md` reúne o roteiro de prompts e o registro dos pedidos. |
 | 0.9 | 15/10/2026 | Seção 9: nomes das variáveis do `.env.example` (T-02). |
+| 0.10 | 15/10/2026 | T-03: `Microsoft.AspNetCore.OpenApi` nas dependências previstas (12.3); `Directory.Build.props`, nome do projeto Host e `scripts/ferramentas-container.sh` na estrutura (4); `DB_PORT` (9); teste de estrutura do `Domain` (11); serviço `ferramentas` e PostgreSQL 17 (12.1); ADR-31 e ADR-32. |
