@@ -4,7 +4,7 @@ Sistema local para manter o status report semanal de um projeto de software a pa
 
 > **Versão 1.0.0 — entrega parcial planejada.** O projeto foi construído em degraus, e cada degrau termina com algo funcionando. Esta versão entrega os dois primeiros: o cadastro completo de aplicações e versões, pela API e pelas telas. A timeline, a tabela de status das aplicações e o congelamento semanal estão especificados e ficaram para os próximos degraus ([seção 14](#14-limitações-e-próximos-passos)).
 
-## 1. Título e descrição
+## 1. Descrição
 
 **O problema.** O status report semanal do projeto é mantido à mão, em PowerPoint, com uma timeline de entregas e uma tabela de status das aplicações. A atualização leva pelo menos 1 hora por semana, a timeline nunca fica alinhada às datas reais, a mesma informação é repetida em mais de um slide, e cada mudança de data é redesenhada manualmente.
 
@@ -40,7 +40,7 @@ Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negoci
 
 ## 3. Tabela de conteúdos
 
-- [1. Título e descrição](#1-título-e-descrição)
+- [1. Descrição](#1-descrição)
 - [2. O que foi entregue](#2-o-que-foi-entregue)
 - [3. Tabela de conteúdos](#3-tabela-de-conteúdos)
 - [4. Tecnologias utilizadas](#4-tecnologias-utilizadas)
@@ -77,7 +77,7 @@ Todas as ferramentas são gratuitas. As versões exatas ficam nos arquivos de de
 | Ferramenta | Modelo | Onde foi usado |
 |---|---|---|
 | Conversa no claude.ai | Claude Opus 5.5 | Planejamento: revisão de requisitos e de arquitetura, processo, tarefas e roteiro de prompts |
-| [Claude Code](https://docs.claude.com/en/docs/claude-code/overview), pela área Code do aplicativo Claude | Claude Sonnet 5.5 | Planos e implementação das tarefas T-02, T-03 e T-05 a T-10 |
+| [Claude Code](https://docs.claude.com/en/docs/claude-code/overview), pela área Code do aplicativo Claude | Claude Sonnet 5.5 | Planos e implementação das tarefas T-02, T-03 e T-05 a T-10, e a entrega (T-20 a T-22) |
 | Claude Code | Claude Opus 5.5 | Implementação da T-04, as regras de negócio da versão |
 
 A aplicação em si não usa IA: o problema é resolvido por regras previsíveis (ADR-04 do [`arquitetura.md`](docs/tecnico/arquitetura.md)).
@@ -132,6 +132,8 @@ git clone https://github.com/priscilabertolazzi/timeline-entregas.git timeline-e
 cd timeline-entregas
 ```
 
+Se você recebeu o projeto em arquivo `.zip`, descompacte-o (seguindo a mesma orientação de pasta), entre na pasta `timeline-entregas` e siga a partir do passo 2. O `.zip` traz também o histórico do Git.
+
 **2. Os quatro comandos do projeto**
 
 | Ação | Windows (PowerShell) | Linux e macOS |
@@ -166,7 +168,7 @@ Em Linux e macOS, sem o `make`, use `sh scripts/install.sh`, `sh scripts/run.sh`
 
 Com o sistema no ar, abra `http://localhost:4200`.
 
-1. **Lista de aplicações.** Aparecem Alfa, Beta, Gama e Delta, cada uma com as suas versões, a fase e a situação de cada versão em etiquetas coloridas e a data de entrega (ou "TBD"). A Delta mostra "Nenhuma versão cadastrada".
+1. **Lista de aplicações.** Aparecem, em ordem alfabética, Alfa, Beta, Delta e Gama, cada uma com as suas versões, a fase e a situação de cada versão em etiquetas coloridas e a data de entrega (ou "TBD"). A Delta mostra "Nenhuma versão cadastrada".
 2. **Nova aplicação.** Cadastre um nome. Tente cadastrar "alfa": a tela mostra "Já existe uma aplicação com esse nome." (CA-33). Os botões **Editar** e **Excluir** de cada aplicação renomeiam e excluem; a exclusão pede confirmação e leva junto as versões (RN-04).
 3. **Nova versão.** Na Delta, cadastre a versão `v1`. Ela nasce em Backlog, sem datas.
 4. **Tela da versão.** Clique na linha da versão (ou em **Abrir ›**). A tela tem dois blocos, **Dados da versão** (rótulo, fase, situação e observação) e **Datas** (uma etapa por linha), e um único botão **Salvar**, numa barra fixa no pé da tela, onde também aparecem as mensagens.
@@ -323,7 +325,7 @@ A data atual é sempre fixada nos testes, para que o resultado não dependa do d
 
 O projeto foi feito por uma analista de requisitos que **não programa**, com o Claude Code escrevendo todo o código. A divisão de papéis foi fixa: a autora define as regras, aprova cada plano antes de qualquer alteração e confere o resultado **pelo comportamento**, pelos critérios de aceite; o assistente toma as decisões técnicas, sempre registradas no [`arquitetura.md`](docs/tecnico/arquitetura.md), e explica cada passo em linguagem simples.
 
-O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CLAUDE.md` com as regras permanentes (na raiz, no backend e no frontend), os requisitos, a arquitetura, as tarefas e um roteiro de prompts. Cada tarefa seguiu o mesmo ciclo: plano, aprovação, branch, implementação em passos pequenos, build, testes e lint, verificação da autora, registro no [`diario.md`](docs/diario.md) e commit.
+O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CLAUDE.md` com as regras permanentes (na raiz, no backend e no frontend), os requisitos, a arquitetura, as tarefas e um roteiro de prompts. Cada tarefa seguiu o mesmo ciclo: plano, aprovação, branch, implementação em passos pequenos, build, testes e lint, verificação da autora, registro no [`diario.md`](docs/diario.md), commit e integração ao `main` (os commits `Integrar <branch>` do histórico). Antes da release, um agente separado, que não participou da implementação, fez a revisão independente de todo o código.
 
 ### Onde a IA acelerou o desenvolvimento
 
@@ -378,7 +380,7 @@ Os pedidos estão na íntegra em [`prompts/prompts-claude-code.md`](prompts/prom
 | Código plausível, mas errado | Build, testes e lint obrigatórios; testes derivados dos critérios; testes vistos falhando antes de passar | Testes que falharam pelo motivo errado foram refeitos até reprovar pelo motivo certo |
 | Mensagens inventadas | Catálogo de mensagens com texto exato, conferido pelos testes | Mensagem nova só depois de entrar no catálogo, com aprovação (MSG-42) |
 | Segredos e dados sensíveis | `.env` no `.gitignore` antes do primeiro commit; só dados fictícios; e-mail privado do GitHub nos commits | Nenhuma senha no histórico do Git; repositório privado até a entrega |
-| A autora não lê o código | Testes como contrato, lint, restrições no banco, explicações em linguagem simples e verificação pelo comportamento | Limitação real: a revisão independente do código, prevista no processo, não foi feita nesta versão ([seção 14](#14-limitações-e-próximos-passos)) |
+| A autora não lê o código | Testes como contrato, lint, restrições no banco, explicações em linguagem simples, verificação pelo comportamento e revisão independente do código por um agente separado | A revisão independente final não achou problema grave e apontou 10 itens: os que afetavam o comportamento foram corrigidos, com testes novos, e os pontos menores ficaram como próximos passos ([seção 14](#14-limitações-e-próximos-passos)) |
 | Funcionalidades além do pedido | Escopo limitado ao `requisitos-mvp.md` e à tarefa; lacunas viram perguntas | Duas lacunas dos documentos (lista sem versões, dados de exemplo sem detalhes) foram levadas à autora antes de implementar |
 
 ## 13. Demonstração visual
@@ -389,11 +391,11 @@ Capturas com os dados de exemplo fictícios.
 
 ![Lista de aplicações com Alfa, Beta, Gama e Delta, as etiquetas de fase e situação e a data de entrega](docs/imagens/lista-aplicacoes.jpg)
 
-**Tela da versão**, com o erro do CA-25 (só a data de entrega informada): nada é gravado, e a mensagem aparece na barra do Salvar
+**Tela da versão**, com o erro do CA-25 (datas informadas pela metade: falta a data de entrega): nada é gravado, e a mensagem aparece na barra do Salvar
 
 ![Tela da versão com a mensagem do CA-25](docs/imagens/tela-versao.jpg)
 
-**Página de documentação da API**
+**Página de documentação da API** (na captura, a API rodava numa porta alternativa, 8180; o padrão é 8080)
 
 ![Página de documentação da API (Scalar)](docs/imagens/documentacao-api.jpg)
 
@@ -402,8 +404,7 @@ Capturas com os dados de exemplo fictícios.
 **Limitações desta versão**
 
 - **Entrega parcial:** estão prontos dois dos sete degraus planejados. O sistema ainda não desenha a timeline, não monta a tabela de status das aplicações e não congela o status report semanal, que são o objetivo final do produto. Os documentos em `docs/` descrevem o MVP completo, inclusive rotas que ainda não existem (`/api/timeline`, `/api/tabela-status` e `/api/historico`).
-- **Revisão independente do código não realizada:** o processo previa uma revisão do código por uma sessão separada do assistente ao fim das etapas de API e antes da entrega. Como a autora não lê código, os testes, o lint e as restrições do banco foram as proteções efetivas.
-- **Pontos apontados pela revisão independente final, que ficam como próximos passos** (nenhum afeta o uso hoje; a API sempre passa pelos caminhos seguros):
+- **Pontos menores apontados pela revisão independente final do código, que ficam como próximos passos** (nenhum afeta o uso hoje; a API sempre passa pelos caminhos seguros):
   - Sem controle de concorrência: se a mesma versão for salva em duas abas, a segunda grava por cima da primeira, sem aviso (as regras continuam valendo em cada salvamento).
   - Corpo de requisição grande demais ou com tempo esgotado é tratado como "Requisição inválida" (400), e o cancelamento pelo navegador é registrado como erro inesperado.
   - A camada da API usa tipos do `Domain` por meio da `Application`, e o teste de camadas só confere o `Domain`.

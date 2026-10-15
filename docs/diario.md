@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão do modelo | 0.10 |
+| Versão | 0.16 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -57,7 +57,7 @@ Copie o bloco abaixo para cada nova sessão.
 | Tarefa | Planejamento, antes da T-01: adaptação do processo, revisão de arquitetura, estratégia de entrega em etapas, roteiro de prompts e preparação do repositório |
 | Regras e critérios | RN-01, RN-02, RN-08, RN-24, RN-25, RN-27, RN-30; CA-02, CA-28, CA-29, CA-33, CA-34, CA-40, CA-41, CA-42 |
 | Modelo usado | Claude Opus 5.5, numa conversa no claude.ai (ainda não no Claude Code) |
-| Tempo real | *(a preencher pela autora)* |
+| Tempo real | Não medido: a anotação do horário de início e de fim passou a ser feita a partir da Sessão 04. |
 | Estimativa sem IA | 16 h (proposta do assistente: o mesmo trabalho feito por um arquiteto experiente sem IA, somando a revisão cruzada de nove documentos, a reescrita do processo e das tarefas, o catálogo de 41 mensagens e o roteiro de prompts das 22 tarefas) |
 
 **O que foi pedido:** continuar o planejamento a partir do resumo da sessão anterior; adaptar o processo à autora não técnica; mudar a estratégia de entrega; fazer uma revisão de arquitetura antes do código; preparar o repositório e os prompts de cada tarefa. Pedidos completos na Parte 2 do `prompts/prompts-claude-code.md`, itens P-01 a P-17.
@@ -82,7 +82,7 @@ Copie o bloco abaixo para cada nova sessão.
 - A ordem das etapas mudou duas vezes. O assistente recomendou fazer a API da timeline logo depois das APIs de cadastro; a autora manteve a sua ordem, com a entrega como primeiro objetivo (P-02 e P-04).
 - O assistente encontrou e corrigiu erros próprios nas conferências que fazia ao final de cada alteração: duas menções ao contexto externo do projeto em documentos do repositório; o catálogo de mensagens dado como aprovado antes da revisão da autora; a tabela de histórico do processo fora de ordem; as datas dos históricos registradas como 14/10/2026 em vez de 15/10/2026.
 
-**O que a revisão humana capturou:** *(rascunho do assistente; a autora completa com o que ela própria percebeu)*
+**O que a revisão humana capturou:**
 
 - As decisões de negócio foram da autora: avanço direto de fase para a carga inicial (N-01), nomes iguais sem diferença de maiúsculas (N-02), correção da prorrogação em Produção (N-03), catálogo de mensagens (N-04), Histórico sem congelados (N-05), limites de tamanho (N-06).
 - A autora apontou que os prompts do roteiro não mostravam o modelo CO-STAR de forma explícita. O roteiro foi reescrito com os seis elementos em cada prompt (P-17).
@@ -102,7 +102,7 @@ Copie o bloco abaixo para cada nova sessão.
 - Revisar a arquitetura com perguntas objetivas antes do código encontrou um erro que viraria um teste errado e protegido.
 - Perguntar "o que você vai fazer?" ou "o que eu faço?" sobre um item técnico transforma a recomendação em algo que a autora consegue conferir.
 - Decisões apresentadas em botões, com exemplos, foram respondidas mais rápido do que perguntas abertas.
-- Sessões anteriores de planejamento (requisitos e primeira versão da arquitetura) não foram registradas neste diário. A autora pode acrescentá-las, se quiser.
+- As sessões anteriores de planejamento (requisitos e primeira versão da arquitetura) ficaram registradas nos históricos de versão dos próprios documentos (`requisitos-negocio.md`, `requisitos-mvp.md` e `arquitetura.md`).
 
 ### Sessão 01 — 15/10/2026 — T-01, Preparação do ambiente
 
@@ -111,7 +111,7 @@ Copie o bloco abaixo para cada nova sessão.
 | Tarefa | T-01 — Preparação do ambiente |
 | Regras e critérios | Nenhum (tarefa de preparação) |
 | Modelo usado | Nenhum modelo de IA na execução: a tarefa foi feita pela autora, com o roteiro do `tarefas.md` |
-| Tempo real | *(a preencher pela autora)* |
+| Tempo real | Não medido: a anotação do horário de início e de fim passou a ser feita a partir da Sessão 04. |
 | Estimativa sem IA | 2 h (proposta do assistente: instalar e verificar Git, .NET, Node.js e Docker, configurar o Git e montar a pasta do projeto) |
 
 **O que foi pedido:** não houve pedido ao Claude Code. A autora seguiu o roteiro da T-01: verificou o computador, instalou as ferramentas, conferiu cada uma pelos comandos da tabela, configurou o Git e montou a pasta do projeto. Esta entrada foi criada na Sessão 02, a pedido da autora.
@@ -126,11 +126,11 @@ Copie o bloco abaixo para cada nova sessão.
 - O motor do Docker ficou parado até a instalação do WSL, que o Docker Desktop usa no Windows.
 - O e-mail do Git foi configurado por engano com os sinais `<` e `>` em volta do endereço e depois corrigido.
 
-**O que a revisão humana capturou:** *(a preencher pela autora)*
+**O que a revisão humana capturou:** a conferência de cada ferramenta pelos comandos da tabela da T-01, antes de seguir para o passo seguinte, mostrou os três problemas acima ainda na preparação, e não no meio de uma tarefa de código.
 
 **Riscos mitigados:** assistente sem as regras do projeto (os `CLAUDE.md` já estavam na pasta, com os nomes certos, na primeira sessão); informação indevida nos commits (e-mail privado do GitHub).
 
-**Aprendizados:** *(a preencher pela autora)*
+**Aprendizados:** depois de instalar o Docker no Windows, reiniciar o computador e conferir se o WSL está instalado antes de testar o comando. Conferir a configuração do Git (`git config user.email`) logo depois de fazê-la.
 
 ---
 
@@ -141,10 +141,10 @@ Copie o bloco abaixo para cada nova sessão.
 | Tarefa | T-02 — Repositório e documentação inicial |
 | Regras e critérios | Nenhuma RN ou CA; `arquitetura.md`, seções 4 e 9, e ADR-19 (licença MIT) |
 | Modelo usado | Claude Sonnet 5.5, no Claude Code (área Code do aplicativo Claude) |
-| Tempo real | *(a preencher pela autora)* |
+| Tempo real | Não medido: a anotação do horário de início e de fim passou a ser feita a partir da Sessão 04. |
 | Estimativa sem IA | 1 h (proposta do assistente: um desenvolvedor experiente escreveria os arquivos de configuração e o esqueleto do README, iniciaria o repositório e conferiria o envio ao GitHub) |
 
-**O que foi pedido:** iniciar o repositório e enviar o primeiro commit, com `.gitignore`, `.gitattributes` e `.editorconfig` criados antes dele, `.env.example`, `LICENSE` (MIT) e o esqueleto do README com as 15 seções. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, se registrado.
+**O que foi pedido:** iniciar o repositório e enviar o primeiro commit, com `.gitignore`, `.gitattributes` e `.editorconfig` criados antes dele, `.env.example`, `LICENSE` (MIT) e o esqueleto do README com as 15 seções. O pedido seguiu o prompt da T-02 do roteiro (Parte 1 do `prompts/prompts-claude-code.md`), sem registro à parte na Parte 2.
 
 **Resultado:** repositório iniciado, com o branch `chore/repositorio-inicial` integrado ao `main`. Arquivos de configuração e proteção criados; README com as 15 seções, cada uma com uma linha do que vai conter; nomes das variáveis do `.env.example` registrados no `arquitetura.md` (versão 0.9). A regra das mensagens de commit foi corrigida no `CLAUDE.md` e no `processo-desenvolvimento.md` (versão 0.8): descrição em português com o verbo no infinitivo. T-01 e T-02 marcadas no `tarefas.md` (versão 0.11).
 
@@ -396,7 +396,7 @@ Copie o bloco abaixo para cada nova sessão.
 - O desenho de três botões, aceitável tecnicamente, não servia para o uso: tudo na mesma tela pede um só salvamento.
 - Faltavam boas práticas de UX. Revisão de usabilidade pedida pela autora, aplicada e conferida no navegador: barra de título com a cor do tema; conteúdo com largura máxima; fase e situação como etiquetas, com Risco destacado; linha da versão inteira clicável; "Excluir" em cor de alerta e afastado das demais ações; barra de carregamento; barra fixa no pé com o Salvar e as mensagens da API sempre à vista; datas em grade, uma etapa por linha, com "×" dentro do campo.
 
-**Tag `v0.1.0`:** a autora decidiu criá-la agora, no commit que fechou a etapa 1 (T-08), **antes da revisão independente da T-08**, que segue pendente (`processo-desenvolvimento.md`, seção 7.3). Ela pode ser feita a qualquer momento, em nova sessão do Claude Code.
+**Tag `v0.1.0`:** a autora decidiu criá-la agora, no commit que fechou a etapa 1 (T-08), **antes da revisão independente da T-08** (`processo-desenvolvimento.md`, seção 7.3). Essa revisão foi feita na entrega, junto com a revisão independente final, que cobriu todo o código, inclusive o da etapa 1 (ver "Entrega", abaixo).
 
 **Alterações pedidas pela autora depois do commit da T-10** (ao testar as telas):
 
@@ -419,18 +419,40 @@ Copie o bloco abaixo para cada nova sessão.
 
 - **Data de entrega na lista de aplicações e título (pedidos da autora):** a lista mostra, para cada versão, a coluna "Data de entrega" em dd/mm/aaaa, ou "TBD" quando não há datas (RN-13); para isso o resumo das versões da API ganhou `dataEntrega` (`arquitetura.md`, rota da lista). O título passou a "Timeline de Entregas (MVP)", na barra e na aba do navegador. `requisitos-mvp.md` (RF-23, RF-24, CA-48, CA-49). 3 testes novos. **Um teste antigo**, `RF03_ListaDeAplicacoes_TrazAsVersoesDeCadaUmaNaOrdemDeCadastro`, passa a falhar porque compara o resumo da versão sem a data; a autora aprovou o ajuste (incluir a data de entrega 24/08/2026 da v1 no resultado esperado).
 
-**Entrega (T-20 a T-22), a pedido da autora ("faça tudo na ordem que julgar melhor"):**
+**Entrega (T-20 a T-22), a pedido da autora ("faça tudo na ordem que julgar melhor", P-27):**
 
 - **Revisão independente do código:** feita por um agente separado, só leitura, que não participou da implementação. Não achou nenhum problema grave; apontou 10 itens. **Corrigidos:** o "tudo ou nada" da versão agora desfaz em qualquer falha, e não só em regra violada (teste novo); a documentação passou a dizer que o bloco de datas ausente dá a MSG-42 e a fase ausente ou desconhecida dá a MSG-26 (ADR-39 e comentário do código); 3 testes novos. **Registrados como limitações no README:** métodos públicos da versão que não conferem a regra do Risco, falta de controle de concorrência, tratamento de corpo grande demais e do cancelamento, teste de camadas só do Domain e nome ausente na confirmação de exclusão. **Resolvidos depois, com a aprovação da autora:** os métodos `AlterarSituacao` e `AlterarObservacao` da versão passaram a ser internos (só o projeto de testes do `Domain` os enxerga, então nenhum teste antigo foi alterado) e a carga de exemplo usa `AlterarDados`; `vitest` e `jsdom` (e `@angular/cdk`, `eslint`, `typescript-eslint` e `@eslint/js`, que vêm com as ferramentas aprovadas) foram registrados na arquitetura, seção 12.3, com a licença MIT conferida nos pacotes instalados.
 - **C-11 (informação de terceiros):** a autora passou os termos a procurar, apenas na conversa, e o assistente os buscou em todo o histórico do Git (conteúdo, mensagens de commit, autores, e-mails e nomes de arquivo). Nenhum nome real foi encontrado; as únicas ocorrências foram palavras comuns ("FITNESS" na licença MIT e `flex` no CSS). Os termos não foram escritos em nenhum arquivo.
 - **Instalação limpa (C-10 e C-05):** o `main` foi clonado numa pasta nova e o README seguido (instalar, executar, testar e lint): tudo com código 0, 239 testes passando.
 - **T-20:** os 42 exemplos do `exemplos.http` foram executados do começo ao fim, num banco vazio, todos com o resultado esperado. O arquivo foi completado: recadastro da Beta (excluída no passo 10), data de entrega na lista e exemplos do CA-43 e do CA-44.
 - **Ícone da aba e imagens:** ícone próprio no lugar do logotipo do Angular; as imagens do README refeitas com a v1.0.0 na barra.
-- **Checklist de release, pré-verificação do assistente:** C-03 (30 commits no padrão), C-04, C-06 (nenhum segredo no histórico inteiro; `.env` nunca versionado), C-07 e C-09, sem pendências.
+- **Checklist de release, pré-verificação do assistente:** C-03 (todos os commits de trabalho no padrão Conventional Commits; os merges registram a integração de cada branch, como `Integrar <branch>`), C-04, C-06 (nenhum segredo no histórico inteiro; `.env` nunca versionado), C-07 e C-09, sem pendências.
 
-**Riscos mitigados:** regra de ordem entre fase e datas fora da tela (ficou na API, ADR-39); data digitada errada apagando um valor sem aviso (campos só de leitura, escolha pelo calendário); datas trocando de dia por fuso (conversão pelos componentes locais); nenhum teste existente alterado; nenhuma dependência nova.
+**Riscos mitigados:** regra de ordem entre fase e datas fora da tela (ficou na API, ADR-39); data digitada errada apagando um valor sem aviso (campos só de leitura, escolha pelo calendário); datas trocando de dia por fuso (conversão pelos componentes locais); teste ajustado para o código passar (os três testes antigos alterados nesta sessão, listados acima, tiveram a aprovação da autora); nenhuma dependência nova.
 
 **Aprendizados:** quando uma decisão de tela (um só botão) conflita com como a API grava, resolver na API e não na tela. Pedir a revisão de UX antes do commit custou pouco e evitou retrabalho nas próximas telas. Conferir o envio de acentos pelo `curl` no Windows antes de suspeitar da API.
+
+### Sessão 11 — 15/10/2026 — Conferência final da entrega
+
+| Campo | Registro |
+|---|---|
+| Tarefa | Complemento da T-22: conferência dos documentos entre si e contra as diretrizes do curso |
+| Regras e critérios | Checklist de release C-01 a C-11 (`processo-desenvolvimento.md`, seção 14) e seções obrigatórias do README |
+| Modelo usado | Claude Opus 5.5, numa conversa no claude.ai |
+| Tempo real | Não medido |
+| Estimativa sem IA | 2 h (proposta do assistente: ler o README, os seis documentos e o histórico do Git atrás de contradições e corrigi-las) |
+
+**O que foi pedido:** conferir o projeto inteiro, com prioridade para as diretrizes do curso, e deixar tudo coerente para a entrega, sem acrescentar trabalho além do necessário.
+
+**Resultado:** branch `docs/consistencia-entrega`. No README: a menção à revisão independente como não realizada saiu (ela foi feita, e os seus achados já estavam na seção 14); a seção 1 passou a se chamar "Descrição"; a ordem da lista de exemplo ficou igual à da tela (alfabética); a legenda da captura da tela da versão passou a descrever o que a imagem mostra; a porta da captura da API foi explicada; o passo de instalação ganhou a orientação para quem recebe o projeto em `.zip`. No diário: tempos não medidos das Sessões 00 a 02 registrados como tais, campos em branco da Sessão 01 preenchidos, a revisão da T-08 dada como coberta pela revisão final e o resumo acumulado completo. No `tarefas.md`: T-20 a T-22 marcadas. No `processo-desenvolvimento.md`: a mensagem dos merges (`Integrar <branch>`). No registro de prompts: o pedido da entrega (P-27). No `arquitetura.md`: aprovação da MSG-43 na tabela da seção 14. Nenhum código alterado.
+
+**Primeira tentativa:** funcionou.
+
+**O que a revisão humana capturou:** a autora pediu que a conferência partisse das diretrizes do curso, e não só do código, o que mostrou contradições que só aparecem lendo os documentos lado a lado.
+
+**Riscos mitigados:** documentação contraditória chegando à avaliação.
+
+**Aprendizados:** ao final, conferir os documentos entre si, e as legendas contra as imagens, e não só o código e os testes.
 
 ---
 
@@ -440,17 +462,15 @@ Atualizado ao final de cada fase do `tarefas.md`.
 
 | Etapa | Tempo real | Estimativa sem IA | Sessões | Acertos na primeira tentativa |
 |---|---|---|---|---|
-| Planejamento | *(a preencher)* | 16 h | 1 | 15 de 17 pedidos |
-| 0. Preparação | | 4,0 h (T-01 a T-03) | 3 (T-01, T-02 e T-03) | |
-| 1. APIs de cadastro | | | | |
-| 2. Telas de cadastro | T-09 não medido por inteiro (verificação: 10 min); T-10: 2 h | 10 h (T-09: 2 h; T-10: 8 h) | 2 (T-09 e T-10) | 0 de 2 |
-| 3. API da timeline | | | | |
-| 4. Tela da timeline | | | | |
-| 5. API da tabela de status das aplicações | | | | |
-| 6. Tela da tabela de status das aplicações | | | | |
-| 7. Congelamento | | | | |
-| Entrega | | | | |
-| **Total** | | | | |
+| Planejamento | Não medido | 16 h | 1 (Sessão 00) | 15 de 17 pedidos |
+| 0. Preparação | Não medido; verificação da T-03: cerca de 10 min | 6 h (T-01: 2 h; T-02: 1 h; T-03: 3 h) | 3 (Sessões 01 a 03) | 1 de 3 (T-02) |
+| 1. APIs de cadastro | T-08: 30 min; as demais não foram medidas por inteiro | 18 h (T-04: 4 h; T-05: 3 h; T-06: 4 h; T-07: 4 h; T-08: 3 h) | 5 (Sessões 04 a 08) | 2 de 5 (T-07 e T-08); T-05 e T-06 com o desenho certo e pequenos ajustes |
+| 2. Telas de cadastro | T-09 não medido por inteiro (verificação: 10 min); T-10: 2 h | 10 h (T-09: 2 h; T-10: 8 h) | 2 (Sessões 09 e 10) | 0 de 2 |
+| Ajustes pedidos depois da T-10 e entrega (T-20 a T-22) | Cerca de 3,5 h de relógio, entre o commit da T-10 (13:32) e o último commit da release (17:01) | Não estimada | Registrados na Sessão 10; conferência final na Sessão 11 | — |
+| 3 a 7 (timeline, tabela de status e congelamento) | Não iniciadas: próximos passos, por decisão da autora (README, seção 14) | — | — | — |
+| **Total** | **Cerca de 8,5 h de relógio** entre o commit da T-03 (08:32) e o último commit da release (17:01), pelo histórico do Git, com pausas e verificações da autora; mais o planejamento e a preparação, não medidos | **50 h** (planejamento e etapas 0 a 2) | 12 (Sessões 00 a 11) | — |
+
+O tempo de relógio vem dos horários dos commits no Git, porque o tempo de cada sessão nem sempre foi anotado. As estimativas sem IA foram propostas pelo assistente e aceitas pela autora.
 
 **Destaques para o README** (preencher ao longo do projeto)
 
@@ -481,3 +501,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.13 | 15/10/2026 | Registrada a Sessão 09 (T-09), com o pedido P-25. |
 | 0.14 | 15/10/2026 | Registrada a Sessão 10 (T-10), com o pedido P-26, a mudança para um só botão Salvar, a revisão de UX e a tag `v0.1.0` criada antes da revisão independente da T-08. |
 | 0.15 | 15/10/2026 | Sessão 10: registradas as alterações pedidas depois do commit (campo Situação, observação obrigatória em Risco e MSG-43). |
+| 0.16 | 15/10/2026 | Sessão 10: entrega (T-20 a T-22) e revisão independente final registradas. Sessão 11: conferência final. Tempos não medidos das Sessões 00 a 02 registrados, campos da Sessão 01 completados, revisão da T-08 dada como coberta pela revisão final e resumo acumulado completo. |

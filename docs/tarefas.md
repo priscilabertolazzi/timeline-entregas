@@ -3,11 +3,11 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.21 |
+| Versão | 0.22 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.19) |
 
-> **Situação na v1.0.0:** concluídas as etapas 0 a 2 (T-01 a T-10). A autora decidiu encerrar o desenvolvimento depois da etapa 2 e seguir para a entrega (T-20 a T-22). As tarefas T-11 a T-19 ficam como próximos passos, listados no README.
+> **Situação na v1.0.0:** concluídas as etapas 0 a 2 (T-01 a T-10). A autora decidiu encerrar o desenvolvimento depois da etapa 2 e seguir para a entrega, também concluída (T-20 a T-22). As tarefas T-11 a T-19 ficam como próximos passos, listados no README.
 
 Roteiro de desenvolvimento em tarefas pequenas. Cada tarefa segue o ciclo e a definição de pronto do `docs/tecnico/processo-desenvolvimento.md`.
 
@@ -44,7 +44,7 @@ O sistema é construído em degraus (`arquitetura.md`, ADR-22). Cada degrau term
 - Antes de começar cada degrau, compare o tempo real acumulado mais a estimativa do degrau com as 26 horas. Se passar, a autora decide entre seguir ou ir direto para a entrega. Pelas estimativas, a decisão aparece no degrau 5 (API da tabela de status das aplicações), que termina em 26,5 horas.
 - Os degraus não concluídos entram no README, em "Limitações e próximos passos". Os requisitos deles já estão escritos.
 
-**Revisão independente:** as tarefas T-08, T-13 e T-15, que fecham as etapas de API, incluem a revisão independente do código antes da tag, e a T-22 a inclui antes da release (`processo-desenvolvimento.md`, seção 7.3). Cada revisão leva cerca de 20 minutos e consome a margem das estimativas. As etapas de telas e de congelamento não têm revisão própria; a da T-22 cobre todo o código.
+**Revisão independente:** as tarefas T-08, T-13 e T-15, que fecham as etapas de API, incluem a revisão independente do código antes da tag, e a T-22 a inclui antes da release (`processo-desenvolvimento.md`, seção 7.3). Cada revisão leva cerca de 20 minutos e consome a margem das estimativas. As etapas de telas e de congelamento não têm revisão própria; a da T-22 cobre todo o código. Na v1.0.0, a revisão da T-08 foi feita junto com a revisão final da T-22, depois da tag `v0.1.0`.
 
 ---
 
@@ -158,7 +158,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 - Página de documentação da API publicada também no Docker (ADR-30).
 - Carga de dados fictícios de exemplo quando o banco estiver vazio, com datas relativas ao dia da carga (ADR-25).
 - Scripts `run` e `test` atualizados; README atualizado.
-- Revisão independente (`processo-desenvolvimento.md`, seção 7.3). Tag `v0.1.0`.
+- Revisão independente (`processo-desenvolvimento.md`, seção 7.3), feita junto com a revisão final da T-22. Tag `v0.1.0`.
 
 **Sua verificação:** `scripts\run.ps1` sobe banco e API; a página da documentação abre no navegador; a lista de aplicações de exemplo aparece na resposta da API.
 
@@ -268,13 +268,13 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 ## Entrega (tempo protegido)
 
-### [ ] T-20 — Exemplos de uso (1 h)
+### [x] T-20 — Exemplos de uso (1 h)
 - `http/exemplos.http` cobrindo todos os endpoints construídos, na ordem de um fluxo de uso.
 - Exemplos `curl` na seção de uso do README.
 
 **Sua verificação:** o Claude Code executa o arquivo de exemplos do começo ao fim e mostra o resultado de cada requisição; você confere que não há erros inesperados.
 
-### [ ] T-21 — README completo e registro do uso de IA (1,5 h)
+### [x] T-21 — README completo e registro do uso de IA (1,5 h)
 - Todas as seções do README, incluindo dependências, arquitetura, limitações e próximos passos (os degraus não concluídos).
 - Seção sobre o uso de IA, com as quatro subseções (onde a IA acelerou, onde a revisão humana foi decisiva, quais prompts funcionaram melhor, quais riscos foram mitigados), a partir do diário.
 - Revisão do `prompts/prompts-claude-code.md`.
@@ -282,7 +282,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** você lê o README inteiro na página do GitHub e confere se alguém de fora entenderia o problema, a solução e como rodar.
 
-### [ ] T-22 — Release 1.0 (1,5 h)
+### [x] T-22 — Release 1.0 (1,5 h)
 - Revisão independente final.
 - Executar o checklist de release do `processo-desenvolvimento.md`, item por item, incluindo a **instalação limpa**: clonar numa pasta nova e seguir só o README.
 - Corrigir as pendências encontradas.
@@ -325,3 +325,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.19 | 15/10/2026 | T-09 marcada como concluída. |
 | 0.20 | 15/10/2026 | T-10 marcada como concluída: a tela da versão passou a ter um só botão Salvar, com a operação única na API (ADR-39); inclui as pendências da T-09. Tag `v0.1.0` criada por decisão da autora antes da revisão independente da T-08, que segue pendente. |
 | 0.21 | 15/10/2026 | Preparação da entrega: decisão da autora de encerrar o desenvolvimento depois da etapa 2 e seguir para a entrega; referência à `arquitetura.md` atualizada para a versão 0.19. |
+| 0.22 | 15/10/2026 | T-20 a T-22 marcadas como concluídas; a revisão independente da T-08 foi feita junto com a revisão final da T-22. |

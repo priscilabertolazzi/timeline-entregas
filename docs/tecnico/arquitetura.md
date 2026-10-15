@@ -733,7 +733,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | Ponto | Onde | Situação |
 |---|---|---|
 | Tabelas, colunas e restrições do banco, incluindo as colunas de comparação de nomes e rótulos e a versão do formato do congelado | Seção 6 | Aprovado na T-05 |
-| Catálogo de mensagens | Seção 7.6 | Aprovado: MSG-11 e MSG-13 a MSG-30 na T-04; as demais 22 depois da T-05; MSG-42 na T-06 |
+| Catálogo de mensagens | Seção 7.6 | Aprovado: MSG-11 e MSG-13 a MSG-30 na T-04; as demais 22 depois da T-05; MSG-42 na T-06; MSG-43 na T-10 |
 | Dependências previstas | Seção 12.3 | Aprovado |
 | Dados de exemplo carregados automaticamente, com datas relativas ao dia da carga | Seção 12.1 | Aprovado na T-08 |
 | Limites de tamanho: nome da aplicação até 100, rótulo da versão até 20 e observação até 1000 caracteres | Seção 6 | Aprovado |
