@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.6 |
+| Versão | 0.7 |
 | Data | 15/10/2026 |
 
 Este arquivo tem duas partes:
@@ -999,6 +999,22 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** a autora respondeu às perguntas do plano com decisões numeradas e já disse onde registrá-las. Sem o teste de estrutura, a tarefa terminaria com "0 testes", sem prova de que o caminho de testes funciona de ponta a ponta.
 
+### P-20 — 15/10/2026 — T-04
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas. Continuação da sessão anterior. A T-03 está concluída e no GitHub (commit 9025163). O registro do diário da T-03 está só no branch local docs/registro-t03 (commit 7d6c3b3), ainda sem integrar ao main. Vamos começar a T-04 do docs/tarefas.md. As regras do projeto estão no CLAUDE.md e no backend/CLAUDE.md; o andamento, no docs/tarefas.md e no docs/diario.md.
+> OBJETIVO: Antes de qualquer alteração, (1) integrar o branch docs/registro-t03 ao main e enviar ao GitHub, e (2) apresentar o plano da T-04 no formato da seção 4.1 do processo, com o tipo de modelo adequado.
+> ESTILO: Siga o CLAUDE.md. A T-04 é TDD: o plano traz a lista dos testes, um por critério de aceite (CA-05, 06, 13, 20, 25, 32, 35, 36, 39, 40, 42), com o nome e uma frase. Mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato (MSG-11 e MSG-13 a MSG-30). Nomes do glossário.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro integre o branch docs/registro-t03 ao main e envie. Depois, o plano da T-04 sem alterar nenhum arquivo, e a lembrança da regra do corte, já que a T-04 abre a Etapa 1 (7 h estimadas; o tempo real das sessões 00 a 02 está em branco no diário). Não crie o branch da T-04 nem escreva testes até eu aprovar o plano.
+
+**Resultado:** o assistente conferiu que o registro da T-03 já estava no `main` e no GitHub, integrado junto com o processo enxuto, e não repetiu a integração. O plano trouxe 13 testes para os 11 critérios, mais 24 testes das regras sem critério próprio, quatro decisões técnicas e a lembrança da regra do corte. O plano foi aprovado sem ajustes. A autora trocou para o modelo de maior capacidade, como o plano indicava.
+
+**Funcionou de primeira?** O plano, sim. A implementação precisou de um ajuste no cenário de um teste novo (ver Sessão 04 do diário). O plano deixou de avisar que o catálogo de mensagens ainda não tinha sido revisado pela autora.
+
+**Por que é relevante:** o pedido foi preparado numa sessão anterior, num arquivo de apoio, e retomou o trabalho sem perder o contexto. A lista de critérios e de mensagens no próprio pedido deu à autora uma referência direta para conferir o plano.
+
 ---
 
 ## Histórico do documento
@@ -1011,3 +1027,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.4 | 15/10/2026 | Verificações das APIs pela página de documentação no navegador, sem VS Code (T-06, T-08, T-20 e A8). |
 | 0.5 | 15/10/2026 | Registro dos pedidos P-18 e P-19 (T-03). |
 | 0.6 | 15/10/2026 | Processo mais leve (`processo-desenvolvimento.md` versão 0.9): registro e commit num único pedido (A11), ajuste da mensagem de commit só quando necessário (A12), A6 e A7 opcionais, dois níveis de detalhe nas regras de uso e revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (A13, A14 e tarefas T-10, T-14, T-16 e T-19). |
+| 0.7 | 15/10/2026 | Registro do pedido P-20 (T-04). |
