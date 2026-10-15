@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.9 |
+| Versão | 0.10 |
 | Data | 15/10/2026 |
 | Ferramenta principal | Claude Code |
 
@@ -325,7 +325,7 @@ Refs: RN-14, RN-25, CA-02, CA-07
 
 **Integração e publicação**
 
-- Depois da confirmação, o assistente faz o commit, integra o branch ao `main` e envia ao GitHub.
+- Depois da confirmação, o assistente faz o commit, integra o branch ao `main` e envia ao GitHub. A integração é um merge com a mensagem `Integrar <branch>` (ex.: `Integrar feat/api-versoes`), que marca no histórico o fim de cada tarefa.
 - O repositório fica **privado** durante o desenvolvimento. Ele só se torna público na T-22, depois do checklist de release (seção 14).
 - **Tags:** uma ao final de cada degrau do `tarefas.md` (`v0.1.0` a `v0.7.0`) e a release `v1.0.0` na entrega.
 
@@ -417,7 +417,7 @@ Executado na T-22, antes da publicação da versão final (`v1.0.0`). O assisten
 |---|---|---|---|
 | C-01 | Repositório público e acessível, com todos os arquivos necessários | A autora abre o link numa janela anônima do navegador, sem login. O assistente compara os arquivos versionados com a estrutura do `arquitetura.md`, seção 4. Se as telas não tiverem sido construídas, a pasta `frontend/` contém apenas o `CLAUDE.md`. | Autora e assistente |
 | C-02 | README completo e renderizado corretamente | Ler todas as seções na página do GitHub e conferir tabelas, blocos de código, imagens e links da tabela de conteúdos. | Autora |
-| C-03 | Histórico de commits consistente | O assistente lista o histórico (`git log --oneline`) e confere o padrão Conventional Commits em todos os commits. A autora lê a lista. | Assistente; autora confere |
+| C-03 | Histórico de commits consistente | O assistente lista o histórico (`git log --oneline`) e confere o padrão Conventional Commits em todos os commits de trabalho; os merges seguem a mensagem `Integrar <branch>` (seção 10). A autora lê a lista. | Assistente; autora confere |
 | C-04 | Dependências declaradas com versões | `.csproj` e `global.json` versionados; `package.json` e `package-lock.json` quando houver telas. A instalação limpa (C-10) confirma na prática. | Assistente |
 | C-05 | Testes presentes, passando e documentados | Rodar o comando de testes do README a partir do clone limpo da C-10. | Autora |
 | C-06 | Credenciais fora do código e do histórico | O assistente busca senhas, chaves e strings de conexão em todo o histórico do Git e relata. A autora confere no GitHub que o `.env` não aparece e que o `.env.example` aparece. | Assistente e autora |
@@ -460,3 +460,4 @@ Executado na T-22, antes da publicação da versão final (`v1.0.0`). O assisten
 | 0.7 | 15/10/2026 | Verificações das APIs pela página de documentação da API, no navegador, no lugar do arquivo de exemplos no VS Code (seções 9.2 e 15). |
 | 0.8 | 15/10/2026 | Seção 10: a regra das mensagens de commit diz que a descrição usa o verbo no infinitivo (ex.: calcular, iniciar, corrigir), como nos exemplos; antes dizia "no imperativo". O `CLAUDE.md` da raiz recebeu o mesmo ajuste. |
 | 0.9 | 15/10/2026 | Processo mais leve, para caber no limite de horas: dois níveis de detalhe, com plano e relatório completos só nas tarefas de regra (T-04, T-11, T-15 e T-17) e resumidos nas demais (seções 4.1 e 4.2); registro e commit num único pedido da autora (seções 2.2 e 4); a autora pode aceitar o relatório quando a "Sua verificação" só repete comandos já rodados (seções 4 e 5); revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (seções 7.3 e 11). O `CLAUDE.md` da raiz recebeu os mesmos ajustes. |
+| 0.10 | 15/10/2026 | Seção 10 e checklist C-03: a mensagem dos merges de integração (`Integrar <branch>`) passa a constar da regra. |

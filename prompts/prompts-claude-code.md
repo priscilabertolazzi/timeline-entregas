@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.7 |
+| Versão | 0.14 |
 | Data | 15/10/2026 |
 
 Este arquivo tem duas partes:
@@ -1135,6 +1135,21 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 ---
 
+### P-27 — 15/10/2026 — T-20 a T-22
+
+**Pedido (trecho registrado no diário):**
+> faça tudo na ordem que julgar melhor
+
+O pedido veio depois do roteiro da entrega (T-20 a T-22, nesta Parte 1), com a revisão independente final (A13 e A14) antes da release.
+
+**Resultado:** revisão independente do código por um agente separado, só leitura (nenhum problema grave; 10 apontamentos, corrigidos ou registrados no README); execução dos 42 exemplos do `exemplos.http` num banco vazio; instalação limpa a partir de um clone novo, com os 239 testes passando; busca dos termos de terceiros (C-11) em todo o histórico; README e imagens refeitos; tag `v1.0.0`. Detalhes na Sessão 10 do diário.
+
+**Funcionou de primeira?** Sim. As correções vieram dos achados da revisão independente, que é o esperado dela.
+
+**Por que é relevante:** com o roteiro e o checklist já escritos, um pedido curto bastou para a entrega inteira: o contexto estava nos documentos, e não na mensagem.
+
+---
+
 ## Histórico do documento
 
 | Versão | Data | Descrição |
@@ -1152,3 +1167,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.11 | 15/10/2026 | Registro do pedido P-24 (T-08). |
 | 0.12 | 15/10/2026 | Registro do pedido P-25 (T-09). |
 | 0.13 | 15/10/2026 | Registro do pedido P-26 (T-10). |
+| 0.14 | 15/10/2026 | Registro do pedido P-27 (entrega, T-20 a T-22); versão no cabeçalho atualizada. |
