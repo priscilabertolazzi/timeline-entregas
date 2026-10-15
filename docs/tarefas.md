@@ -128,7 +128,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** o Claude Code mostra a lista de testes, um por critério de aceite, todos passando. Você confere se os nomes dos testes correspondem aos cenários e se as mensagens são as do catálogo.
 
-### [ ] T-05 — Banco de dados do cadastro (1,5 h)
+### [x] T-05 — Banco de dados do cadastro (1,5 h)
 - DbContext com o schema `timeline`; tabelas `aplicacao` e `versao`, com as colunas de comparação, as unicidades e as restrições `CHECK` (`arquitetura.md`, seção 6). A tabela do congelado entra na T-18.
 - Migration inicial, aplicada automaticamente ao iniciar a API.
 
@@ -313,3 +313,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.12 | 15/10/2026 | T-03 marcada como concluída. |
 | 0.13 | 15/10/2026 | Revisão independente só nas tarefas T-08, T-13, T-15 e T-22, alinhada ao `processo-desenvolvimento.md` versão 0.9 ("Entrega em degraus", T-10, T-14, T-16 e T-19). |
 | 0.14 | 15/10/2026 | T-04 marcada como concluída. |
+| 0.15 | 15/10/2026 | T-05 marcada como concluída. |
