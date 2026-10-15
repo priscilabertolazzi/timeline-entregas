@@ -63,11 +63,18 @@ DELETE {{api}}/aplicacoes/2
 ### 11. Exclui de novo a mesma aplicação. Esperado: 404 "Aplicação não encontrada."
 DELETE {{api}}/aplicacoes/2
 
+### 11a. Cadastra a Beta de novo (a primeira foi renomeada e excluída nos passos 7 e 10). Esperado: 201
+POST {{api}}/aplicacoes
+Content-Type: application/json
+
+{ "nome": "Beta" }
+
 # ============================================================
 # Versões (RF-03 a RF-05, RF-09, RF-10, RF-14, RN-02, RN-07, RN-08)
-# Antes, cadastre as aplicações Alfa e Beta (passos 2 e 3 acima, com o banco vazio).
+# Antes, a Alfa (passo 2) e a Beta (passo 11a) precisam estar cadastradas, com o banco vazio.
 # Nos passos abaixo, troque os números das rotas pelos "id" devolvidos por cada resposta:
-# ALFA = id da Alfa, BETA = id da Beta, V1 = id da v1 da Alfa, V0 = id da v0 da Beta.
+# ALFA = id da Alfa, BETA = id da Beta do passo 11a, V1 = id da v1 da Alfa, V0 = id da v0 da Beta,
+# V2 = id da v2 da Alfa (passo 40).
 # Os cenários do CA-39 e do CA-40 supõem a data atual de 14/10/2026 ou posterior.
 # ============================================================
 
@@ -225,7 +232,7 @@ Content-Type: application/json
 
 { "fase": "Testes" }
 
-### 34. Lista as aplicações. Esperado: 200, cada aplicação com o resumo das suas versões (id, rótulo, fase e situação)
+### 34. Lista as aplicações. Esperado: 200, cada aplicação com o resumo das suas versões (id, rótulo, fase, situação e data de entrega)
 GET {{api}}/aplicacoes
 
 ### 35. Exclui a v0 da Beta. Esperado: 204, sem corpo
@@ -271,5 +278,37 @@ Content-Type: application/json
     "inicioProrrogacao": "2026-10-13",
     "fimProrrogacao": "2026-10-25",
     "dataEntrega": "2026-10-20"
+  }
+}
+
+### 39. Risco sem observação (RN-22, CA-43). A v1 está em Risco; apagar a observação. Esperado: 422 "Informe a observação quando a situação for Risco."
+PUT {{api}}/versoes/V1
+Content-Type: application/json
+
+{ "rotulo": "v1", "situacao": "Risco", "observacao": "" }
+
+### 40. Cadastra a v2 na Alfa (troque ALFA). Esperado: 201, em Backlog, sem datas
+POST {{api}}/aplicacoes/ALFA/versoes
+Content-Type: application/json
+
+{ "rotulo": "v2" }
+
+### 41. CA-44: passa a v2 de Backlog para Homologação, com as datas e a prorrogação num só salvamento (troque V2). Esperado: 200, fase Homologacao e a prorrogação registrada
+PUT {{api}}/versoes/V2/completo
+Content-Type: application/json
+
+{
+  "rotulo": "v2",
+  "situacao": "",
+  "observacao": "",
+  "fase": "Homologacao",
+  "datas": {
+    "inicioAndamento": "2026-10-05",
+    "fimAndamento": "2026-10-09",
+    "inicioHomologacao": "2026-10-13",
+    "fimHomologacao": "2026-10-16",
+    "inicioProrrogacao": "2026-10-19",
+    "fimProrrogacao": "2026-10-23",
+    "dataEntrega": "2026-10-26"
   }
 }
