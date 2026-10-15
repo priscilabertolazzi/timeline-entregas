@@ -1076,6 +1076,23 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** a instrução "se precisar fugir do padrão da T-06, explique o motivo no plano" fez o assistente justificar cada diferença antes de implementar, e a leitura da arquitetura ao lado da tarefa anterior revelou a lacuna da lista de aplicações, que a autora resolveu na hora.
 
+### P-24 — 15/10/2026 — T-08
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, etapa 1 (APIs de cadastro), última tarefa da etapa. Tarefa T-08 do docs/tarefas.md: Docker da API, fuso horário e dados de exemplo.
+> Referências: arquitetura.md, seções 5.6 (fuso) e 12.1 (dados de exemplo), ADR-25 e ADR-30. Depois desta tarefa, farei a revisão independente antes da tag v0.1.0.
+> OBJETIVO: Criar o Dockerfile e o serviço api no docker-compose.yml, com o fuso pela variável TZ; publicar a página de documentação da API também no Docker; carregar os dados de exemplo exatamente como no conjunto da seção 12.1, com as datas calculadas a partir do dia da carga; e criar um teste que simula a carga em cada dia de um ano e confere que todas as versões respeitam as regras e que pelo menos uma versão atravessa o dia da carga.
+> ESTILO: Siga as convenções do CLAUDE.md e do backend/CLAUDE.md, com os nomes do glossário e as mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
+
+**Resultado:** o assistente notou que a seção 12.1 não traz o conjunto de dados que o pedido citava, parou e propôs um quadro (Alfa v0 e v1, Beta v1, Gama v1 e Delta sem versões, com deslocamentos em dias a partir do dia da carga). Com o quadro aprovado, implementou e conferiu no Docker real.
+
+**Funcionou de primeira?** Sim, depois de a lacuna ser resolvida no plano.
+
+**Por que é relevante:** "exatamente como no conjunto da seção 12.1" apontava para um conjunto que não existia; a regra de parar e perguntar diante de lacunas evitou dados inventados sem aprovação. O teste de um ano inteiro garante que a carga nunca quebra por causa da data.
+
 ---
 
 ## Histórico do documento
@@ -1092,3 +1109,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.8 | 15/10/2026 | Registro do pedido P-21 (T-05). |
 | 0.9 | 15/10/2026 | Registro do pedido P-22 (T-06). |
 | 0.10 | 15/10/2026 | Registro do pedido P-23 (T-07). |
+| 0.11 | 15/10/2026 | Registro do pedido P-24 (T-08). |

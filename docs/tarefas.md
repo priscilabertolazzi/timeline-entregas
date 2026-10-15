@@ -151,7 +151,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** pela página de documentação da API, você cadastra uma versão, informa as datas, tenta passar para Produção com entrega futura e confere a mensagem do CA-39. Depois, repete o cenário do CA-40 (de Backlog direto para Produção, com datas passadas) e confere que é aceito.
 
-### [ ] T-08 — Docker da API, fuso horário e dados de exemplo (1 h)
+### [x] T-08 — Docker da API, fuso horário e dados de exemplo (1 h)
 - Dockerfile da API e serviço `api` no `docker-compose.yml`; fuso pela variável `TZ`.
 - Página de documentação da API publicada também no Docker (ADR-30).
 - Carga de dados fictícios de exemplo quando o banco estiver vazio, com datas relativas ao dia da carga (ADR-25).
@@ -317,3 +317,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.15 | 15/10/2026 | T-05 marcada como concluída. |
 | 0.16 | 15/10/2026 | T-06 marcada como concluída. |
 | 0.17 | 15/10/2026 | T-07 marcada como concluída; a lista de aplicações passou a trazer as versões. |
+| 0.18 | 15/10/2026 | T-08 marcada como concluída (a tag `v0.1.0` fica para depois da revisão independente). |

@@ -1,4 +1,4 @@
-# Banco de dados e ferramentas de teste. A API e as telas entram nas tarefas T-08 e T-09.
+# Banco de dados, API e ferramentas de teste. As telas entram na tarefa T-09.
 # Os valores vêm do arquivo .env (modelo em .env.example). Os padrões abaixo só evitam avisos
 # nos comandos que não usam o banco, como test e lint.
 name: timeline-entregas
@@ -21,6 +21,28 @@ services:
       interval: 5s
       timeout: 5s
       retries: 12
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Fuso horário: define a data atual da API (RN-19, arquitetura.md, seção 5.6).
+      TZ: ${TZ:-America/Sao_Paulo}
+      SEED_DADOS_EXEMPLO: ${SEED_DADOS_EXEMPLO:-true}
+      # Dentro do Docker, o banco é o serviço "db", na porta padrão.
+      DB_HOST: db
+      DB_PORT: "5432"
+      POSTGRES_USER: ${POSTGRES_USER:-timeline}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-}
+      POSTGRES_DB: ${POSTGRES_DB:-timeline_entregas}
+    ports:
+      # Só o próprio computador alcança a API.
+      - "127.0.0.1:${API_PORT:-8080}:8080"
 
   # Container com o SDK do .NET, usado por install, test e lint (ADR-24, ADR-31).
   # Só roda quando chamado pelos scripts (perfil "ferramentas"), nunca com "docker compose up".
