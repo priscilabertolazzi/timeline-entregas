@@ -636,7 +636,7 @@ public sealed class VersaoCasosDeUsoTests
 
         Assert.Equal(["Alfa", "Beta", "Gama"], lista.Select(a => a.Nome));
         Assert.Equal(
-            [new VersaoResumoResposta(v1.Id, "v1", Fase.Producao, Situacao.Entregue), new VersaoResumoResposta(v2.Id, "v2", Fase.Backlog, Situacao.NaoIniciado)],
+            [new VersaoResumoResposta(v1.Id, "v1", Fase.Producao, Situacao.Entregue, new DateOnly(2026, 8, 24)), new VersaoResumoResposta(v2.Id, "v2", Fase.Backlog, Situacao.NaoIniciado)],
             lista[0].Versoes);
         Assert.Equal(["v0"], lista[1].Versoes.Select(v => v.Rotulo));
         Assert.Empty(lista[2].Versoes);

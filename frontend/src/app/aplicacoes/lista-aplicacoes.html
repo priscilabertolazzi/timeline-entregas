@@ -22,11 +22,21 @@
         @if (aplicacao.versoes.length === 0) {
           <p class="sem-versoes">Nenhuma versão cadastrada</p>
         }
+        @if (aplicacao.versoes.length > 0) {
+          <div class="cabecalho-versoes" aria-hidden="true">
+            <span>Versão</span>
+            <span>Fase</span>
+            <span>Situação</span>
+            <span>Data de entrega</span>
+            <span></span>
+          </div>
+        }
         @for (versao of aplicacao.versoes; track versao.id) {
           <a class="versao" [routerLink]="['/versoes', versao.id]" [attr.aria-label]="'Abrir ' + versao.rotulo + ' de ' + aplicacao.nome">
             <span class="rotulo">{{ versao.rotulo }}</span>
-            <span class="etiqueta">{{ rotuloFase(versao.fase) }}</span>
-            <span class="etiqueta" [class.risco]="versao.situacao === 'Risco'">{{ rotuloSituacao(versao.situacao) }}</span>
+            <app-etiqueta class="etiqueta" [texto]="rotuloFase(versao.fase)" [cor]="corDaFase(versao.fase)" />
+            <app-etiqueta class="etiqueta" [texto]="rotuloSituacao(versao.situacao)" [cor]="corDaSituacao(versao.situacao)" />
+            <span class="entrega">{{ entregaParaExibir(versao.dataEntrega) }}</span>
             <span class="abrir">Abrir ›</span>
           </a>
         }

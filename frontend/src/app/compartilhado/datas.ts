@@ -12,6 +12,15 @@ export function dataParaTexto(data: Date | null | undefined): string {
   return `${data.getFullYear()}-${mes}-${dia}`;
 }
 
+/**
+ * Data de entrega para exibição: dd/mm/aaaa (RNF-03) ou "TBD" quando a versão não tem data (RN-13).
+ * Troca a ordem do texto, sem criar `Date`, para o dia nunca mudar por fuso.
+ */
+export function entregaParaExibir(texto: string | null | undefined): string {
+  const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto ?? '');
+  return partes ? `${partes[3]}/${partes[2]}/${partes[1]}` : 'TBD';
+}
+
 /** Converte o texto AAAA-MM-DD da API numa data local, à meia-noite, para o calendário. */
 export function textoParaData(texto: string | null | undefined): Date | null {
   const partes = /^(\d{4})-(\d{2})-(\d{2})$/.exec(texto ?? '');

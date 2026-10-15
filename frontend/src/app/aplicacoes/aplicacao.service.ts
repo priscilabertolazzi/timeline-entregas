@@ -8,6 +8,8 @@ export interface VersaoResumo {
   rotulo: string;
   fase: string;
   situacao: string;
+  /** AAAA-MM-DD, ou nulo quando a versão não tem datas. */
+  dataEntrega: string | null;
 }
 
 /** Aplicação com o resumo das suas versões. */

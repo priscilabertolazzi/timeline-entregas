@@ -1,4 +1,4 @@
-import { FASES, rotuloFase, rotuloSituacao } from './rotulos';
+import { FASES, corDaFase, corDaSituacao, rotuloFase, rotuloSituacao } from './rotulos';
 
 describe('rótulos de exibição', () => {
   it('mostra as fases com os nomes do glossário', () => {
@@ -13,6 +13,20 @@ describe('rótulos de exibição', () => {
     expect(rotuloSituacao('OnTrack')).toBe('On track');
     expect(rotuloSituacao('Risco')).toBe('Risco');
     expect(rotuloSituacao('Entregue')).toBe('Entregue');
+  });
+
+  it('cada fase tem a cor combinada com a autora', () => {
+    expect(corDaFase('Backlog')).toBe('cinza');
+    expect(['Analise', 'Desenvolvimento', 'Testes'].map(corDaFase)).toEqual(['azul', 'azul', 'azul']);
+    expect(corDaFase('Homologacao')).toBe('roxo');
+    expect(corDaFase('Producao')).toBe('verde-escuro');
+  });
+
+  it('cada situação tem a cor combinada com a autora', () => {
+    expect(corDaSituacao('NaoIniciado')).toBe('cinza');
+    expect(corDaSituacao('OnTrack')).toBe('verde-claro');
+    expect(corDaSituacao('Entregue')).toBe('verde-escuro');
+    expect(corDaSituacao('Risco')).toBe('risco');
   });
 
   it('valor desconhecido aparece como veio', () => {

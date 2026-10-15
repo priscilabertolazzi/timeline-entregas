@@ -52,7 +52,7 @@ public static class TimelineApiExtensions
             opcoes.AddDocumentTransformer((documento, _, _) =>
             {
                 documento.Info.Title = "Timeline de Entregas";
-                documento.Info.Description = "API de cadastro de aplicações e versões, timeline de entregas e status report semanal.";
+                documento.Info.Description = "API de cadastro de aplicações e versões.";
                 return Task.CompletedTask;
             });
 

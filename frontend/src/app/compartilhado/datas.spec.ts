@@ -1,4 +1,4 @@
-import { dataParaTexto, textoParaData } from './datas';
+import { dataParaTexto, entregaParaExibir, textoParaData } from './datas';
 
 describe('datas', () => {
   it('converte a data escolhida em AAAA-MM-DD, sem trocar o dia', () => {
@@ -22,6 +22,13 @@ describe('datas', () => {
     expect(data?.getFullYear()).toBe(2026);
     expect(data?.getMonth()).toBe(9);
     expect(data?.getDate()).toBe(28);
+  });
+
+  it('RN-13: a data de entrega aparece como dd/mm/aaaa, e sem data aparece TBD', () => {
+    expect(entregaParaExibir('2026-10-23')).toBe('23/10/2026');
+    expect(entregaParaExibir('2026-01-05')).toBe('05/01/2026');
+    expect(entregaParaExibir(null)).toBe('TBD');
+    expect(entregaParaExibir(undefined)).toBe('TBD');
   });
 
   it('texto ausente ou fora do formato vira nulo', () => {

@@ -43,6 +43,37 @@ describe('ListaAplicacoes', () => {
     expect(texto).toContain('Nenhuma versão cadastrada');
   });
 
+  it('mostra a data de entrega de cada versão em dd/mm/aaaa e TBD quando não há data', async () => {
+    http.expectNone('/api/aplicacoes');
+    fixture = TestBed.createComponent(ListaAplicacoes);
+    http.expectOne('/api/aplicacoes').flush([
+      {
+        id: 1,
+        nome: 'Alfa',
+        versoes: [
+          { id: 10, rotulo: 'v1', fase: 'Homologacao', situacao: 'OnTrack', dataEntrega: '2026-10-23' },
+          { id: 11, rotulo: 'v2', fase: 'Backlog', situacao: 'NaoIniciado', dataEntrega: null },
+        ],
+      },
+    ]);
+    await fixture.whenStable();
+
+    const linhas = Array.from(tela().querySelectorAll('a.versao')).map((l) => l.textContent ?? '');
+    expect(linhas[0]).toContain('23/10/2026');
+    expect(linhas[1]).toContain('TBD');
+    expect(tela().textContent).toContain('Data de entrega');
+  });
+
+  it('mostra as etiquetas de fase e situação com as cores combinadas', () => {
+    const cor = (texto: string) =>
+      Array.from(tela().querySelectorAll('app-etiqueta span')).find((e) => e.textContent?.trim() === texto)?.className;
+
+    expect(cor('Homologação')).toContain('roxo');
+    expect(cor('On track')).toContain('verde-claro');
+    expect(cor('Backlog')).toContain('cinza');
+    expect(cor('Não iniciado')).toContain('cinza');
+  });
+
   it('RN-04: ao clicar em Excluir, pede confirmação e não chama a API antes do "Excluir" da janelinha', async () => {
     (tela().querySelector('[aria-label="Excluir Alfa"]') as HTMLButtonElement).click();
     await fixture.whenStable();

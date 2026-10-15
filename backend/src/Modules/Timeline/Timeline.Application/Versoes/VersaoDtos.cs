@@ -89,8 +89,10 @@ public sealed record VersaoResposta(
 /// <param name="Rotulo">Rótulo da versão.</param>
 /// <param name="Fase">Fase atual.</param>
 /// <param name="Situacao">Situação exibida (RN-21).</param>
-public sealed record VersaoResumoResposta(long Id, string Rotulo, Fase Fase, Situacao Situacao)
+/// <param name="DataEntrega">Data de entrega, ou nulo quando a versão não tem datas (a tela mostra "TBD", RN-13).</param>
+public sealed record VersaoResumoResposta(long Id, string Rotulo, Fase Fase, Situacao Situacao, DateOnly? DataEntrega = null)
 {
     /// <summary>Converte a entidade no resumo.</summary>
-    public static VersaoResumoResposta De(Versao versao) => new(versao.Id, versao.Rotulo, versao.Fase, versao.Situacao);
+    public static VersaoResumoResposta De(Versao versao) =>
+        new(versao.Id, versao.Rotulo, versao.Fase, versao.Situacao, versao.Datas.DataEntrega);
 }

@@ -71,6 +71,48 @@ public class VersaoAlterarTests
     }
 
     [Fact]
+    public void RN24_BacklogSemDatas_HomologacaoComProrrogacaoNoMesmoSalvamento_Aceita()
+    {
+        // Bug da CRM v0.2: a prorrogação era recusada com a MSG-23 porque a fase ainda era Backlog.
+        var relogio = Relogio(15, 10);
+        var versao = new Versao(1, "v0.2");
+        var comProrrogacao = DatasAlfaV1 with { InicioProrrogacao = Dia(13, 10), FimProrrogacao = Dia(18, 10), DataEntrega = Dia(20, 10) };
+
+        versao.Alterar("v0.2", null, null, Fase.Homologacao, comProrrogacao, relogio);
+
+        Assert.Equal(Fase.Homologacao, versao.Fase);
+        Assert.Equal(comProrrogacao, versao.Datas);
+    }
+
+    [Fact]
+    public void RN24_TestesParaHomologacao_ComProrrogacaoNoMesmoSalvamento_Aceita()
+    {
+        var relogio = Relogio(15, 10);
+        var versao = Criar("v1", Fase.Testes, DatasAlfaV1, relogio);
+        var comProrrogacao = DatasAlfaV1 with { InicioProrrogacao = Dia(13, 10), FimProrrogacao = Dia(18, 10), DataEntrega = Dia(20, 10) };
+
+        versao.Alterar("v1", null, null, Fase.Homologacao, comProrrogacao, relogio);
+
+        Assert.Equal(Fase.Homologacao, versao.Fase);
+        Assert.Equal(Dia(18, 10), versao.Datas.FimProrrogacao);
+    }
+
+    [Fact]
+    public void RN24_BacklogSemDatas_DesenvolvimentoComProrrogacao_RecusaComMsg23()
+    {
+        var relogio = Relogio(15, 10);
+        var versao = new Versao(1, "v0.2");
+        var comProrrogacao = DatasAlfaV1 with { InicioProrrogacao = Dia(13, 10), FimProrrogacao = Dia(18, 10), DataEntrega = Dia(20, 10) };
+
+        var erro = Assert.Throws<RegraNegocioException>(
+            () => versao.Alterar("v0.2", null, null, Fase.Desenvolvimento, comProrrogacao, relogio));
+
+        Assert.Equal(["A prorrogação só pode ser registrada para versões em Homologação."], erro.Mensagens);
+        Assert.Equal(Fase.Backlog, versao.Fase);
+        Assert.True(versao.Datas.EstaVazia);
+    }
+
+    [Fact]
     public void RN07_BacklogSemDatas_SoAFaseDesenvolvimento_RecusaComMsg28()
     {
         var relogio = Relogio(15, 10);

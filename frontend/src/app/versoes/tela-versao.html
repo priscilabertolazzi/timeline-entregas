@@ -4,8 +4,8 @@
   <header class="cabecalho">
     <div class="titulo">
       <h1>{{ nomeAplicacao() }} · {{ v.rotulo }}</h1>
-      <span class="etiqueta">{{ rotuloFase(v.fase) }}</span>
-      <span class="etiqueta" [class.risco]="v.situacao === 'Risco'">{{ rotuloSituacao(v.situacao) }}</span>
+      <app-etiqueta [texto]="rotuloFase(v.fase)" [cor]="corDaFase(v.fase)" />
+      <app-etiqueta [texto]="rotuloSituacao(v.situacao)" [cor]="corDaSituacao(v.situacao)" />
     </div>
     <button mat-button type="button" class="perigo" (click)="excluir()">Excluir versão</button>
   </header>

@@ -33,9 +33,21 @@
   --mat-button-text-label-text-color: var(--mat-sys-error);
 }
 
+// Colunas da lista de versões: versão, fase, situação, data de entrega e "Abrir".
+$colunas-versao: minmax(5rem, 8rem) minmax(8rem, 11rem) minmax(6rem, 9rem) minmax(7rem, 9rem) 1fr;
+
+.cabecalho-versoes {
+  display: grid;
+  grid-template-columns: $colunas-versao;
+  gap: 8px;
+  padding: 0 12px 4px;
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-label-medium);
+}
+
 .versao {
   display: grid;
-  grid-template-columns: minmax(5rem, 9rem) minmax(8rem, 11rem) minmax(6rem, 9rem) 1fr;
+  grid-template-columns: $colunas-versao;
   align-items: center;
   gap: 8px;
   padding: 10px 12px;
@@ -55,15 +67,6 @@
 
 .etiqueta {
   justify-self: start;
-  padding: 2px 12px;
-  border-radius: 12px;
-  background: var(--mat-sys-surface-container-high);
-  font: var(--mat-sys-label-large);
-
-  &.risco {
-    background: var(--mat-sys-error-container);
-    color: var(--mat-sys-on-error-container);
-  }
 }
 
 .abrir {
