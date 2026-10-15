@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão do modelo | 0.6 |
+| Versão do modelo | 0.7 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -167,7 +167,7 @@ Copie o bloco abaixo para cada nova sessão.
 | Tarefa | T-03 — Esqueleto da solução, banco e scripts |
 | Regras e critérios | Nenhuma RN ou CA; `arquitetura.md`, seções 4, 9, 12.2 e 12.3, e ADR-24 |
 | Modelo usado | Claude Sonnet 5.5, no Claude Code (área Code do aplicativo Claude) |
-| Tempo real | *(a preencher pela autora)* |
+| Tempo real | Não medido: a sessão foi interrompida no meio por falta de limite de uso e retomada depois. A verificação da autora levou cerca de 10 min. |
 | Estimativa sem IA | 3 h (proposta do assistente: um desenvolvedor experiente montaria 7 projetos, 8 scripts e a composição do Docker, e testaria tudo em container) |
 
 **O que foi pedido:** criar o `global.json`, a solução e os projetos do módulo Timeline com as referências entre camadas, o `docker-compose.yml` com o banco, os scripts `install`, `run`, `test` e `lint` (`.ps1` e `.sh`), o `Makefile` e a atualização do README. Pedidos completos na Parte 2 do `prompts/prompts-claude-code.md`, itens P-18 e P-19.
@@ -182,14 +182,14 @@ Copie o bloco abaixo para cada nova sessão.
 - A porta 5432 já estava ocupada por um PostgreSQL instalado no computador da autora, e o banco do projeto não subiu. A porta passou a ser configurável por `DB_PORT` (no `.env` local, 5433), e o script `run` agora explica o erro em português.
 - O primeiro teste de reprovação do teste de estrutura usou uma referência que já existia (o `Application` já depende do `Domain`) e falhou por outro motivo. Foi repetido com uma referência ao framework web, e o teste reprovou como esperado.
 
-**O que a revisão humana capturou:** *(rascunho do assistente; a autora completa)*
+**O que a revisão humana capturou:** a autora conferiu o resultado no GitHub e estava tudo certo, sem nada diferente do esperado. Os pontos abaixo são as decisões da autora durante a sessão:
 
 - A autora aprovou o pacote `Microsoft.AspNetCore.OpenApi`, que não estava na lista da seção 12.3 e que o Scalar precisa, e pediu um teste de estrutura sem dependência nova, para a tarefa não terminar com "0 testes".
 - A autora pediu a confirmação de que `test` e `lint` não dependem do SDK instalado. Isso foi provado rodando os dois com o `dotnet` fora do caminho do terminal.
 
 **Riscos mitigados:** pacote fora da lista aprovada (pedida a aprovação e registrada no `arquitetura.md`); pacote extra que o modelo de projeto de teste traz (`coverlet`, removido); versões de pacotes escritas pelas ferramentas oficiais, sem versão de memória; `.env` fora do Git (confirmado pelo `.gitignore`); banco aberto só para o próprio computador; senha do banco só no `.env`.
 
-**Aprendizados:** testar o teste: um teste só é confiável depois de ser visto reprovando, com o erro certo. Pedir que o assistente prove a promessa do documento ("sem depender do SDK") com um experimento, e não só afirmar.
+**Aprendizados:** testar o teste: um teste só é confiável depois de ser visto reprovando, com o erro certo. Pedir que o assistente prove a promessa do documento ("sem depender do SDK") com um experimento, e não só afirmar. A sessão pode ser interrompida pelo limite de uso: anotar o horário de início e de fim evita ficar sem o tempo real, e o prompt A16 do roteiro serve para retomar.
 
 ---
 
@@ -231,3 +231,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.4 | 15/10/2026 | Sessão 00 atualizada com os pedidos P-15 a P-17 e o ajuste dos prompts ao modelo CO-STAR. |
 | 0.5 | 15/10/2026 | Registradas as Sessões 01 (T-01) e 02 (T-02); resumo acumulado da Etapa 0 iniciado. |
 | 0.6 | 15/10/2026 | Registrada a Sessão 03 (T-03), com os pedidos P-18 e P-19; resumo acumulado da Etapa 0 atualizado. |
+| 0.7 | 15/10/2026 | Sessão 03: tempo real (não medido), o que a revisão capturou e novo aprendizado registrados. |
