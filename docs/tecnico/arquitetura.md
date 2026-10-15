@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.10 |
+| Versão | 0.11 |
 | Data | 15/10/2026 |
 | Status | Em elaboração |
 | Documento base | `docs/negocio/requisitos-mvp.md` (versão 0.6) |
@@ -189,6 +189,8 @@ A situação exibida é calculada: Não iniciado em Backlog, Entregue em Produç
 
 A `Aplicacao` segue a mesma ideia: o nome é obrigatório, guardado sem os espaços das pontas e comparado sem diferença entre maiúsculas e minúsculas (RN-01, CA-33).
 
+As sete datas trafegam juntas no registro `DatasVersao`, recebido por `AlterarDatas`. Os erros de formato da entrada (nome ou rótulo vazio ou longo demais, observação longa demais, situação ou fase com valor desconhecido: MSG-01, 02, 05, 06, 09, 10 e 26) são recusados antes, pela `Application` (seção 7.5); no `Domain`, esses casos só disparam uma proteção técnica, que nunca chega ao usuário (ADR-33).
+
 **Como uma regra violada é informada (ADR-26).** O método lança uma exceção de regra de negócio (`RegraNegocioException`) com as mensagens do catálogo (seção 7.6) de **todas** as regras violadas naquela operação. Por exemplo, um salvamento com duas datas fora de ordem devolve as duas mensagens. A API converte essa exceção em erro 422.
 
 ### 5.4 Cálculo da timeline e da tabela de status das aplicações
@@ -227,7 +229,7 @@ Cada data corresponde a um ponto no eixo, no **início do dia**. Assim, uma etap
 
 ### 5.6 Data atual e fuso horário
 
-Nenhuma classe lê o relógio diretamente. A data atual vem da abstração `TimeProvider` do .NET, registrada na injeção de dependências; nos testes, ela é fixada, para que o resultado não dependa do dia em que os testes rodam.
+Nenhuma classe lê o relógio diretamente. A data atual vem da abstração `TimeProvider` do .NET, registrada na injeção de dependências; nos testes, ela é fixada, para que o resultado não dependa do dia em que os testes rodam. As operações da `Versao` que dependem da data atual (`AlterarDatas` e `AlterarFase`) recebem o `TimeProvider` como parâmetro, entregue pela `Application` (ADR-33).
 
 A data atual é a do computador do usuário (RN-19). Como a API roda dentro de um container, cujo relógio usa o fuso UTC por padrão, o fuso é configurado pela variável `TZ` do `.env` (padrão `America/Sao_Paulo`). Sem isso, entre 21h e meia-noite a API consideraria o dia seguinte. A imagem da API deve conter os dados de fuso horário.
 
@@ -689,6 +691,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | ADR-30 | Documentação OpenAPI publicada em todos os ambientes, com página de visualização | O sistema é local (RNF-01), e quem avalia consulta a API pelo navegador. | Documentação só em desenvolvimento (invisível no Docker). |
 | ADR-31 | Serviço `ferramentas` no Docker Compose (imagem do SDK do .NET, perfil `ferramentas`), usado por `install`, `test` e `lint`; o container trabalha numa cópia do código, sem `bin` e `obj` | Um só lugar define a imagem do SDK e como montar o código, igual no Windows, no Linux e no macOS (ADR-24). A cópia evita misturar arquivos de compilação do computador com os do container e arquivos de root na pasta do projeto. | `docker run` em cada script (imagem repetida em quatro scripts e caminhos diferentes por sistema); montar a pasta para escrita (mistura de arquivos e permissões). |
 | ADR-32 | PostgreSQL de versão principal 17, porta publicada só para o próprio computador e configurável por `DB_PORT` | Versão estável e madura, com o volume no caminho padrão da imagem. Quem já tem outro PostgreSQL instalado (porta 5432 ocupada) só troca `DB_PORT` no `.env`. | Versão 18 (mudou o caminho do volume); porta fixa (conflita com PostgreSQL já instalado); porta aberta para a rede. |
+| ADR-33 | A `Versao` recebe o `TimeProvider` como parâmetro nas operações que dependem da data atual; erros de formato são recusados na `Application`, e o `Domain` só tem uma proteção técnica para eles | A entidade continua sem dependências e sem ler o relógio (seção 5.6), e cada mensagem do catálogo tem um único lugar de origem. | Data atual como `DateOnly` vinda de fora (mais fácil de errar o fuso em cada chamada); validar formato também no `Domain` com as mensagens (mensagem em dois lugares). |
 
 ---
 
@@ -697,7 +700,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | Ponto | Onde | Situação |
 |---|---|---|
 | Tabelas, colunas e restrições do banco, incluindo as colunas de comparação de nomes e rótulos e a versão do formato do congelado | Seção 6 | A revisar |
-| Catálogo de mensagens | Seção 7.6 | A revisar |
+| Catálogo de mensagens | Seção 7.6 | MSG-11 e MSG-13 a MSG-30 aprovadas na T-04; as demais a revisar antes da T-06 |
 | Dependências previstas | Seção 12.3 | Aprovado |
 | Dados de exemplo carregados automaticamente, com datas relativas ao dia da carga | Seção 12.1 | A revisar |
 | Limites de tamanho: nome da aplicação até 100, rótulo da versão até 20 e observação até 1000 caracteres | Seção 6 | Aprovado |
@@ -718,3 +721,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.8 | 15/10/2026 | Seção 4: o `prompts/prompts-claude-code.md` reúne o roteiro de prompts e o registro dos pedidos. |
 | 0.9 | 15/10/2026 | Seção 9: nomes das variáveis do `.env.example` (T-02). |
 | 0.10 | 15/10/2026 | T-03: `Microsoft.AspNetCore.OpenApi` nas dependências previstas (12.3); `Directory.Build.props`, nome do projeto Host e `scripts/ferramentas-container.sh` na estrutura (4); `DB_PORT` (9); teste de estrutura do `Domain` (11); serviço `ferramentas` e PostgreSQL 17 (12.1); ADR-31 e ADR-32. |
+| 0.11 | 15/10/2026 | T-04: registro `DatasVersao` e origem dos erros de formato (5.3); `TimeProvider` como parâmetro das operações da `Versao` (5.6); ADR-33; MSG-11 e MSG-13 a MSG-30 aprovadas pela autora (14). |

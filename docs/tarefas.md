@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.13 |
+| Versão | 0.14 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -120,7 +120,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 ## Etapa 1 — APIs de cadastro
 
-### [ ] T-04 — Entidades e regras da aplicação e da versão (2 h) — **TDD**
+### [x] T-04 — Entidades e regras da aplicação e da versão (2 h) — **TDD**
 - `Aplicacao`, `Versao` e enums (`arquitetura.md`, seções 5.2 e 5.3), com a exceção de regra de negócio (ADR-26).
 - Regras: RN-01, RN-02, RN-05, RN-07 a RN-10, RN-21, RN-22, RN-24, RN-26.
 - Critérios de aceite: CA-05, CA-06, CA-13, CA-20, CA-25, CA-32, CA-35, CA-36, CA-39, CA-40, CA-42.
@@ -312,3 +312,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.11 | 15/10/2026 | T-01 e T-02 marcadas como concluídas. |
 | 0.12 | 15/10/2026 | T-03 marcada como concluída. |
 | 0.13 | 15/10/2026 | Revisão independente só nas tarefas T-08, T-13, T-15 e T-22, alinhada ao `processo-desenvolvimento.md` versão 0.9 ("Entrega em degraus", T-10, T-14, T-16 e T-19). |
+| 0.14 | 15/10/2026 | T-04 marcada como concluída. |

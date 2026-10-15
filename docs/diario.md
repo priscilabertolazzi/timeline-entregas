@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão do modelo | 0.7 |
+| Versão do modelo | 0.8 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -193,6 +193,35 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 04 — 15/10/2026 — T-04, Entidades e regras da aplicação e da versão
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-04 — Entidades e regras da aplicação e da versão (TDD) |
+| Regras e critérios | RN-01, RN-02, RN-05, RN-07 a RN-10, RN-21, RN-22, RN-24, RN-26; CA-05, CA-06, CA-13, CA-20, CA-25, CA-32, CA-35, CA-36, CA-39, CA-40, CA-42 |
+| Modelo usado | Claude Sonnet 5.5 no plano; Claude Opus 5.5 na implementação, trocado pela autora depois do plano, que indicava o modelo de maior capacidade. No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | Não medido. A verificação da autora no PowerShell levou cerca de 5 min. |
+| Estimativa sem IA | 4 h (proposta do assistente: um desenvolvedor experiente derivaria 37 testes dos critérios e das regras, escreveria as entidades com todas as validações e conferiria 19 mensagens contra o catálogo) |
+
+**O que foi pedido:** integrar o registro da T-03 ao `main` e apresentar o plano da T-04, com um teste por critério de aceite, sem alterar arquivos. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-20.
+
+**Resultado:** branch `feat/entidades-regras`. `Aplicacao`, `Versao`, `DatasVersao`, os cinco enums, a `RegraNegocioException` e as mensagens MSG-11 e MSG-13 a MSG-30 no `Domain`. São 37 testes novos: 13 dos 11 critérios de aceite (o CA-32 e o CA-42 têm duas partes cada) e 24 das regras sem critério próprio. Com os 2 testes de estrutura, são 39, todos passando. Os testes foram vistos falhando antes do código, pelo motivo certo. `arquitetura.md` na versão 0.11 (ADR-33). O registro da T-03 já estava no `main`, integrado junto com o processo enxuto.
+
+**Primeira tentativa:** precisou de um ajuste num teste novo, descrito abaixo.
+
+**Ajustes necessários e por quê:**
+
+- O teste da MSG-15 (prorrogação sem as datas do ciclo) usava uma versão em Backlog. O sistema devolveu a MSG-15 e a MSG-23, as duas corretas (ADR-26). O cenário passou a usar uma versão em Homologação, que isola a MSG-15. A regra testada não mudou.
+- Na revisão técnica, o assistente acrescentou uma proteção para um valor de fase inexistente, que a `Application` recusa com a MSG-26 na T-07.
+
+**O que a revisão humana capturou:** a autora perguntou por que não foi avisada antes de que o catálogo de mensagens ainda estava "a revisar". O catálogo deveria passar pela revisão dela antes da T-04 (`arquitetura.md`, seção 14), e o plano não avisou. A autora revisou e aprovou as 19 mensagens usadas na tarefa; as demais ficam para antes da T-06.
+
+**Riscos mitigados:** mensagem fora do catálogo (os testes digitam o texto do catálogo, separado do código, e um erro de digitação reprova o teste); teste ajustado para o código passar (o único ajuste foi no cenário de um teste novo, explicado à autora, e a mensagem conferida continuou a mesma); dependência nova (nenhuma; o `TimeProvider` já vem no .NET); relógio lido diretamente (a data atual é sempre fixada nos testes).
+
+**Aprendizados:** no plano, conferir na seção 14 do `arquitetura.md` se algum ponto ainda não revisado pela autora afeta a tarefa e avisar antes da aprovação. Anotar o horário de início e de fim da sessão, para ter o tempo real.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -232,3 +261,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.5 | 15/10/2026 | Registradas as Sessões 01 (T-01) e 02 (T-02); resumo acumulado da Etapa 0 iniciado. |
 | 0.6 | 15/10/2026 | Registrada a Sessão 03 (T-03), com os pedidos P-18 e P-19; resumo acumulado da Etapa 0 atualizado. |
 | 0.7 | 15/10/2026 | Sessão 03: tempo real (não medido), o que a revisão capturou e novo aprendizado registrados. |
+| 0.8 | 15/10/2026 | Registrada a Sessão 04 (T-04), com o pedido P-20. |
