@@ -75,6 +75,14 @@ Em Linux e macOS, sem o `make`, use `sh scripts/install.sh`, `sh scripts/run.sh`
 - **Executar** sobe o banco de dados (PostgreSQL) e informa o endereço, por exemplo `localhost:5432`. Por enquanto só o banco sobe; a API e as telas entram nas próximas tarefas. Para parar: `docker compose down` (os dados ficam guardados).
 - Se o **Executar** avisar que a porta não está disponível, outro programa (por exemplo, um PostgreSQL já instalado) usa a porta 5432. Troque o valor de `DB_PORT` no arquivo `.env` (por exemplo, para `5433`) e rode de novo.
 - O arquivo `.env` guarda a configuração local, inclusive a senha do banco, e **nunca é versionado**. O `.env.example` traz só valores fictícios.
+- **A API e o banco:** ao iniciar, a API cria sozinha as tabelas `aplicacao` e `versao` no banco (schema `timeline`) e atualiza o que faltar. Ela lê a conexão das mesmas variáveis do `.env` (`POSTGRES_*` e `DB_PORT`). Para rodá-la no seu computador com o banco já no ar (depois do **Executar**), use o bloco abaixo.
+
+  ```powershell
+  Get-Content .env | Where-Object { $_ -match '^\s*[^#\s].*=' } | ForEach-Object { $n, $v = $_ -split '=', 2; Set-Item "env:$n" $v }
+  dotnet run --project backend\src\Host
+  ```
+
+  A primeira linha copia o `.env` para a sessão do PowerShell; a segunda inicia a API (Ctrl+C para parar). Para conferir o banco: `docker compose exec db psql -U timeline -d timeline_entregas -c "\d+ timeline.versao"`.
 
 ## 8. Uso e exemplos
 

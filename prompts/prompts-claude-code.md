@@ -1017,6 +1017,30 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 ---
 
+### P-21 — 15/10/2026 — T-05
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, etapa 1 (APIs de cadastro). Continuação: a T-04 está concluída e no GitHub (commit e0a3886, integrado ao main). Tarefa T-05 do docs/tarefas.md: Banco de dados do cadastro.
+> Referência: arquitetura.md, seção 6 (a tabela do congelado fica para a T-18).
+> Pontos de atenção:
+> - Antes do plano, mostre o modelo de dados da seção 6 em linguagem simples para eu revisar: a seção 14 ainda o marca como "A revisar".
+> - Colunas nome_comparacao e rotulo_comparacao geradas pelo banco, com as unicidades sobre elas (ADR-23).
+> - Todas as restrições CHECK da seção 6, inclusive a da prorrogação sem as datas do ciclo.
+> - Schema timeline, inclusive para o histórico de migrations.
+> OBJETIVO: Criar o DbContext, as tabelas aplicacao e versao com as restrições, e a migration inicial, aplicada ao iniciar a API.
+> ESTILO: Siga as convenções do CLAUDE.md e do backend/CLAUDE.md, com os nomes do glossário e as mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o modelo de dados para revisão e o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação". Ao final, mostre como eu abro o banco e listo tabelas, colunas e restrições, para conferir contra a seção 6.
+
+**Resultado:** o assistente leu a seção 6, a T-05 e o código atual e apresentou o modelo de dados em tabelas simples, com exemplos da Alfa e da Beta, o que o banco recusa e o que ele não vigia. O plano trouxe seis partes e uma pergunta: uma proteção extra contra nome e rótulo vazios ou com espaço nas pontas, que a seção 6 não previa. A autora aprovou tudo, e a tarefa foi implementada, verificada em 45 cenários no PostgreSQL real e entregue com o passo a passo para abrir o banco.
+
+**Funcionou de primeira?** Sim. O desenho não mudou depois da aprovação. Os ajustes foram só de ordem das colunas, de lint da migration gerada e de um passo desnecessário na inicialização (ver Sessão 05 do diário).
+
+**Por que é relevante:** pedir o modelo de dados em linguagem simples antes do plano deu à autora a chance de revisar a seção 6, que estava marcada como "A revisar", e levou à proteção extra no banco. O pedido final de "como eu abro o banco" produziu um passo a passo que ela mesma executou.
+
+---
+
 ## Histórico do documento
 
 | Versão | Data | Descrição |
@@ -1028,3 +1052,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.5 | 15/10/2026 | Registro dos pedidos P-18 e P-19 (T-03). |
 | 0.6 | 15/10/2026 | Processo mais leve (`processo-desenvolvimento.md` versão 0.9): registro e commit num único pedido (A11), ajuste da mensagem de commit só quando necessário (A12), A6 e A7 opcionais, dois níveis de detalhe nas regras de uso e revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (A13, A14 e tarefas T-10, T-14, T-16 e T-19). |
 | 0.7 | 15/10/2026 | Registro do pedido P-20 (T-04). |
+| 0.8 | 15/10/2026 | Registro do pedido P-21 (T-05). |

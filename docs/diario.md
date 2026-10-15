@@ -222,6 +222,36 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 05 — 15/10/2026 — T-05, Banco de dados do cadastro
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-05 — Banco de dados do cadastro |
+| Regras e critérios | RN-01, RN-02, RN-04, RN-07, RN-09, RN-10, RN-24 (como segunda proteção no banco, ADR-13 e ADR-23); nenhum critério de aceite novo (CA-33 e CA-34 só ficam testáveis de ponta a ponta na T-06) |
+| Modelo usado | Claude Sonnet 5.5, no plano e na implementação (tarefa rotineira, modelo rápido). No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | Não medido. A revisão da autora levou cerca de 10 min. A sessão começou às 09:07. |
+| Estimativa sem IA | 3 h (proposta do assistente: um desenvolvedor experiente escreveria os mapeamentos, geraria a migration, escreveria o SQL de cada restrição e testaria uma a uma no PostgreSQL) |
+
+**O que foi pedido:** antes do plano, mostrar o modelo de dados da seção 6 em linguagem simples, porque a seção 14 o marcava como "A revisar"; depois, o plano da T-05. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-21.
+
+**Resultado:** branch `feat/banco-cadastro`. `TimelineDbContext` e os mapeamentos de `aplicacao` e `versao` no schema `timeline`, com as colunas `nome_comparacao` e `rotulo_comparacao` geradas pelo banco, as duas unicidades, oito restrições `CHECK` de `versao` mais uma de `aplicacao`, e a exclusão em cascata. Migration `Inicial`, aplicada quando a API inicia, por um serviço de inicialização do `Host`. Build sem avisos, 39 testes passando e lint sem apontamentos, também pelos scripts em container. No PostgreSQL real, 45 cenários (gravações aceitas e recusadas) se comportaram como o esperado, e uma gravação e leitura pelas classes do `Domain` confirmou o mapeamento sem mudar o `Domain`. `arquitetura.md` na versão 0.12 (ADR-34, seção 6 e `DB_HOST` na seção 9); seção 14 marcada como "Aprovado" para o modelo de dados.
+
+**Primeira tentativa:** certa quanto ao desenho. Três ajustes no caminho, descritos abaixo.
+
+**Ajustes necessários e por quê:**
+
+- A primeira versão da migration listava as colunas fora da ordem da seção 6 (as datas no fim, as colunas de comparação no meio). Foi fixada a ordem do modelo, para a autora conferir lado a lado.
+- O lint reprovou a migration gerada pela ferramenta (fim de linha, codificação e estilo de namespace). A migration passou a ser tratada como código gerado, fora da verificação de padrão, no `.editorconfig`.
+- O serviço de inicialização tinha um passo extra, de contar as migrations pendentes, que consultava a tabela de histórico antes de ela existir e acrescentava uma mensagem de erro ao registro da primeira criação. O passo foi retirado. Restam apenas as mensagens `fail:` do próprio EF Core ao criar o banco do zero, que são normais.
+
+**O que a revisão humana capturou:** a autora aprovou o modelo e o plano, incluindo a proteção extra contra nome e rótulo vazios ou com espaço nas pontas, que a seção 6 não previa e foi proposta pelo assistente. Na conferência do banco, não pediu nenhum ajuste.
+
+**Riscos mitigados:** SQL montado por texto (nenhum; só o EF Core, e o SQL das restrições é fixo); senha no código (a conexão vem das variáveis do `.env`, e o `.env` fica fora do Git); dependência nova (nenhuma; EF Core e Npgsql já estavam na seção 12.3); migration rodando sem querer ao criar uma migration (a aplicação fica num serviço que só roda ao iniciar a API); restrição escrita errada (cada uma testada no banco real, com caso aceito e caso recusado); mudança escondida no `Domain` (nenhuma; os 39 testes seguem iguais).
+
+**Aprendizados:** testar cada restrição `CHECK` num banco real, com um caso que deve passar e outro que deve falhar, pega erros que a leitura do SQL não pega (valores vazios são aceitos por padrão numa comparação). Pedir a ordem das colunas igual à do documento facilita a conferência da autora. Anotar o horário de início e de fim da sessão continua valendo, para ter o tempo real.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -262,3 +292,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.6 | 15/10/2026 | Registrada a Sessão 03 (T-03), com os pedidos P-18 e P-19; resumo acumulado da Etapa 0 atualizado. |
 | 0.7 | 15/10/2026 | Sessão 03: tempo real (não medido), o que a revisão capturou e novo aprendizado registrados. |
 | 0.8 | 15/10/2026 | Registrada a Sessão 04 (T-04), com o pedido P-20. |
+| 0.9 | 15/10/2026 | Registrada a Sessão 05 (T-05), com o pedido P-21. |

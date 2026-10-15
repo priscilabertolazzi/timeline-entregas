@@ -291,6 +291,7 @@ erDiagram
 **Observações sobre o modelo**
 
 - **Identificadores:** inteiros gerados pelo banco (`bigint identity`). A ordem dos identificadores é a ordem de cadastro, usada como desempate na RN-03.
+- **Data de cadastro:** `criado_em` é preenchida pelo banco (`now()`) e existe só na tabela, sem aparecer no `Domain` (ADR-34). As colunas `nome_comparacao` e `rotulo_comparacao` também ficam só no banco.
 - **Unicidade (ADR-23):** a comparação de nomes e rótulos não diferencia maiúsculas de minúsculas (RN-01, RN-02). Por isso, o banco gera as colunas `nome_comparacao` e `rotulo_comparacao`, com o texto em minúsculas, e a unicidade é garantida sobre elas: `nome_comparacao` é único, e `(aplicacao_id, rotulo_comparacao)` é único. Os espaços das pontas são retirados pela `Application` antes de gravar. `semana_referencia` é única (RN-28).
 - **Fase e situação** são gravadas como texto (ex.: `Homologacao`, `OnTrack`), com restrição `CHECK` dos valores possíveis, para que o banco seja legível em consultas diretas. A situação Não iniciado e a Entregue não são gravadas, porque são calculadas pela fase (RN-21). A `situacao_informada` está sempre preenchida e começa em `OnTrack`.
 - **Restrições `CHECK` de datas**, que repetem no banco as regras do domínio:
@@ -298,7 +299,8 @@ erDiagram
   - as duas datas da prorrogação são ambas nulas ou ambas preenchidas (RN-09);
   - a prorrogação só é preenchida quando as cinco datas do ciclo estão preenchidas (RN-09);
   - a ordem cronológica da RN-10, entre as datas preenchidas;
-  - uma versão sem datas está em Backlog (RN-07).
+  - uma versão sem datas está em Backlog (RN-07);
+  - nome da aplicação e rótulo da versão não são vazios e não têm espaços nas pontas (RN-01, RN-02), como segunda proteção da `Application` (T-05).
 - **Exclusão (RN-04):** apagar uma aplicação apaga suas versões (`ON DELETE CASCADE`). A tabela `status_report_congelado` não tem ligação com as outras, por isso os congelados continuam intactos (CA-38).
 - **Congelado (RN-27):** as colunas `timeline` e `tabela_status` guardam, em JSON, exatamente o resultado devolvido pela API no momento do congelamento. Recongelar uma semana substitui a linha existente por completo (RN-28).
 - **Nomes** de tabelas e colunas em snake_case, em português, sem acentos. A tabela de histórico de migrations do EF Core também fica no schema `timeline`.
@@ -527,6 +529,7 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
   | `POSTGRES_PASSWORD` | Senha do banco | valor fictício, a trocar localmente |
   | `POSTGRES_DB` | Nome do banco | `timeline_entregas` |
   | `DB_PORT` | Porta do banco no computador (só o próprio computador acessa). Troque se a porta já estiver em uso, por exemplo por outro PostgreSQL instalado | `5432` |
+  | `DB_HOST` | Endereço do banco para a API (opcional). Padrão `localhost`; no Docker Compose, a API usa `db` | não consta (usa o padrão) |
   | `API_PORT` | Porta da API no computador | `8080` |
   | `WEB_PORT` | Porta das telas no computador | `4200` |
   | `TZ` | Fuso horário da API | `America/Sao_Paulo` |
@@ -692,6 +695,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | ADR-31 | Serviço `ferramentas` no Docker Compose (imagem do SDK do .NET, perfil `ferramentas`), usado por `install`, `test` e `lint`; o container trabalha numa cópia do código, sem `bin` e `obj` | Um só lugar define a imagem do SDK e como montar o código, igual no Windows, no Linux e no macOS (ADR-24). A cópia evita misturar arquivos de compilação do computador com os do container e arquivos de root na pasta do projeto. | `docker run` em cada script (imagem repetida em quatro scripts e caminhos diferentes por sistema); montar a pasta para escrita (mistura de arquivos e permissões). |
 | ADR-32 | PostgreSQL de versão principal 17, porta publicada só para o próprio computador e configurável por `DB_PORT` | Versão estável e madura, com o volume no caminho padrão da imagem. Quem já tem outro PostgreSQL instalado (porta 5432 ocupada) só troca `DB_PORT` no `.env`. | Versão 18 (mudou o caminho do volume); porta fixa (conflita com PostgreSQL já instalado); porta aberta para a rede. |
 | ADR-33 | A `Versao` recebe o `TimeProvider` como parâmetro nas operações que dependem da data atual; erros de formato são recusados na `Application`, e o `Domain` só tem uma proteção técnica para eles | A entidade continua sem dependências e sem ler o relógio (seção 5.6), e cada mensagem do catálogo tem um único lugar de origem. | Data atual como `DateOnly` vinda de fora (mais fácil de errar o fuso em cada chamada); validar formato também no `Domain` com as mensagens (mensagem em dois lugares). |
+| ADR-34 | A migration é aplicada por um serviço de inicialização do `Host`, e não no `Program.cs`; a conexão é montada com as variáveis `POSTGRES_*`, `DB_PORT` e `DB_HOST`; `criado_em` e as colunas de comparação existem só no banco; as migrations geradas ficam fora da verificação de padrão do lint | O serviço roda só quando a API inicia, e não quando a ferramenta de migrations carrega o programa para criar uma migration. A conexão reaproveita as variáveis do `.env`, sem senha no código. O `Domain` continua sem conhecer o banco. O código gerado pela ferramenta não é reformatado à mão. | Migrate no `Program.cs` (a ferramenta de migrations o executaria); string de conexão única em outra variável (senha repetida no `.env`); `criado_em` na entidade (campo sem regra de negócio no `Domain`). |
 
 ---
 
@@ -699,7 +703,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 
 | Ponto | Onde | Situação |
 |---|---|---|
-| Tabelas, colunas e restrições do banco, incluindo as colunas de comparação de nomes e rótulos e a versão do formato do congelado | Seção 6 | A revisar |
+| Tabelas, colunas e restrições do banco, incluindo as colunas de comparação de nomes e rótulos e a versão do formato do congelado | Seção 6 | Aprovado na T-05 |
 | Catálogo de mensagens | Seção 7.6 | MSG-11 e MSG-13 a MSG-30 aprovadas na T-04; as demais a revisar antes da T-06 |
 | Dependências previstas | Seção 12.3 | Aprovado |
 | Dados de exemplo carregados automaticamente, com datas relativas ao dia da carga | Seção 12.1 | A revisar |
@@ -722,3 +726,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.9 | 15/10/2026 | Seção 9: nomes das variáveis do `.env.example` (T-02). |
 | 0.10 | 15/10/2026 | T-03: `Microsoft.AspNetCore.OpenApi` nas dependências previstas (12.3); `Directory.Build.props`, nome do projeto Host e `scripts/ferramentas-container.sh` na estrutura (4); `DB_PORT` (9); teste de estrutura do `Domain` (11); serviço `ferramentas` e PostgreSQL 17 (12.1); ADR-31 e ADR-32. |
 | 0.11 | 15/10/2026 | T-04: registro `DatasVersao` e origem dos erros de formato (5.3); `TimeProvider` como parâmetro das operações da `Versao` (5.6); ADR-33; MSG-11 e MSG-13 a MSG-30 aprovadas pela autora (14). |
+| 0.12 | 15/10/2026 | T-05: proteção do banco contra nome e rótulo vazios ou com espaço nas pontas, e `criado_em` (seção 6); `DB_HOST` (9); modelo de dados aprovado (14); ADR-34. |
