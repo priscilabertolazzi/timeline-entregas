@@ -62,3 +62,174 @@ DELETE {{api}}/aplicacoes/2
 
 ### 11. Exclui de novo a mesma aplicação. Esperado: 404 "Aplicação não encontrada."
 DELETE {{api}}/aplicacoes/2
+
+# ============================================================
+# Versões (RF-03 a RF-05, RF-09, RF-10, RF-14, RN-02, RN-07, RN-08)
+# Antes, cadastre as aplicações Alfa e Beta (passos 2 e 3 acima, com o banco vazio).
+# Nos passos abaixo, troque os números das rotas pelos "id" devolvidos por cada resposta:
+# ALFA = id da Alfa, BETA = id da Beta, V1 = id da v1 da Alfa, V0 = id da v0 da Beta.
+# Os cenários do CA-39 e do CA-40 supõem a data atual de 14/10/2026 ou posterior.
+# ============================================================
+
+### 12. Cadastra a versão v1 na Alfa (troque ALFA). Esperado: 201, em Backlog, sem datas, situação NaoIniciado
+POST {{api}}/aplicacoes/ALFA/versoes
+Content-Type: application/json
+
+{ "rotulo": "v1" }
+
+### 13. Tenta cadastrar "V1" na Alfa (CA-34). Esperado: 409 "Já existe uma versão com esse rótulo na aplicação."
+POST {{api}}/aplicacoes/ALFA/versoes
+Content-Type: application/json
+
+{ "rotulo": "V1" }
+
+### 14. Cadastra a v0 na Beta (troque BETA). Esperado: 201 (a Beta pode ter a sua própria versão, CA-34)
+POST {{api}}/aplicacoes/BETA/versoes
+Content-Type: application/json
+
+{ "rotulo": "v0" }
+
+### 15. Rótulo em branco. Esperado: 400 "Informe o rótulo da versão."
+POST {{api}}/aplicacoes/ALFA/versoes
+Content-Type: application/json
+
+{ "rotulo": "   " }
+
+### 16. Aplicação que não existe. Esperado: 404 "Aplicação não encontrada."
+POST {{api}}/aplicacoes/999999/versoes
+Content-Type: application/json
+
+{ "rotulo": "v1" }
+
+### 17. Detalha a v1 da Alfa (troque V1). Esperado: 200 com rótulo, fase, situação, observação e as sete datas
+GET {{api}}/versoes/V1
+
+### 18. Detalha uma versão que não existe. Esperado: 404 "Versão não encontrada."
+GET {{api}}/versoes/999999
+
+### 19. Tenta sair do Backlog sem datas (CA-13). Esperado: 422 "Informe as datas da versão antes de iniciá-la."
+PUT {{api}}/versoes/V1/fase
+Content-Type: application/json
+
+{ "fase": "Desenvolvimento" }
+
+### 20. Grava as sete datas da v1 da Alfa, com entrega em 28/10/2026 (CA-39). Esperado: 200 com as datas (a prorrogação fica vazia)
+PUT {{api}}/versoes/V1/datas
+Content-Type: application/json
+
+{
+  "inicioAndamento": "2026-09-01",
+  "fimAndamento": "2026-09-25",
+  "inicioHomologacao": "2026-10-01",
+  "fimHomologacao": "2026-10-13",
+  "inicioProrrogacao": null,
+  "fimProrrogacao": null,
+  "dataEntrega": "2026-10-28"
+}
+
+### 21. Datas em parte (CA-25). Esperado: 422 "As datas de andamento, de homologação e de entrega devem ser informadas em conjunto."
+PUT {{api}}/versoes/V1/datas
+Content-Type: application/json
+
+{ "inicioAndamento": "2026-09-01", "fimAndamento": "2026-09-25" }
+
+### 22. Data em formato errado. Esperado: 400 "Data inválida. Use o formato AAAA-MM-DD."
+PUT {{api}}/versoes/V1/datas
+Content-Type: application/json
+
+{
+  "inicioAndamento": "01/09/2026",
+  "fimAndamento": "2026-09-25",
+  "inicioHomologacao": "2026-10-01",
+  "fimHomologacao": "2026-10-13",
+  "dataEntrega": "2026-10-28"
+}
+
+### 23. Passa a v1 para Homologação. Esperado: 200, fase Homologacao, situação OnTrack
+PUT {{api}}/versoes/V1/fase
+Content-Type: application/json
+
+{ "fase": "Homologacao" }
+
+### 24. Fase que não existe. Esperado: 400 "Fase inválida."
+PUT {{api}}/versoes/V1/fase
+Content-Type: application/json
+
+{ "fase": "Pronto" }
+
+### 25. Volta a v1 para Desenvolvimento (CA-06). Esperado: 422 "Uma versão em Homologação não retorna a fases anteriores. ..."
+PUT {{api}}/versoes/V1/fase
+Content-Type: application/json
+
+{ "fase": "Desenvolvimento" }
+
+### 26. CA-39: tenta passar a v1 para Produção, com entrega futura (28/10/2026). Esperado: 422 "Para passar para Produção, a data de entrega deve ser igual ou anterior à data atual."
+PUT {{api}}/versoes/V1/fase
+Content-Type: application/json
+
+{ "fase": "Producao" }
+
+### 27. Marca a v1 em Risco e escreve a observação (RF-09, RF-10). Esperado: 200, situação Risco e a observação gravada
+PUT {{api}}/versoes/V1
+Content-Type: application/json
+
+{ "rotulo": "v1", "situacao": "Risco", "observacao": "Aguardando a homologação do cliente." }
+
+### 28. Situação inválida. Esperado: 400 "Situação inválida. Use On track ou Risco."
+PUT {{api}}/versoes/V1
+Content-Type: application/json
+
+{ "rotulo": "v1", "situacao": "Atrasado" }
+
+### 29. Registra a prorrogação da homologação, só possível em Homologação (RF-14). Esperado: 200 com a prorrogação de 13/10 a 23/10
+PUT {{api}}/versoes/V1/datas
+Content-Type: application/json
+
+{
+  "inicioAndamento": "2026-09-01",
+  "fimAndamento": "2026-09-25",
+  "inicioHomologacao": "2026-10-01",
+  "fimHomologacao": "2026-10-13",
+  "inicioProrrogacao": "2026-10-13",
+  "fimProrrogacao": "2026-10-23",
+  "dataEntrega": "2026-10-28"
+}
+
+### 30. Tenta remover todas as datas fora do Backlog (CA-20). Esperado: 422 "Para remover as datas, mude antes a fase da versão para Backlog."
+PUT {{api}}/versoes/V1/datas
+Content-Type: application/json
+
+{}
+
+### 31. Grava as datas da v0 da Beta, todas no passado (CA-40; troque V0). Esperado: 200
+PUT {{api}}/versoes/V0/datas
+Content-Type: application/json
+
+{
+  "inicioAndamento": "2026-08-01",
+  "fimAndamento": "2026-08-14",
+  "inicioHomologacao": "2026-08-17",
+  "fimHomologacao": "2026-08-21",
+  "dataEntrega": "2026-08-24"
+}
+
+### 32. CA-40: passa a v0 da Beta de Backlog direto para Produção. Esperado: 200, fase Producao e situação Entregue
+PUT {{api}}/versoes/V0/fase
+Content-Type: application/json
+
+{ "fase": "Producao" }
+
+### 33. Tenta mudar a fase de uma versão em Produção. Esperado: 422 "Uma versão em Produção não muda mais de fase."
+PUT {{api}}/versoes/V0/fase
+Content-Type: application/json
+
+{ "fase": "Testes" }
+
+### 34. Lista as aplicações. Esperado: 200, cada aplicação com o resumo das suas versões (id, rótulo, fase e situação)
+GET {{api}}/aplicacoes
+
+### 35. Exclui a v0 da Beta. Esperado: 204, sem corpo
+DELETE {{api}}/versoes/V0
+
+### 36. Exclui de novo a mesma versão. Esperado: 404 "Versão não encontrada."
+DELETE {{api}}/versoes/V0

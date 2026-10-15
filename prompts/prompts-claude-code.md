@@ -1058,6 +1058,26 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 ---
 
+### P-23 — 15/10/2026 — T-07
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, etapa 1 (APIs de cadastro). Tarefa T-07 do docs/tarefas.md: API de versões.
+> Referência de padrão: siga o padrão da T-06 (API de aplicações). As sete datas são gravadas juntas por PUT /api/versoes/{id}/datas (ADR-12).
+> OBJETIVO: Criar os endpoints de cadastrar, detalhar, alterar, mudar a fase, gravar as datas e excluir versões (RF-03 a RF-05, RF-09, RF-10, RF-14), atendendo o critério CA-34, com as mensagens MSG-05 a MSG-12 e MSG-26. Incluir no http/exemplos.http os cenários do CA-39 e do CA-40.
+> ESTILO: Siga as convenções do CLAUDE.md e do backend/CLAUDE.md, com os nomes do glossário e as mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
+> Se precisar fugir do padrão da T-06 em algum ponto, explique o motivo no plano.
+
+**Resultado:** o assistente apresentou o plano resumido, com as fugas do padrão da T-06 justificadas (datas e fase recebidas como texto, para devolver a MSG-12 e a MSG-26) e uma pergunta de negócio: a lista de aplicações devia trazer as versões, como diz a `arquitetura.md`, ou isso ficava para a T-10? A autora decidiu incluir já na T-07. A API foi implementada com 68 testes novos, conferida no PostgreSQL real (CA-34, CA-39 e CA-40) e pela página Scalar.
+
+**Funcionou de primeira?** Sim. A verificação pela página gerou perguntas sobre o corpo de exemplo (editável), a falta de uma operação de listar versões e a diferença entre fase e situação (ver Sessão 07 do diário).
+
+**Por que é relevante:** a instrução "se precisar fugir do padrão da T-06, explique o motivo no plano" fez o assistente justificar cada diferença antes de implementar, e a leitura da arquitetura ao lado da tarefa anterior revelou a lacuna da lista de aplicações, que a autora resolveu na hora.
+
+---
+
 ## Histórico do documento
 
 | Versão | Data | Descrição |
@@ -1071,3 +1091,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.7 | 15/10/2026 | Registro do pedido P-20 (T-04). |
 | 0.8 | 15/10/2026 | Registro do pedido P-21 (T-05). |
 | 0.9 | 15/10/2026 | Registro do pedido P-22 (T-06). |
+| 0.10 | 15/10/2026 | Registro do pedido P-23 (T-07). |

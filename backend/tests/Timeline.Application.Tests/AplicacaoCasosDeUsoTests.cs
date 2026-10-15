@@ -18,7 +18,7 @@ public sealed class AplicacaoCasosDeUsoTests
         new ExcluirAplicacao(_repositorio).ExecutarAsync(id, CancellationToken.None);
 
     private async Task<IReadOnlyList<string>> NomesListados() =>
-        (await new ListarAplicacoes(_repositorio).ExecutarAsync(CancellationToken.None)).Select(a => a.Nome).ToList();
+        (await new ListarAplicacoes(_repositorio, new VersaoRepositoryEmMemoria()).ExecutarAsync(CancellationToken.None)).Select(a => a.Nome).ToList();
 
     // ---------- Cadastrar ----------
 

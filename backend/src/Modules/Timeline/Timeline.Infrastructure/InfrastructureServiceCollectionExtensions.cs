@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Timeline.Application.Aplicacoes;
+using Timeline.Application.Versoes;
 
 namespace Timeline.Infrastructure;
 
@@ -17,6 +18,7 @@ public static class InfrastructureServiceCollectionExtensions
             connectionString,
             npgsql => npgsql.MigrationsHistoryTable("__EFMigrationsHistory", TimelineDbContext.Schema)));
         services.AddScoped<IAplicacaoRepository, AplicacaoRepository>();
+        services.AddScoped<IVersaoRepository, VersaoRepository>();
         return services;
     }
 }

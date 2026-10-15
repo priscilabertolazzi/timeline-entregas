@@ -281,6 +281,34 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 07 — 15/10/2026 — T-07, API de versões
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-07 — API de versões |
+| Regras e critérios | RF-03 a RF-05, RF-09, RF-10, RF-14, RN-02, RN-07, RN-08; CA-34, CA-39, CA-40; MSG-05 a MSG-12 e MSG-26 |
+| Modelo usado | Claude Sonnet 5.5, no plano e na implementação. No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | Não medido por inteiro; a verificação da autora levou 20 min. |
+| Estimativa sem IA | 4 h (proposta do assistente: um desenvolvedor experiente escreveria seis casos de uso, o repositório, os endpoints, a validação de formato, cerca de 70 testes e os exemplos de requisição, e conferiria tudo contra o PostgreSQL) |
+
+**O que foi pedido:** os endpoints de cadastrar, detalhar, alterar, mudar a fase, gravar as datas e excluir versões, no padrão da T-06, e os cenários do CA-39 e do CA-40 no `http/exemplos.http`. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-23.
+
+**Resultado:** branch `feat/api-versoes`. Seis casos de uso na `Application` (`CadastrarVersao`, `DetalharVersao`, `AlterarVersao`, `AlterarFaseVersao`, `AlterarDatasVersao`, `ExcluirVersao`), `IVersaoRepository` com a implementação no EF Core, `VersaoEndpoints` e validação de formato num só lugar. As MSG-05 a MSG-10 e a MSG-12 entraram em `Mensagens.cs`. A lista de aplicações passou a trazer o resumo das versões (id, rótulo, fase e situação). Fase e situação saem como texto (`Homologacao`, `OnTrack`). O `TimeProvider` foi registrado na injeção de dependências. Corpos de exemplo preenchidos na página Scalar. `http/exemplos.http` com os passos 12 a 36. Build sem avisos, 141 testes (39 do `Domain`, 95 da `Application`, 7 da `Api`) e lint sem apontamentos. No PostgreSQL real, CA-34, CA-39 e CA-40 se comportaram como esperado. `arquitetura.md` na versão 0.15 (ADR-36).
+
+**Primeira tentativa:** certa. Nenhum ajuste de código foi necessário depois dos testes; o único tropeço foi do roteiro de conferência do assistente, que usou ids fixos (1 e 2) em vez dos ids reais devolvidos pela API, e foi refeito.
+
+**Ajustes necessários e por quê:** nenhum no código. Ver a lacuna abaixo, que mudou o escopo no plano.
+
+**Lacuna encontrada nos requisitos:** a `arquitetura.md` (seção 7.2) diz que `GET /api/aplicacoes` devolve a lista "com suas versões" (RF-03), mas a T-06 entregou só `id` e `nome`, e nenhuma tarefa previa completar isso. O assistente apontou a lacuna no plano, e a autora decidiu incluir já na T-07 o resumo das versões, em vez de deixar para a T-10 (risco de a pendência se perder). Efeito: a resposta da lista ganhou o campo `versoes`, e a linha que monta `ListarAplicacoes` no teste existente `AplicacaoCasosDeUsoTests` mudou (só o preparo do teste, nenhuma verificação), o que foi informado à autora.
+
+**O que a revisão humana capturou:** a decisão sobre a lista com versões. Na verificação, as perguntas da autora mostraram três pontos que o roteiro não deixava claros: o `"v1"` já vinha preenchido no corpo de exemplo e não ficava óbvio que era editável; não existe uma operação só de "listar versões" (a lista vem dentro de Aplicações); e "em andamento, em homologação" é a fase, que tem operação própria, diferente da situação (On track ou Risco). O CA-34, o CA-39 e o CA-40 foram conferidos pela página e aceitos.
+
+**Riscos mitigados:** teste alterado para o código passar (a única mudança em teste existente foi o preparo, informada e dentro do que a autora aprovou); mensagem fora do catálogo (todas as mensagens vêm do catálogo, com o texto exato conferido nos testes); apagar as datas sem querer (corpo ausente em `/datas` é recusado com a MSG-42); mudança parcial em caso de erro (a regra que pode falhar roda antes de qualquer alteração); dependência nova (nenhuma); SQL por texto (nenhum; só consultas do EF Core); fase informada como número (recusada com a MSG-26).
+
+**Aprendizados:** conferir a seção 7.2 da arquitetura contra o que cada tarefa de API entrega achou a lacuna da lista antes de ela virar retrabalho na T-10. Corpos de exemplo preenchidos ajudam, mas o passo a passo da página precisa dizer que eles são editáveis e que a fase e a situação têm operações diferentes. Em roteiros de conferência, usar os ids devolvidos pela API, e não números fixos.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -323,3 +351,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.8 | 15/10/2026 | Registrada a Sessão 04 (T-04), com o pedido P-20. |
 | 0.9 | 15/10/2026 | Registrada a Sessão 05 (T-05), com o pedido P-21. |
 | 0.10 | 15/10/2026 | Registrada a Sessão 06 (T-06), com o pedido P-22. |
+| 0.11 | 15/10/2026 | Registrada a Sessão 07 (T-07), com o pedido P-23 e a lacuna da lista de aplicações sem as versões. |

@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.16 |
+| Versão | 0.17 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -144,9 +144,10 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** pela página de documentação da API, no navegador, você cadastra a aplicação Alfa, tenta cadastrar "alfa" e confere a mensagem "Já existe uma aplicação com esse nome.".
 
-### [ ] T-07 — API de versões (1,5 h)
+### [x] T-07 — API de versões (1,5 h)
 - Cadastrar, detalhar, alterar, mudar a fase, gravar as datas e excluir (RF-03 a RF-05, RF-09, RF-10, RF-14), seguindo o padrão da T-06.
 - Critério de aceite: CA-34. Mensagens MSG-05 a MSG-12 e MSG-26.
+- A lista de aplicações passa a trazer o resumo das versões de cada aplicação (arquitetura.md, seção 7.2).
 
 **Sua verificação:** pela página de documentação da API, você cadastra uma versão, informa as datas, tenta passar para Produção com entrega futura e confere a mensagem do CA-39. Depois, repete o cenário do CA-40 (de Backlog direto para Produção, com datas passadas) e confere que é aceito.
 
@@ -315,3 +316,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.14 | 15/10/2026 | T-04 marcada como concluída. |
 | 0.15 | 15/10/2026 | T-05 marcada como concluída. |
 | 0.16 | 15/10/2026 | T-06 marcada como concluída. |
+| 0.17 | 15/10/2026 | T-07 marcada como concluída; a lista de aplicações passou a trazer as versões. |

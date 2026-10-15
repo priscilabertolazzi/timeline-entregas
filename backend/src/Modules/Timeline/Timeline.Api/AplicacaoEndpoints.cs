@@ -20,8 +20,8 @@ public static class AplicacaoEndpoints
         grupo.MapGet("/", async (ListarAplicacoes caso, CancellationToken ct) => TypedResults.Ok(await caso.ExecutarAsync(ct)))
             .WithName("ListarAplicacoes")
             .WithSummary("Lista as aplicações")
-            .WithDescription("Devolve as aplicações em ordem alfabética, sem diferença entre maiúsculas e minúsculas.")
-            .Produces<IReadOnlyList<AplicacaoResposta>>(StatusCodes.Status200OK)
+            .WithDescription("Devolve as aplicações em ordem alfabética, sem diferença entre maiúsculas e minúsculas, cada uma com o resumo das suas versões (id, rótulo, fase e situação).")
+            .Produces<IReadOnlyList<AplicacaoComVersoesResposta>>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
         grupo.MapPost("/", async (NomeAplicacaoEntrada? entrada, CadastrarAplicacao caso, CancellationToken ct) =>

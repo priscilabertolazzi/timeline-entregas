@@ -18,8 +18,29 @@ public static class Mensagens
     /// <summary>Aplicação inexistente. Erro 404.</summary>
     public const string Msg04 = "Aplicação não encontrada.";
 
+    /// <summary>Rótulo da versão não informado (RN-02). Validada na Application, com erro 400.</summary>
+    public const string Msg05 = "Informe o rótulo da versão.";
+
+    /// <summary>Rótulo da versão com mais de 20 caracteres. Validada na Application, com erro 400.</summary>
+    public const string Msg06 = "O rótulo da versão deve ter no máximo 20 caracteres.";
+
+    /// <summary>Rótulo já existente na aplicação (RN-02, CA-34). Erro 409.</summary>
+    public const string Msg07 = "Já existe uma versão com esse rótulo na aplicação.";
+
+    /// <summary>Versão inexistente. Erro 404.</summary>
+    public const string Msg08 = "Versão não encontrada.";
+
+    /// <summary>Observação com mais de 1000 caracteres (RN-22). Validada na Application, com erro 400.</summary>
+    public const string Msg09 = "A observação deve ter no máximo 1000 caracteres.";
+
+    /// <summary>Situação com valor desconhecido (RN-21). Validada na Application, com erro 400.</summary>
+    public const string Msg10 = "Situação inválida. Use On track ou Risco.";
+
     /// <summary>Situação alterada em Backlog ou Produção (RN-21).</summary>
     public const string Msg11 = "A situação só pode ser alterada em versões em Análise, Desenvolvimento, Testes ou Homologação.";
+
+    /// <summary>Data em formato inválido. Validada na Application, com erro 400.</summary>
+    public const string Msg12 = "Data inválida. Use o formato AAAA-MM-DD.";
 
     /// <summary>Datas do ciclo informadas em parte (RN-09, CA-25).</summary>
     public const string Msg13 = "As datas de andamento, de homologação e de entrega devem ser informadas em conjunto.";
