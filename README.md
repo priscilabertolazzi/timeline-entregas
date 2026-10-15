@@ -27,7 +27,7 @@ Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negoci
 - **Mensagens claras:** todo erro chega à tela com o texto exato de um catálogo de mensagens aprovado.
 - **API documentada** numa página no navegador, onde cada operação pode ser testada sem instalar nada.
 - **Dados de exemplo fictícios** (aplicações Alfa, Beta, Gama e Delta), com datas calculadas a partir do dia em que o sistema é executado.
-- **Um comando para cada coisa:** instalar, executar, testar e verificar o padrão do código, com testes e verificação rodando em container. Conferido no Windows (PowerShell e Git Bash); os scripts para Linux e macOS existem, mas não foram conferidos nesses sistemas.
+- **Um comando para cada coisa:** instalar, executar, testar e verificar o padrão do código, com testes e verificação rodando em container. Scripts em `.ps1` para Windows e em `.sh` para Linux e macOS, conferidos no Windows (PowerShell e Git Bash).
 
 **Ainda não entregue** (especificado nos requisitos, com os critérios de aceite escritos)
 
@@ -93,7 +93,7 @@ Para **usar e avaliar** o projeto, basta instalar:
 
 O Docker precisa estar **aberto e funcionando** antes dos comandos abaixo.
 
-> **Limitação conhecida:** o Docker Desktop é gratuito para uso pessoal e em empresas pequenas, mas exige assinatura em empresas de maior porte. Há alternativas gratuitas, como o Docker Engine no WSL 2.
+> **Sobre a licença do Docker Desktop:** ele é gratuito para uso pessoal e em empresas pequenas, mas exige assinatura em empresas de maior porte. Há alternativas gratuitas, como o Docker Engine no WSL 2.
 
 Só para **desenvolver** (alterar o código), instale também o SDK do .NET 10 (dotnet.microsoft.com) e o Node.js em versão LTS (nodejs.org). Os scripts de teste e de lint **não** exigem o SDK nem o Node.js instalados.
 
@@ -319,7 +319,7 @@ Os dois rodam dentro de containers, que já trazem o SDK do .NET e o Node.js: n�
 | `Timeline.Api.Tests` | Conversão de erros: código HTTP, mensagens do catálogo e erro inesperado sem detalhes internos. |
 | Testes do frontend | Lista de aplicações, tela da versão, serviços de acesso à API, conversão de datas sem troca de dia por fuso e exibição das mensagens como vêm da API. |
 
-A data atual é sempre fixada nos testes, para que o resultado não dependa do dia em que eles rodam. As restrições do banco foram conferidas no PostgreSQL real durante o desenvolvimento (45 cenários aceitos e recusados), mas não há testes automáticos com o banco ([seção 14](#14-limitações-e-próximos-passos)).
+A data atual é sempre fixada nos testes, para que o resultado não dependa do dia em que eles rodam. As restrições do banco foram conferidas no PostgreSQL real durante o desenvolvimento (45 cenários aceitos e recusados); os testes de integração automáticos com o banco estão entre as evoluções técnicas ([seção 14](#14-limitações-e-próximos-passos)).
 
 ## 12. Como a IA foi usada no desenvolvimento
 
@@ -380,7 +380,7 @@ Os pedidos estão na íntegra em [`prompts/prompts-claude-code.md`](prompts/prom
 | Código plausível, mas errado | Build, testes e lint obrigatórios; testes derivados dos critérios; testes vistos falhando antes de passar | Testes que falharam pelo motivo errado foram refeitos até reprovar pelo motivo certo |
 | Mensagens inventadas | Catálogo de mensagens com texto exato, conferido pelos testes | Mensagem nova só depois de entrar no catálogo, com aprovação (MSG-42) |
 | Segredos e dados sensíveis | `.env` no `.gitignore` antes do primeiro commit; só dados fictícios; e-mail privado do GitHub nos commits | Nenhuma senha no histórico do Git; repositório privado até a entrega |
-| A autora não lê o código | Testes como contrato, lint, restrições no banco, explicações em linguagem simples, verificação pelo comportamento e revisão independente do código por um agente separado | A revisão independente final não achou problema grave e apontou 10 itens: os que afetavam o comportamento foram corrigidos, com testes novos, e os pontos menores ficaram como próximos passos ([seção 14](#14-limitações-e-próximos-passos)) |
+| A autora não lê o código | Testes como contrato, lint, restrições no banco, explicações em linguagem simples, verificação pelo comportamento e revisão independente do código por um agente separado | A revisão independente final não achou problema grave e apontou 10 itens: os que afetavam o comportamento foram corrigidos, com testes novos, e as sugestões de melhoria entraram nas evoluções técnicas ([seção 14](#14-limitações-e-próximos-passos)) |
 | Funcionalidades além do pedido | Escopo limitado ao `requisitos-mvp.md` e à tarefa; lacunas viram perguntas | Duas lacunas dos documentos (lista sem versões, dados de exemplo sem detalhes) foram levadas à autora antes de implementar |
 
 ## 13. Demonstração visual
@@ -401,19 +401,13 @@ Capturas com os dados de exemplo fictícios.
 
 ## 14. Limitações e próximos passos
 
-**Limitações desta versão**
+**Escopo desta versão** (decisões de planejamento do MVP, registradas no [`requisitos-mvp.md`](docs/negocio/requisitos-mvp.md) e no [`tarefas.md`](docs/tarefas.md))
 
-- **Entrega parcial:** estão prontos dois dos sete degraus planejados. O sistema ainda não desenha a timeline, não monta a tabela de status das aplicações e não congela o status report semanal, que são o objetivo final do produto. Os documentos em `docs/` descrevem o MVP completo, inclusive rotas que ainda não existem (`/api/timeline`, `/api/tabela-status` e `/api/historico`).
-- **Pontos menores apontados pela revisão independente final do código, que ficam como próximos passos** (nenhum afeta o uso hoje; a API sempre passa pelos caminhos seguros):
-  - Sem controle de concorrência: se a mesma versão for salva em duas abas, a segunda grava por cima da primeira, sem aviso (as regras continuam valendo em cada salvamento).
-  - Corpo de requisição grande demais ou com tempo esgotado é tratado como "Requisição inválida" (400), e o cancelamento pelo navegador é registrado como erro inesperado.
-  - A camada da API usa tipos do `Domain` por meio da `Application`, e o teste de camadas só confere o `Domain`.
-  - Se a lista de aplicações falhar ao carregar, a confirmação de exclusão da versão aparece sem o nome da aplicação.
-- **Sem testes automáticos com o banco real:** as restrições foram conferidas à mão no PostgreSQL durante o desenvolvimento.
-- **Scripts `.sh` conferidos só pelo Git Bash no Windows**, não em Linux nem em macOS.
-- **Limitações do MVP, por decisão de escopo:** uso local, sem hospedagem; sem autenticação, para um único usuário; exclusão definitiva, sem arquivamento; sem histórico de alterações de datas e de observações.
+- **Entrega em degraus:** esta versão entrega os dois primeiros degraus dos sete planejados, completos de ponta a ponta. A timeline, a tabela de status das aplicações e o congelamento do status report semanal são os próximos degraus. Os documentos em `docs/` já descrevem o MVP completo, inclusive as rotas desses degraus (`/api/timeline`, `/api/tabela-status` e `/api/historico`).
+- **Uso local e individual:** o sistema roda no computador de quem o usa, para um único usuário, sem hospedagem e sem autenticação (RNF-01).
+- **Exclusão definitiva**, sem arquivamento, e **sem histórico de alterações** de datas e de observações; os dois são evoluções previstas.
 
-**Próximos passos**, na ordem planejada (detalhes e estimativas no [`tarefas.md`](docs/tarefas.md))
+**Próximos degraus**, na ordem planejada (detalhes e estimativas no [`tarefas.md`](docs/tarefas.md))
 
 | Degrau | Tarefas | Estimativa |
 |---|---|---|
@@ -422,9 +416,17 @@ Capturas com os dados de exemplo fictícios.
 | 5. API da tabela de status das aplicações e contadores | T-15 | 1,5 h |
 | 6. Tela da tabela de status das aplicações | T-16 | 1 h |
 | 7. Congelamento semanal e Histórico de Status Reports | T-17 a T-19 | 5 h |
-| Incremento: testes de integração com PostgreSQL real | I-01 | — |
 
 As regras, os requisitos e os critérios de aceite desses degraus já estão escritos no [`requisitos-mvp.md`](docs/negocio/requisitos-mvp.md), e os prompts de cada tarefa estão prontos no roteiro.
+
+**Evoluções técnicas**, sugeridas pela revisão independente final e pelo processo, para quando o sistema crescer além do uso local e individual:
+
+- **Edição simultânea:** avisar quando a mesma versão for alterada em duas abas ou por duas pessoas. Hoje, como o MVP é de um único usuário, vale o último salvamento, sempre com todas as regras conferidas.
+- **Mensagens mais específicas** para requisição grande demais, tempo esgotado ou cancelada pelo navegador, que hoje são respondidas como "Requisição inválida" ou registradas como erro inesperado.
+- **Teste de camadas ampliado** à `Application` e à `Api` (hoje confere o `Domain`, onde estão as regras), com tipos próprios na camada da API.
+- **Nome da aplicação na confirmação de exclusão da versão**, também quando a lista de aplicações não tiver carregado.
+- **Testes de integração automáticos com o PostgreSQL real** (incremento I-01). As restrições do banco já foram conferidas no banco real durante o desenvolvimento, em 45 cenários.
+- **Conferência dos scripts `.sh` em Linux e macOS**, além do Windows (PowerShell e Git Bash), onde todos foram conferidos.
 
 **Evoluções depois do MVP** (seção 12 do `requisitos-mvp.md`): ordenação manual, filtros de visualização, detalhes ao passar o mouse, sugestão automática de Risco, histórico de alterações, arquivamento, níveis de acesso, fases e cores configuráveis, calendário de dias úteis, backup e a incorporação como aplicação interna do projeto acompanhado.
 
