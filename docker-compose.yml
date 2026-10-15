@@ -44,6 +44,16 @@ services:
       # Só o próprio computador alcança a API.
       - "127.0.0.1:${API_PORT:-8080}:8080"
 
+  web:
+    build:
+      context: frontend
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      # Só o próprio computador alcança as telas.
+      - "127.0.0.1:${WEB_PORT:-4200}:80"
+
   # Container com o SDK do .NET, usado por install, test e lint (ADR-24, ADR-31).
   # Só roda quando chamado pelos scripts (perfil "ferramentas"), nunca com "docker compose up".
   ferramentas:
@@ -61,6 +71,20 @@ services:
       - ./scripts/ferramentas-container.sh:/origem/scripts/ferramentas-container.sh:ro
       - timeline-nuget-cache:/root/.nuget/packages
 
+  # Container com o Node.js, usado por install, test e lint do frontend (ADR-24, ADR-38).
+  ferramentas-web:
+    profiles: ["ferramentas"]
+    image: node:24-slim
+    entrypoint: ["sh", "/origem/scripts/ferramentas-web-container.sh"]
+    environment:
+      CI: "true"
+      NG_CLI_ANALYTICS: "false"
+    volumes:
+      - ./frontend:/origem/frontend:ro
+      - ./scripts/ferramentas-web-container.sh:/origem/scripts/ferramentas-web-container.sh:ro
+      - timeline-npm-cache:/root/.npm
+
 volumes:
   timeline-db-data:
   timeline-nuget-cache:
+  timeline-npm-cache:

@@ -1,0 +1,42 @@
+// Tema do sistema. As cores dos grupos visuais ficam só aqui (RN-06, RN-25, frontend/CLAUDE.md).
+// Cada grupo tem um tom forte (realizado) e um tom claro (previsto). Os valores de cada tom
+// serão ajustados com a autora na tarefa da timeline (T-14).
+@use '@angular/material' as mat;
+
+html {
+  @include mat.theme(
+    (
+      color: mat.$azure-palette,
+      typography: (
+        plain-family: 'Segoe UI, Roboto, Arial, sans-serif',
+        brand-family: 'Segoe UI, Roboto, Arial, sans-serif',
+      ),
+      density: 0,
+    )
+  );
+}
+
+:root {
+  // Não iniciado (cinza): barra de uma versão em Backlog.
+  --cor-nao-iniciado-forte: #757575;
+  --cor-nao-iniciado-claro: #e0e0e0;
+  // Em andamento (azul): Análise, Desenvolvimento e Testes.
+  --cor-em-andamento-forte: #1565c0;
+  --cor-em-andamento-claro: #90caf9;
+  // Em homologação (roxo).
+  --cor-em-homologacao-forte: #6a1b9a;
+  --cor-em-homologacao-claro: #ce93d8;
+  // Homologação prorrogada (vermelho).
+  --cor-homologacao-prorrogada-forte: #c62828;
+  --cor-homologacao-prorrogada-claro: #ef9a9a;
+  // Em produção (verde).
+  --cor-em-producao-forte: #2e7d32;
+  --cor-em-producao-claro: #a5d6a7;
+}
+
+body {
+  margin: 0;
+  background: var(--mat-sys-surface);
+  color: var(--mat-sys-on-surface);
+  font: var(--mat-sys-body-large);
+}

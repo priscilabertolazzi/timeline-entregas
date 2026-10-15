@@ -1,0 +1,11 @@
+<h1>Lista de aplicações</h1>
+@if (aplicacoes(); as lista) {
+  <mat-list>
+    @for (aplicacao of lista; track aplicacao.id) {
+      <mat-list-item>
+        <span matListItemTitle>{{ aplicacao.nome }}</span>
+        <span matListItemLine>{{ aplicacao.versoes.length }} versão(ões)</span>
+      </mat-list-item>
+    }
+  </mat-list>
+}
