@@ -306,7 +306,7 @@ flowchart TB
 
 Os dois rodam dentro de containers, que já trazem o SDK do .NET e o Node.js: não é preciso instalar nada além do Docker. O container trabalha numa cópia do código, então os arquivos do seu computador não são alterados. Se algum teste ou apontamento falhar, o comando termina com erro.
 
-**Situação na versão 1.0.0:** 236 testes passando, 186 do backend e 50 do frontend; lint sem apontamentos.
+**Situação na versão 1.0.0:** 239 testes passando, 189 do backend e 50 do frontend; lint sem apontamentos.
 
 **O que os testes cobrem**
 
@@ -338,7 +338,7 @@ As estimativas sem IA foram propostas pelo assistente (quanto um desenvolvedor e
 
 O ganho apareceu mais onde o trabalho é volumoso e bem especificado:
 
-- **Testes a partir dos critérios de aceite:** 37 testes de regras escritos antes do código na T-04, cada um vinculado a um critério; 236 testes no total.
+- **Testes a partir dos critérios de aceite:** 37 testes de regras escritos antes do código na T-04, cada um vinculado a um critério; 239 testes no total.
 - **Conferências que um humano dificilmente faria à mão:** 45 cenários de gravação aceita e recusada no banco real (T-05); a carga dos dados de exemplo simulada em cada dia de um ano, incluindo 29/02 (T-08).
 - **Infraestrutura:** Dockerfiles, Docker Compose e os quatro scripts em duas versões, com testes e lint em container.
 - **Revisão antes do código:** a revisão de arquitetura do planejamento encontrou uma contradição no exemplo do CA-02, que viraria um teste errado e protegido.
@@ -403,6 +403,12 @@ Capturas com os dados de exemplo fictícios.
 
 - **Entrega parcial:** estão prontos dois dos sete degraus planejados. O sistema ainda não desenha a timeline, não monta a tabela de status das aplicações e não congela o status report semanal, que são o objetivo final do produto. Os documentos em `docs/` descrevem o MVP completo, inclusive rotas que ainda não existem (`/api/timeline`, `/api/tabela-status` e `/api/historico`).
 - **Revisão independente do código não realizada:** o processo previa uma revisão do código por uma sessão separada do assistente ao fim das etapas de API e antes da entrega. Como a autora não lê código, os testes, o lint e as restrições do banco foram as proteções efetivas.
+- **Pontos apontados pela revisão independente final, que ficam como próximos passos** (nenhum afeta o uso hoje; a API sempre passa pelos caminhos seguros):
+  - Os métodos `AlterarSituacao` e `AlterarObservacao` da versão são públicos e, sozinhos, não conferem a regra "Risco exige observação"; só os caminhos usados pela API (`AlterarDados` e `Alterar`) conferem. A correção é torná-los internos e ajustar os testes que os chamam.
+  - Sem controle de concorrência: se a mesma versão for salva em duas abas, a segunda grava por cima da primeira, sem aviso (as regras continuam valendo em cada salvamento).
+  - Corpo de requisição grande demais ou com tempo esgotado é tratado como "Requisição inválida" (400), e o cancelamento pelo navegador é registrado como erro inesperado.
+  - A camada da API usa tipos do `Domain` por meio da `Application`, e o teste de camadas só confere o `Domain`.
+  - Se a lista de aplicações falhar ao carregar, a confirmação de exclusão da versão aparece sem o nome da aplicação.
 - **Sem testes automáticos com o banco real:** as restrições foram conferidas à mão no PostgreSQL durante o desenvolvimento.
 - **Scripts `.sh` conferidos só pelo Git Bash no Windows**, não em Linux nem em macOS.
 - **Limitações do MVP, por decisão de escopo:** uso local, sem hospedagem; sem autenticação, para um único usuário; exclusão definitiva, sem arquivamento; sem histórico de alterações de datas e de observações.

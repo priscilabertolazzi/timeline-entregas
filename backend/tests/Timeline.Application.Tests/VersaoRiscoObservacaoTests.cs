@@ -59,5 +59,8 @@ public sealed class VersaoRiscoObservacaoTests
                 v1.Id, new AlterarVersaoCompletaEntrada("v1", "Risco", "   ", "Desenvolvimento", DatasAlfaV1), CancellationToken.None));
 
         Assert.Equal(["Informe a observação quando a situação for Risco."], erro.Mensagens);
+        var depois = await new DetalharVersao(_versoes).ExecutarAsync(v1.Id, CancellationToken.None);
+        Assert.Equal(Situacao.OnTrack, depois.Situacao);
+        Assert.Null(depois.Observacao);
     }
 }
