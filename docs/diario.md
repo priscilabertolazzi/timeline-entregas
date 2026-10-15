@@ -316,7 +316,7 @@ Copie o bloco abaixo para cada nova sessão.
 | Tarefa | T-08 — Docker da API, fuso horário e dados de exemplo |
 | Regras e critérios | RN-19, CA-23; ADR-25, ADR-30 e ADR-37 |
 | Modelo usado | Claude Sonnet 5.5, no plano e na implementação. No Claude Code (área Code do aplicativo Claude) |
-| Tempo real | Não informado. |
+| Tempo real | 30 min (informado pela autora). |
 | Estimativa sem IA | 3 h (proposta do assistente: Dockerfile em duas etapas, serviço no Compose, carga de exemplo com datas relativas, teste de um ano inteiro e atualização dos scripts e do README) |
 
 **O que foi pedido:** Dockerfile e serviço `api` com o fuso pela variável `TZ`, a página de documentação também no Docker, a carga dos dados de exemplo com datas relativas ao dia da carga e um teste que simula a carga em cada dia de um ano. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-24.
