@@ -8,7 +8,9 @@ import { AvisoErros } from '../compartilhado/aviso-erros';
 import { DadosDialogoConfirmacao, DialogoConfirmacao } from '../compartilhado/dialogo-confirmacao';
 import { DadosDialogoNome, DialogoNome } from '../compartilhado/dialogo-nome';
 import { mensagensDoErro } from '../compartilhado/mensagens-api';
-import { rotuloFase, rotuloSituacao } from '../compartilhado/rotulos';
+import { entregaParaExibir } from '../compartilhado/datas';
+import { Etiqueta } from '../compartilhado/etiqueta';
+import { corDaFase, corDaSituacao, rotuloFase, rotuloSituacao } from '../compartilhado/rotulos';
 import { VersaoCadastrada, VersaoService } from '../versoes/versao.service';
 import { Aplicacao, AplicacaoService } from './aplicacao.service';
 
@@ -18,7 +20,7 @@ import { Aplicacao, AplicacaoService } from './aplicacao.service';
  */
 @Component({
   selector: 'app-lista-aplicacoes',
-  imports: [MatButtonModule, MatCardModule, MatProgressBarModule, RouterLink, AvisoErros],
+  imports: [MatButtonModule, MatCardModule, MatProgressBarModule, RouterLink, AvisoErros, Etiqueta],
   templateUrl: './lista-aplicacoes.html',
   styleUrl: './lista-aplicacoes.scss',
 })
@@ -30,6 +32,9 @@ export class ListaAplicacoes {
 
   protected readonly aplicacoes = signal<Aplicacao[] | undefined>(undefined);
   protected readonly erros = signal<string[]>([]);
+  protected readonly entregaParaExibir = entregaParaExibir;
+  protected readonly corDaFase = corDaFase;
+  protected readonly corDaSituacao = corDaSituacao;
   protected readonly rotuloFase = rotuloFase;
   protected readonly rotuloSituacao = rotuloSituacao;
 
@@ -61,7 +66,7 @@ export class ListaAplicacoes {
   protected excluir(aplicacao: Aplicacao): void {
     const dados: DadosDialogoConfirmacao = {
       titulo: 'Excluir aplicação',
-      texto: `Excluir a aplicação ${aplicacao.nome}? Todas as suas versões também serão excluídas e isso não pode ser desfeito. Os status reports já congelados não são afetados.`,
+      texto: `Excluir a aplicação ${aplicacao.nome}? Todas as suas versões também serão excluídas e isso não pode ser desfeito.`,
       botao: 'Excluir',
     };
     this.dialog

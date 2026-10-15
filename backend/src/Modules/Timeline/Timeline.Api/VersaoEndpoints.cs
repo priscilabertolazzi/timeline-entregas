@@ -90,7 +90,7 @@ public static class VersaoEndpoints
             })
             .WithName("ExcluirVersao")
             .WithSummary("Exclui uma versão")
-            .WithDescription("Exclui definitivamente a versão. Os status reports já congelados não são afetados (RN-04).")
+            .WithDescription("Exclui definitivamente a versão (RN-04).")
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError);

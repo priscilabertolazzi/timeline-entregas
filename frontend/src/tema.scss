@@ -32,6 +32,8 @@ html {
   // Em produção (verde).
   --cor-em-producao-forte: #2e7d32;
   --cor-em-producao-claro: #a5d6a7;
+  // Situação Risco (etiqueta nas telas de cadastro): laranja claro, para não confundir com a prorrogação (vermelho).
+  --cor-risco: #ffcc80;
 }
 
 body {

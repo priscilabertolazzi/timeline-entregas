@@ -6,6 +6,15 @@ mat-toolbar {
   font: var(--mat-sys-title-large);
 }
 
+.espaco {
+  flex: 1 1 auto;
+}
+
+.versao-sistema {
+  font: var(--mat-sys-label-large);
+  opacity: 0.85;
+}
+
 main {
   box-sizing: border-box;
   max-width: 1000px;

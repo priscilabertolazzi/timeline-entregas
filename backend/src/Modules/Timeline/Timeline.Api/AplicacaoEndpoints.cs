@@ -52,7 +52,7 @@ public static class AplicacaoEndpoints
             })
             .WithName("ExcluirAplicacao")
             .WithSummary("Exclui uma aplicação")
-            .WithDescription("Exclui definitivamente a aplicação e todas as suas versões (RN-04). Os status reports já congelados não são afetados.")
+            .WithDescription("Exclui definitivamente a aplicação e todas as suas versões (RN-04).")
             .Produces(StatusCodes.Status204NoContent)
             .ProducesProblem(StatusCodes.Status404NotFound)
             .ProducesProblem(StatusCodes.Status500InternalServerError);

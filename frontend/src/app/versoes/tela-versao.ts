@@ -17,7 +17,8 @@ import { AvisoErros } from '../compartilhado/aviso-erros';
 import { DadosDialogoConfirmacao, DialogoConfirmacao } from '../compartilhado/dialogo-confirmacao';
 import { dataParaTexto, textoParaData } from '../compartilhado/datas';
 import { mensagensDoErro } from '../compartilhado/mensagens-api';
-import { FASES, rotuloFase, rotuloSituacao } from '../compartilhado/rotulos';
+import { Etiqueta } from '../compartilhado/etiqueta';
+import { FASES, corDaFase, corDaSituacao, rotuloFase, rotuloSituacao } from '../compartilhado/rotulos';
 import { Versao, VersaoParaGravar, VersaoService } from './versao.service';
 
 /** Aviso mostrado depois de salvar. */
@@ -77,6 +78,7 @@ const GRUPOS_DE_DATAS: readonly { titulo: string; campos: readonly { nome: Campo
     MatSelectModule,
     RouterLink,
     AvisoErros,
+    Etiqueta,
   ],
   providers: [provideNativeDateAdapter()],
   templateUrl: './tela-versao.html',
@@ -91,6 +93,8 @@ export class TelaVersao {
   private readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
 
   protected readonly gruposDeDatas = GRUPOS_DE_DATAS;
+  protected readonly corDaFase = corDaFase;
+  protected readonly corDaSituacao = corDaSituacao;
   protected readonly rotuloFase = rotuloFase;
   protected readonly rotuloSituacao = rotuloSituacao;
   protected readonly versao = signal<Versao | undefined>(undefined);
@@ -139,10 +143,11 @@ export class TelaVersao {
     this.salvando.set(true);
     this.erros.set([]);
     this.versaoService.gravar(this.id, this.montarCorpo()).subscribe({
-      next: (versao) => {
-        this.preencher(versao);
+      next: () => {
+        // Salvou: volta para a lista de aplicações, com o aviso de salvo.
         this.salvando.set(false);
         this.aviso.open(AVISO_SALVO, undefined, { duration: 4000 });
+        void this.router.navigate(['/']);
       },
       error: (erro: unknown) => {
         this.erros.set(mensagensDoErro(erro));

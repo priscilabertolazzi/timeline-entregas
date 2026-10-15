@@ -18,18 +18,6 @@
   }
 }
 
-.etiqueta {
-  padding: 2px 12px;
-  border-radius: 12px;
-  background: var(--mat-sys-surface-container-high);
-  font: var(--mat-sys-label-large);
-
-  &.risco {
-    background: var(--mat-sys-error-container);
-    color: var(--mat-sys-on-error-container);
-  }
-}
-
 // Excluir é uma ação destrutiva: cor de alerta e afastada do Salvar.
 .perigo {
   --mat-button-text-label-text-color: var(--mat-sys-error);

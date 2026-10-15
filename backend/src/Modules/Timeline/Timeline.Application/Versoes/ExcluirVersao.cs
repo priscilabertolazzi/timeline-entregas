@@ -7,8 +7,8 @@ namespace Timeline.Application.Versoes;
 public sealed class ExcluirVersao(IVersaoRepository versoes)
 {
     /// <summary>
-    /// Exclui a versão definitivamente ou informa que ela não existe (MSG-08). Os status reports já
-    /// congelados não são afetados (RN-04). A confirmação é pedida pela tela.
+    /// Exclui a versão definitivamente (RN-04) ou informa que ela não existe (MSG-08). A confirmação é
+    /// pedida pela tela.
     /// </summary>
     public async Task ExecutarAsync(long id, CancellationToken cancellationToken)
     {

@@ -54,6 +54,13 @@ public sealed class Versao
     /// </summary>
     public void AlterarDatas(DatasVersao novas, TimeProvider relogio)
     {
+        AlterarDatas(novas, relogio, Fase);
+    }
+
+    // faseDaProrrogacao: fase em que a versão estará depois do salvamento. No salvamento único, quando a
+    // fase avança, as datas entram antes da fase; a prorrogação nova vale para a fase de destino (RN-24).
+    private void AlterarDatas(DatasVersao novas, TimeProvider relogio, Fase faseDaProrrogacao)
+    {
         ArgumentNullException.ThrowIfNull(novas);
         ArgumentNullException.ThrowIfNull(relogio);
 
@@ -77,7 +84,7 @@ public sealed class Versao
 
             // RN-24: só a prorrogação nova exige Homologação; a já registrada pode ser
             // corrigida ou removida também em Produção.
-            if (novas.TemProrrogacao && !Datas.TemProrrogacao && Fase != Fase.Homologacao)
+            if (novas.TemProrrogacao && !Datas.TemProrrogacao && faseDaProrrogacao != Fase.Homologacao)
             {
                 violacoes.Add(Mensagens.Msg23);
             }
@@ -183,7 +190,7 @@ public sealed class Versao
     /// da tela da versão. Tudo ou nada: se qualquer regra falhar, nada muda (CA-32) e a exceção traz as
     /// mensagens do primeiro passo que falhou. Fase e datas dependem uma da outra (RN-07), por isso a
     /// ordem é: avançando de fase, as datas vêm antes (sair do Backlog exige datas, e Produção exige a
-    /// entrega até a data atual); nos demais casos, a fase vem antes (voltar ao Backlog libera a
+    /// entrega até a data atual), e uma prorrogação nova vale para a fase de destino; nos demais casos, a fase vem antes (voltar ao Backlog libera a
     /// remoção das datas). A situação vem depois da fase, pois ao sair do Backlog ela recomeça em On track.
     /// </summary>
     /// <param name="situacao">Nulo mantém a situação atual.</param>
@@ -196,7 +203,7 @@ public sealed class Versao
         {
             if (fase > Fase)
             {
-                AlterarDatas(datas, relogio);
+                AlterarDatas(datas, relogio, fase);
                 AlterarFase(fase, relogio);
             }
             else

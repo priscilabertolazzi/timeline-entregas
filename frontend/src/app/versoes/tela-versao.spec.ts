@@ -1,7 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, TestRequest, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { ActivatedRoute, Router, convertToParamMap, provideRouter } from '@angular/router';
 import { TelaVersao } from './tela-versao';
 import { Versao } from './versao.service';
 
@@ -107,6 +107,28 @@ describe('TelaVersao', () => {
     await fixture.whenStable();
     expect(document.body.textContent).toContain('Alterações salvas.');
     http.verify();
+  });
+
+  it('ao salvar com sucesso, volta para a Lista de aplicações', async () => {
+    await abrir(V1_EM_HOMOLOGACAO);
+    const navegar = vi.spyOn(TestBed.inject(Router), 'navigate');
+
+    await clicarSalvar();
+    gravacao(3).flush(V1_EM_HOMOLOGACAO);
+    await fixture.whenStable();
+
+    expect(navegar).toHaveBeenCalledWith(['/']);
+  });
+
+  it('se a API recusar o salvamento, fica na tela da versão', async () => {
+    await abrir(V1_EM_HOMOLOGACAO);
+    const navegar = vi.spyOn(TestBed.inject(Router), 'navigate');
+
+    await clicarSalvar();
+    gravacao(3).flush({ title: 'x', mensagens: ['Informe o rótulo da versão.'] }, { status: 400, statusText: 'Bad Request' });
+    await fixture.whenStable();
+
+    expect(navegar).not.toHaveBeenCalled();
   });
 
   it('CA-32: prorrogação até 25/10 sem mudar a entrega mostra a MSG-21 como veio da API e não mostra o aviso de salvo', async () => {
