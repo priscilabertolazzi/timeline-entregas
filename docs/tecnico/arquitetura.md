@@ -404,7 +404,7 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
 
 ### 7.6 Catálogo de mensagens
 
-**Em resumo:** todas as mensagens que a API devolve ao usuário, com o texto exato. Os testes conferem estes textos, e as telas os exibem sem alteração. O catálogo passa pela revisão da autora antes da T-04 (seção 14); depois disso, uma mensagem nova ou alterada entra primeiro aqui, com a aprovação dela.
+**Em resumo:** todas as mensagens que a API devolve ao usuário, com o texto exato. Os testes conferem estes textos, e as telas os exibem sem alteração. O catálogo foi revisado e aprovado pela autora (seção 14); uma mensagem nova ou alterada entra primeiro aqui, com a aprovação dela.
 
 **Aplicações**
 
@@ -704,7 +704,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | Ponto | Onde | Situação |
 |---|---|---|
 | Tabelas, colunas e restrições do banco, incluindo as colunas de comparação de nomes e rótulos e a versão do formato do congelado | Seção 6 | Aprovado na T-05 |
-| Catálogo de mensagens | Seção 7.6 | MSG-11 e MSG-13 a MSG-30 aprovadas na T-04; as demais a revisar antes da T-06 |
+| Catálogo de mensagens | Seção 7.6 | Aprovado: MSG-11 e MSG-13 a MSG-30 na T-04; as demais 22 depois da T-05 |
 | Dependências previstas | Seção 12.3 | Aprovado |
 | Dados de exemplo carregados automaticamente, com datas relativas ao dia da carga | Seção 12.1 | A revisar |
 | Limites de tamanho: nome da aplicação até 100, rótulo da versão até 20 e observação até 1000 caracteres | Seção 6 | Aprovado |
@@ -727,3 +727,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.10 | 15/10/2026 | T-03: `Microsoft.AspNetCore.OpenApi` nas dependências previstas (12.3); `Directory.Build.props`, nome do projeto Host e `scripts/ferramentas-container.sh` na estrutura (4); `DB_PORT` (9); teste de estrutura do `Domain` (11); serviço `ferramentas` e PostgreSQL 17 (12.1); ADR-31 e ADR-32. |
 | 0.11 | 15/10/2026 | T-04: registro `DatasVersao` e origem dos erros de formato (5.3); `TimeProvider` como parâmetro das operações da `Versao` (5.6); ADR-33; MSG-11 e MSG-13 a MSG-30 aprovadas pela autora (14). |
 | 0.12 | 15/10/2026 | T-05: proteção do banco contra nome e rótulo vazios ou com espaço nas pontas, e `criado_em` (seção 6); `DB_HOST` (9); modelo de dados aprovado (14); ADR-34. |
+| 0.13 | 15/10/2026 | Catálogo de mensagens completo aprovado pela autora (seções 7.6 e 14). |
