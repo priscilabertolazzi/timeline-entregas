@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.14 |
+| Versão | 0.15 |
 | Data | 15/10/2026 |
 | Status | Em elaboração |
 | Documento base | `docs/negocio/requisitos-mvp.md` (versão 0.6) |
@@ -325,7 +325,7 @@ erDiagram
 
 | Método | Rota | Descrição | Ref. |
 |---|---|---|---|
-| GET | `/api/aplicacoes` | Lista de aplicações, com suas versões | RF-01, RF-03 |
+| GET | `/api/aplicacoes` | Lista de aplicações, cada uma com o resumo das suas versões (id, rótulo, fase e situação, na ordem de cadastro) | RF-01, RF-03 |
 | POST | `/api/aplicacoes` | Cadastra aplicação | RF-01 |
 | PUT | `/api/aplicacoes/{id}` | Renomeia aplicação | RF-01 |
 | DELETE | `/api/aplicacoes/{id}` | Exclui aplicação e suas versões | RF-01, RN-04 |
@@ -702,6 +702,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | ADR-33 | A `Versao` recebe o `TimeProvider` como parâmetro nas operações que dependem da data atual; erros de formato são recusados na `Application`, e o `Domain` só tem uma proteção técnica para eles | A entidade continua sem dependências e sem ler o relógio (seção 5.6), e cada mensagem do catálogo tem um único lugar de origem. | Data atual como `DateOnly` vinda de fora (mais fácil de errar o fuso em cada chamada); validar formato também no `Domain` com as mensagens (mensagem em dois lugares). |
 | ADR-34 | A migration é aplicada por um serviço de inicialização do `Host`, e não no `Program.cs`; a conexão é montada com as variáveis `POSTGRES_*`, `DB_PORT` e `DB_HOST`; `criado_em` e as colunas de comparação existem só no banco; as migrations geradas ficam fora da verificação de padrão do lint | O serviço roda só quando a API inicia, e não quando a ferramenta de migrations carrega o programa para criar uma migration. A conexão reaproveita as variáveis do `.env`, sem senha no código. O `Domain` continua sem conhecer o banco. O código gerado pela ferramenta não é reformatado à mão. | Migrate no `Program.cs` (a ferramenta de migrations o executaria); string de conexão única em outra variável (senha repetida no `.env`); `criado_em` na entidade (campo sem regra de negócio no `Domain`). |
 | ADR-35 | Padrão das APIs de cadastro (T-06): uma classe por caso de uso na `Application`, que lança exceções de erro esperado (entrada inválida, não encontrado, conflito) com as mensagens do catálogo; um único tratador de erros na `Api` converte essas exceções, a `RegraNegocioException` e qualquer erro inesperado em Problem Details, com o `title` e a lista `mensagens`; `ThrowOnBadRequest` ligado, para o JSON ilegível devolver a MSG-42; a ordem das listas é feita na `Application`; os casos de uso são registrados pela própria `Api` (a `Application` não depende de pacote de injeção de dependências); a `Api` publica o OpenAPI e a página Scalar; novo projeto de testes `Timeline.Api.Tests`, sem pacote extra, para o tratador de erros; `API_PORT` define a porta, e a API só aceita chamadas do próprio computador | Um só caminho para os erros, com o texto exato do catálogo, que serve de modelo às próximas APIs; erro inesperado nunca mostra detalhes internos (seção 10); a `Application` continua sem pacotes. | Tratar erros em cada endpoint (repetição); erros como valores de retorno (mais código em cada caso de uso); testes de integração com servidor em memória (exigem pacote fora da lista aprovada). |
+| ADR-36 | Padrão das APIs de versões (T-07): datas, fase e situação chegam como texto e são convertidas na `Application`, que devolve a MSG-12, a MSG-26 ou a MSG-10 (se o .NET convertesse, um valor torto daria a MSG-42); fase e situação saem como texto (`Homologacao`, `OnTrack`); a situação enviada igual à atual não conta como alteração, e vazia mantém a atual; observação vazia remove a observação; `/datas` sem corpo é recusado com a MSG-42, para não apagar as datas por engano; a regra que pode falhar roda antes de qualquer alteração; o `TimeProvider` do sistema é registrado pela `Api`, com o fuso do ambiente (`TZ`); a lista de aplicações traz o resumo das versões, e `ListarAplicacoes` usa os dois repositórios | Respostas sempre com as mensagens do catálogo, e a data atual vinda de um relógio injetado, como a seção 5.6 pede; a tela da T-10 recebe a lista já com as versões. | Converter datas e fase pelo próprio .NET (mensagem genérica no lugar da MSG-12 e da MSG-26); um endpoint à parte só para listar versões; deixar a lista com versões para a T-10. |
 
 ---
 
@@ -735,3 +736,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.12 | 15/10/2026 | T-05: proteção do banco contra nome e rótulo vazios ou com espaço nas pontas, e `criado_em` (seção 6); `DB_HOST` (9); modelo de dados aprovado (14); ADR-34. |
 | 0.13 | 15/10/2026 | Catálogo de mensagens completo aprovado pela autora (seções 7.6 e 14). |
 | 0.14 | 15/10/2026 | T-06: MSG-42 aprovada (7.6, 14); formato do Problem Details com `title` e `mensagens` e respostas padrão do .NET (7.4); projeto `Timeline.Api.Tests` (4, 11); ADR-35. O cabeçalho do documento foi corrigido para a versão do histórico. |
+| 0.15 | 15/10/2026 | T-07: lista de aplicações com o resumo das versões (7.2); ADR-36. |
