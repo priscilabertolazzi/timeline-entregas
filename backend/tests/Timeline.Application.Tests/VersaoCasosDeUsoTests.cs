@@ -280,7 +280,8 @@ public sealed class VersaoCasosDeUsoTests
     {
         var versao = await VersaoEmDesenvolvimento();
 
-        var alterada = await Alterar(versao.Id, "v1", situacao: texto);
+        // RN-22: em Risco a observação é obrigatória (MSG-43); por isso o teste informa uma observação.
+        var alterada = await Alterar(versao.Id, "v1", situacao: texto, observacao: "Dependência de outra equipe.");
 
         Assert.Equal(esperada, alterada.Situacao);
     }

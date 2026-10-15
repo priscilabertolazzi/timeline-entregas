@@ -21,7 +21,7 @@
         <mat-form-field>
           <mat-label>Fase</mat-label>
           <mat-select formControlName="fase">
-            @for (fase of fases; track fase.valor) {
+            @for (fase of opcoesDeFase(); track fase.valor) {
               <mat-option [value]="fase.valor">{{ fase.rotulo }}</mat-option>
             }
           </mat-select>

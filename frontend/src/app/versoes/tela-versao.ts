@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -90,7 +90,6 @@ export class TelaVersao {
   private readonly router = inject(Router);
   private readonly id = Number(inject(ActivatedRoute).snapshot.paramMap.get('id'));
 
-  protected readonly fases = FASES;
   protected readonly gruposDeDatas = GRUPOS_DE_DATAS;
   protected readonly rotuloFase = rotuloFase;
   protected readonly rotuloSituacao = rotuloSituacao;
@@ -115,6 +114,14 @@ export class TelaVersao {
     fimProrrogacao: new FormControl<Date | null>(null),
     dataEntrega: new FormControl<Date | null>(null),
   });
+
+  /**
+   * Fases oferecidas no campo Fase. Só conveniência da tela (a API continua validando, MSG-27 e MSG-30):
+   * em Homologação a versão não volta a fases anteriores (RN-08), então só se oferecem Homologação e Produção.
+   */
+  readonly opcoesDeFase = computed(() =>
+    this.versao()?.fase === 'Homologacao' ? FASES.filter((f) => f.valor === 'Homologacao' || f.valor === 'Producao') : FASES,
+  );
 
   /** Muda a cada alteração do formulário; faz o botão "×" das datas aparecer e sumir na hora. */
   private readonly alteracoes = toSignal(this.formulario.valueChanges);
@@ -209,6 +216,12 @@ export class TelaVersao {
       fimProrrogacao: textoParaData(d.fimProrrogacao),
       dataEntrega: textoParaData(d.dataEntrega),
     });
+    // RN-08: uma versão em Produção não muda mais de fase; o campo fica só de leitura (conveniência da tela).
+    if (versao.fase === 'Producao') {
+      this.formulario.controls.fase.disable({ emitEvent: false });
+    } else {
+      this.formulario.controls.fase.enable({ emitEvent: false });
+    }
     this.ajustarSituacao(versao.fase);
   }
 
@@ -220,7 +233,8 @@ export class TelaVersao {
     const controle = this.formulario.controls.situacao;
     if (fase === 'Backlog' || fase === 'Producao') {
       controle.disable({ emitEvent: false });
-      this.situacaoAutomatica.set(fase === this.versao()?.fase ? rotuloSituacao(this.versao()?.situacao ?? '') : '—');
+      // Só para exibição: mostra já a situação que a API vai aplicar (RN-21), sem esperar o salvamento.
+      this.situacaoAutomatica.set(rotuloSituacao(fase === 'Backlog' ? 'NaoIniciado' : 'Entregue'));
     } else {
       controle.enable({ emitEvent: false });
     }

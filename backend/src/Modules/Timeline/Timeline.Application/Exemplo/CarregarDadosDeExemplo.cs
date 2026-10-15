@@ -17,7 +17,7 @@ public sealed class CarregarDadosDeExemplo(IAplicacaoRepository aplicacoes, IVer
     [
         new("Alfa", "v0", Fase.Producao, Situacao.OnTrack, -110, -60, -59, -30, -20),
         new("Alfa", "v1", Fase.Homologacao, Situacao.OnTrack, -40, -10, -9, 8, 10),
-        new("Beta", "v1", Fase.Desenvolvimento, Situacao.Risco, -15, 25, 26, 40, 45),
+        new("Beta", "v1", Fase.Desenvolvimento, Situacao.Risco, -15, 25, 26, 40, 45, "Dependência de outra equipe ainda sem data."),
         new("Gama", "v1", Fase.Testes, Situacao.OnTrack, -30, 5, 6, 20, 25),
     ];
 
@@ -53,6 +53,11 @@ public sealed class CarregarDadosDeExemplo(IAplicacaoRepository aplicacoes, IVer
                 versao.AlterarSituacao(modelo.Situacao);
             }
 
+            if (modelo.Observacao is not null)
+            {
+                versao.AlterarObservacao(modelo.Observacao);
+            }
+
             await versoes.AdicionarAsync(versao, cancellationToken);
         }
 
@@ -61,7 +66,8 @@ public sealed class CarregarDadosDeExemplo(IAplicacaoRepository aplicacoes, IVer
 
     private sealed record ModeloVersao(
         string Aplicacao, string Rotulo, Fase Fase, Situacao Situacao,
-        int InicioAndamento, int FimAndamento, int InicioHomologacao, int FimHomologacao, int Entrega)
+        int InicioAndamento, int FimAndamento, int InicioHomologacao, int FimHomologacao, int Entrega,
+        string? Observacao = null)
     {
         public DatasVersao DatasEm(DateOnly hoje) => new(
             hoje.AddDays(InicioAndamento), hoje.AddDays(FimAndamento),
