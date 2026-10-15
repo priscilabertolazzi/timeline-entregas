@@ -1,11 +1,23 @@
 namespace Timeline.Domain;
 
 /// <summary>
-/// Mensagens de regra de negócio do catálogo (arquitetura.md, seção 7.6), com o texto exato.
+/// Mensagens do catálogo (arquitetura.md, seção 7.6), com o texto exato.
 /// O número de cada constante é o ID da mensagem no catálogo.
 /// </summary>
 public static class Mensagens
 {
+    /// <summary>Nome da aplicação não informado (RN-01). Validada na Application, com erro 400.</summary>
+    public const string Msg01 = "Informe o nome da aplicação.";
+
+    /// <summary>Nome da aplicação com mais de 100 caracteres. Validada na Application, com erro 400.</summary>
+    public const string Msg02 = "O nome da aplicação deve ter no máximo 100 caracteres.";
+
+    /// <summary>Nome de aplicação já existente (RN-01, CA-33). Erro 409.</summary>
+    public const string Msg03 = "Já existe uma aplicação com esse nome.";
+
+    /// <summary>Aplicação inexistente. Erro 404.</summary>
+    public const string Msg04 = "Aplicação não encontrada.";
+
     /// <summary>Situação alterada em Backlog ou Produção (RN-21).</summary>
     public const string Msg11 = "A situação só pode ser alterada em versões em Análise, Desenvolvimento, Testes ou Homologação.";
 
@@ -62,4 +74,10 @@ public static class Mensagens
 
     /// <summary>Mudança de fase a partir de Produção (RN-08).</summary>
     public const string Msg30 = "Uma versão em Produção não muda mais de fase.";
+
+    /// <summary>Erro inesperado (arquitetura.md, seção 10). Erro 500, sem detalhes internos.</summary>
+    public const string Msg41 = "Ocorreu um erro inesperado. Tente novamente.";
+
+    /// <summary>Corpo da requisição ilegível, como um JSON quebrado (seção 7.5). Erro 400.</summary>
+    public const string Msg42 = "Requisição inválida. Confira os dados enviados.";
 }

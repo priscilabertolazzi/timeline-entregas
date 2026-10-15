@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão do modelo | 0.8 |
+| Versão do modelo | 0.10 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -252,6 +252,35 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 06 — 15/10/2026 — T-06, API de aplicações
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-06 — API de aplicações |
+| Regras e critérios | RF-01, RN-01, RN-04; CA-33 e CA-38 (parte do cadastro); MSG-01 a MSG-04, MSG-41 e a nova MSG-42 |
+| Modelo usado | Claude Sonnet 5.5, no plano e na implementação. No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | Não medido por inteiro. A sessão começou às 10:50; a verificação da autora levou 20 min. |
+| Estimativa sem IA | 4 h (proposta do assistente: um desenvolvedor experiente escreveria os quatro casos de uso, o repositório, o tratamento padronizado de erros, a documentação OpenAPI com a página de consulta e os testes, e conferiria tudo contra o PostgreSQL) |
+
+**O que foi pedido:** os endpoints de listar, cadastrar, renomear e excluir aplicações, com a página de documentação (Scalar) já publicada, porque a autora faz as verificações pelo navegador, e o `http/exemplos.http`. Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-22.
+
+**Resultado:** branch `feat/api-aplicacoes`. Quatro casos de uso na `Application` (um por operação), `IAplicacaoRepository` com a implementação no EF Core, `AplicacaoEndpoints` e um único `TratadorDeErros`, que converte qualquer exceção em Problem Details com `title` e a lista `mensagens`. Erro inesperado devolve só a MSG-41, e o detalhe vai para o registro do servidor. Página Scalar em `/scalar` (e `/` leva a ela), sem depender da internet. Novo projeto de testes `Timeline.Api.Tests`. Build sem avisos, 73 testes (39 do `Domain`, 27 da `Application`, 7 da `Api`) e lint sem apontamentos, também pelos scripts em container. No PostgreSQL real, o CA-33 e o CA-38 (cascata das versões) se comportaram como esperado, e o 500 foi conferido com o banco parado. `arquitetura.md` na versão 0.14 (MSG-42, formato do Problem Details e ADR-35).
+
+**Primeira tentativa:** certa quanto ao desenho. Dois ajustes no caminho, descritos abaixo.
+
+**Ajustes necessários e por quê:**
+
+- Um JSON quebrado devolvia 400 com o corpo vazio, e não a mensagem do catálogo: fora do ambiente de desenvolvimento, o .NET responde sozinho nesse caso. Foi ligada a opção que faz o erro passar pelo tratador de erros, e agora devolve a MSG-42.
+- O exemplo do corpo na página de documentação aparecia como `"nome": null`. Foi acrescentado o exemplo `"Alfa"`, para quem testa só clicar em enviar.
+
+**O que a revisão humana capturou:** a autora aprovou as duas respostas propostas no plano: a lista em ordem alfabética e a nova MSG-42 para o JSON quebrado, que o catálogo não previa. Na verificação, o 404 ao excluir o id 29 era só o valor de exemplo da página; com o id real da lista, a exclusão deu 204.
+
+**Riscos mitigados:** mensagem fora do catálogo (a MSG-42 entrou antes no catálogo, com aprovação); vazamento de detalhes internos no erro 500 (teste com texto sensível na exceção e conferência com o banco parado); dependência nova (nenhuma; o Scalar e o gerador de OpenAPI já estavam na seção 12.3, e o projeto de testes usa os mesmos pacotes dos outros); duplicidade em cadastros simultâneos (o banco recusa e o repositório converte em MSG-03); SQL por texto (nenhum; só consultas do EF Core).
+
+**Aprendizados:** testar a API de verdade, com requisições reais, achou o JSON quebrado sem mensagem, que os testes de unidade não pegariam. Para quem não usa um editor de código, a página de documentação no navegador substitui bem o arquivo de requisições, desde que o corpo de exemplo seja um valor válido.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -293,3 +322,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.7 | 15/10/2026 | Sessão 03: tempo real (não medido), o que a revisão capturou e novo aprendizado registrados. |
 | 0.8 | 15/10/2026 | Registrada a Sessão 04 (T-04), com o pedido P-20. |
 | 0.9 | 15/10/2026 | Registrada a Sessão 05 (T-05), com o pedido P-21. |
+| 0.10 | 15/10/2026 | Registrada a Sessão 06 (T-06), com o pedido P-22. |

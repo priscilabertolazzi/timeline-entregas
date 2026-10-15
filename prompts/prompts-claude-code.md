@@ -1039,6 +1039,23 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** pedir o modelo de dados em linguagem simples antes do plano deu à autora a chance de revisar a seção 6, que estava marcada como "A revisar", e levou à proteção extra no banco. O pedido final de "como eu abro o banco" produziu um passo a passo que ela mesma executou.
 
+### P-22 — 15/10/2026 — T-06
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, etapa 1 (APIs de cadastro). Tarefa T-06 do docs/tarefas.md: API de aplicações.
+> Esta tarefa é o padrão de referência das próximas APIs: as tarefas seguintes vão pedir "siga o padrão da T-06".
+> OBJETIVO: Criar os endpoints de listar, cadastrar, renomear e excluir aplicações (RF-01, RN-01, RN-04), atendendo os critérios CA-33 e CA-38 (parte do cadastro), com as mensagens MSG-01 a MSG-04 e o tratamento do erro inesperado (MSG-41). Publicar já nesta tarefa a página de documentação da API (Scalar, ADR-30), porque eu não uso o VS Code e vou fazer as verificações pelo navegador. Criar o http/exemplos.http com as requisições desta API, na ordem de uso, para o README e para quem avaliar.
+> ESTILO: Siga as convenções do CLAUDE.md e do backend/CLAUDE.md, com os nomes do glossário e as mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação". Ao final, explique em linguagem simples como a API está organizada (endpoint, caso de uso, validação, repositório, tratamento de erros).
+
+**Resultado:** o assistente apresentou o plano em seis partes e duas perguntas de negócio, com recomendação: a ordem da lista (alfabética) e uma mensagem nova para o JSON quebrado (MSG-42), que o catálogo não previa. A autora aprovou as duas, e a API foi implementada com testes, conferida no PostgreSQL real e pela página Scalar. O pedido final produziu a explicação das camadas, com a imagem de uma recepção.
+
+**Funcionou de primeira?** Sim quanto ao desenho. Ajustes: o JSON quebrado devolvia corpo vazio fora do ambiente de desenvolvimento, e o exemplo da página aparecia como `null` (ver Sessão 06 do diário). Na verificação pelo navegador, a autora precisou de um passo a passo mais detalhado do uso da página.
+
+**Por que é relevante:** pedir a página de documentação já na primeira API, e explicar que a autora não usa um editor de código, fez o assistente testar a própria página no navegador antes de entregar. A instrução "padrão de referência" levou a um único tratador de erros e a uma decisão registrada (ADR-35) que as próximas APIs vão repetir.
+
 ---
 
 ## Histórico do documento
@@ -1053,3 +1070,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.6 | 15/10/2026 | Processo mais leve (`processo-desenvolvimento.md` versão 0.9): registro e commit num único pedido (A11), ajuste da mensagem de commit só quando necessário (A12), A6 e A7 opcionais, dois níveis de detalhe nas regras de uso e revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (A13, A14 e tarefas T-10, T-14, T-16 e T-19). |
 | 0.7 | 15/10/2026 | Registro do pedido P-20 (T-04). |
 | 0.8 | 15/10/2026 | Registro do pedido P-21 (T-05). |
+| 0.9 | 15/10/2026 | Registro do pedido P-22 (T-06). |

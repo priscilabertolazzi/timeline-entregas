@@ -82,11 +82,24 @@ Em Linux e macOS, sem o `make`, use `sh scripts/install.sh`, `sh scripts/run.sh`
   dotnet run --project backend\src\Host
   ```
 
-  A primeira linha copia o `.env` para a sessão do PowerShell; a segunda inicia a API (Ctrl+C para parar). Para conferir o banco: `docker compose exec db psql -U timeline -d timeline_entregas -c "\d+ timeline.versao"`.
+  A primeira linha copia o `.env` para a sessão do PowerShell; a segunda inicia a API (Ctrl+C para parar). Quando aparecer "Now listening on: http://localhost:8080", abra esse endereço no navegador: ele leva à **página de documentação da API** (seção 8). A porta é a `API_PORT` do `.env`, e a API só aceita chamadas do próprio computador. Para conferir o banco: `docker compose exec db psql -U timeline -d timeline_entregas -c "\d+ timeline.versao"`.
 
 ## 8. Uso e exemplos
 
-*Vai conter: como usar o sistema, com exemplos dos dados fictícios (aplicações Alfa, Beta, Gama e Delta).*
+A API tem uma **página de documentação** (Scalar), aberta no navegador em `http://localhost:8080/scalar` (ou apenas `http://localhost:8080`), com a API em execução (seção 7). Ela lista as operações, mostra os textos de erro possíveis e permite testar cada operação sem instalar nada.
+
+**Exemplo: cadastrar a aplicação Alfa e conferir a recusa de nome repetido** (CA-33)
+
+1. Na coluna da esquerda, em **Aplicações**, clique em **Cadastra uma aplicação**.
+2. Clique em **Test Request**. O corpo já vem com `{ "nome": "Alfa" }`.
+3. Clique em **Send**. Resultado esperado: `201 Created`, com o `id` e o `nome` da aplicação.
+4. Clique em **Send** de novo (ou troque o nome para `alfa`). Resultado esperado: `409 Conflict`, com a mensagem **"Já existe uma aplicação com esse nome."**
+
+As mesmas requisições, na ordem de uso e com o resultado esperado de cada uma, estão em [`http/exemplos.http`](http/exemplos.http) (para ferramentas que executam esse tipo de arquivo, como a extensão REST Client do VS Code, ou para leitura).
+
+**Como os erros são devolvidos:** sempre no mesmo formato, com o código HTTP (400 dado inválido, 404 não encontrado, 409 nome repetido, 422 regra de negócio, 500 erro inesperado), o campo `title` com a primeira mensagem e a lista `mensagens` com todas elas. O texto de cada mensagem está no catálogo do `docs/tecnico/arquitetura.md`, seção 7.6.
+
+*Este texto cresce a cada API entregue (versões, timeline, tabela de status e congelamento).*
 
 ## 9. Estrutura do projeto
 
@@ -110,7 +123,8 @@ Os dois rodam dentro de um container, que já traz o SDK do .NET: não é precis
 **O que cada tipo de teste cobre** (será completado ao longo das tarefas)
 
 - **Estrutura (já existe):** confere que o `Domain` não depende de nenhuma outra camada, de pacotes nem de frameworks de infraestrutura.
-- **Regras do `Domain` e da `Application`:** um teste por critério de aceite, a partir da T-04.
+- **Regras do `Domain` e da `Application`:** um teste por critério de aceite, a partir da T-04. Os testes da `Application` usam um repositório em memória, sem banco.
+- **Erros da API:** conferem o código HTTP e o texto de cada erro, e que o erro inesperado não mostra detalhes internos (`Timeline.Api.Tests`).
 
 ## 12. Como a IA foi usada no desenvolvimento
 

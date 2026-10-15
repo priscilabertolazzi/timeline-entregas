@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.11 |
+| Versão | 0.14 |
 | Data | 15/10/2026 |
 | Status | Em elaboração |
 | Documento base | `docs/negocio/requisitos-mvp.md` (versão 0.6) |
@@ -111,7 +111,8 @@ As três partes sobem juntas com um único comando, pelo Docker Compose (seção
 │   │       └── Timeline.Api/             # Endpoints HTTP
 │   └── tests/
 │       ├── Timeline.Domain.Tests/
-│       └── Timeline.Application.Tests/
+│       ├── Timeline.Application.Tests/
+│       └── Timeline.Api.Tests/
 ├── frontend/
 │   ├── CLAUDE.md
 │   ├── Dockerfile
@@ -396,6 +397,8 @@ Erros seguem o formato padrão **Problem Details** (RFC 9457), nativo do ASP.NET
 | Violação de regra de negócio (ex.: RN-07, RN-08, RN-10) | 422 |
 | Erro inesperado | 500, sem detalhes internos na resposta |
 
+O Problem Details traz o status, a primeira mensagem no campo `title` e a lista de **todas** as mensagens no campo `mensagens` (mesmo quando há uma só), para que as telas leiam sempre do mesmo lugar (ADR-35). Um corpo JSON ilegível (por exemplo, chave não fechada) devolve 400 com a MSG-42. O 404 de rota inexistente e o 415 de tipo de conteúdo diferente de JSON são respostas padrão do .NET, sem corpo.
+
 Quando várias regras são violadas na mesma operação, o Problem Details traz todas as mensagens, numa lista (ADR-26). Uma duplicidade detectada pelo próprio banco (por exemplo, dois cadastros simultâneos com o mesmo nome) também é devolvida como 409, com a mensagem do catálogo.
 
 ### 7.5 Validação
@@ -481,6 +484,7 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
 | ID | Situação | Mensagem | Status | Ref. |
 |---|---|---|---|---|
 | MSG-41 | Erro inesperado | "Ocorreu um erro inesperado. Tente novamente." | 500 | Seção 10 |
+| MSG-42 | Corpo da requisição ilegível (JSON quebrado) | "Requisição inválida. Confira os dados enviados." | 400 | Seção 7.5 |
 
 ---
 
@@ -568,6 +572,7 @@ Em dois níveis: o formato da entrada (campos obrigatórios, tamanhos, datas vá
 | Unitário — Domain | Regras da `Versao`, cálculo da timeline, da tabela de status das aplicações e das semanas | **TDD**: os critérios de aceite são escritos como testes antes da implementação, com a data atual fixada. |
 | Unitário — Application | Casos de uso, validação de entrada, unicidade, congelamento | Testes após a implementação, com repositórios em memória: classes simples escritas no próprio projeto de teste, sem o provedor em memória do EF Core. |
 | Unitário — Frontend | Distribuição em sub-linhas e conversão de datas em posições | Testes após a implementação. |
+| Unitário — Api | Conversão de erros em Problem Details: status, mensagens do catálogo e erro inesperado sem detalhes internos | Testes após a implementação, no projeto `Timeline.Api.Tests`, sem pacote extra (ADR-35). As rotas em si são conferidas pela página de documentação e pelo `http/exemplos.http`. |
 | Estrutura — Domain | Regra de dependência entre camadas (seção 4): o `Domain` não referencia outras camadas, pacotes nem frameworks de infraestrutura | Dois testes, criados na T-03, sem dependência extra: um lê o `.csproj` do `Domain`; o outro, as referências do código compilado. |
 | Integração — API e banco | Endpoints principais com PostgreSQL real | Incremento, se houver tempo. |
 
@@ -696,6 +701,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | ADR-32 | PostgreSQL de versão principal 17, porta publicada só para o próprio computador e configurável por `DB_PORT` | Versão estável e madura, com o volume no caminho padrão da imagem. Quem já tem outro PostgreSQL instalado (porta 5432 ocupada) só troca `DB_PORT` no `.env`. | Versão 18 (mudou o caminho do volume); porta fixa (conflita com PostgreSQL já instalado); porta aberta para a rede. |
 | ADR-33 | A `Versao` recebe o `TimeProvider` como parâmetro nas operações que dependem da data atual; erros de formato são recusados na `Application`, e o `Domain` só tem uma proteção técnica para eles | A entidade continua sem dependências e sem ler o relógio (seção 5.6), e cada mensagem do catálogo tem um único lugar de origem. | Data atual como `DateOnly` vinda de fora (mais fácil de errar o fuso em cada chamada); validar formato também no `Domain` com as mensagens (mensagem em dois lugares). |
 | ADR-34 | A migration é aplicada por um serviço de inicialização do `Host`, e não no `Program.cs`; a conexão é montada com as variáveis `POSTGRES_*`, `DB_PORT` e `DB_HOST`; `criado_em` e as colunas de comparação existem só no banco; as migrations geradas ficam fora da verificação de padrão do lint | O serviço roda só quando a API inicia, e não quando a ferramenta de migrations carrega o programa para criar uma migration. A conexão reaproveita as variáveis do `.env`, sem senha no código. O `Domain` continua sem conhecer o banco. O código gerado pela ferramenta não é reformatado à mão. | Migrate no `Program.cs` (a ferramenta de migrations o executaria); string de conexão única em outra variável (senha repetida no `.env`); `criado_em` na entidade (campo sem regra de negócio no `Domain`). |
+| ADR-35 | Padrão das APIs de cadastro (T-06): uma classe por caso de uso na `Application`, que lança exceções de erro esperado (entrada inválida, não encontrado, conflito) com as mensagens do catálogo; um único tratador de erros na `Api` converte essas exceções, a `RegraNegocioException` e qualquer erro inesperado em Problem Details, com o `title` e a lista `mensagens`; `ThrowOnBadRequest` ligado, para o JSON ilegível devolver a MSG-42; a ordem das listas é feita na `Application`; os casos de uso são registrados pela própria `Api` (a `Application` não depende de pacote de injeção de dependências); a `Api` publica o OpenAPI e a página Scalar; novo projeto de testes `Timeline.Api.Tests`, sem pacote extra, para o tratador de erros; `API_PORT` define a porta, e a API só aceita chamadas do próprio computador | Um só caminho para os erros, com o texto exato do catálogo, que serve de modelo às próximas APIs; erro inesperado nunca mostra detalhes internos (seção 10); a `Application` continua sem pacotes. | Tratar erros em cada endpoint (repetição); erros como valores de retorno (mais código em cada caso de uso); testes de integração com servidor em memória (exigem pacote fora da lista aprovada). |
 
 ---
 
@@ -704,7 +710,7 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | Ponto | Onde | Situação |
 |---|---|---|
 | Tabelas, colunas e restrições do banco, incluindo as colunas de comparação de nomes e rótulos e a versão do formato do congelado | Seção 6 | Aprovado na T-05 |
-| Catálogo de mensagens | Seção 7.6 | Aprovado: MSG-11 e MSG-13 a MSG-30 na T-04; as demais 22 depois da T-05 |
+| Catálogo de mensagens | Seção 7.6 | Aprovado: MSG-11 e MSG-13 a MSG-30 na T-04; as demais 22 depois da T-05; MSG-42 na T-06 |
 | Dependências previstas | Seção 12.3 | Aprovado |
 | Dados de exemplo carregados automaticamente, com datas relativas ao dia da carga | Seção 12.1 | A revisar |
 | Limites de tamanho: nome da aplicação até 100, rótulo da versão até 20 e observação até 1000 caracteres | Seção 6 | Aprovado |
@@ -728,3 +734,4 @@ No Windows, o README indica o comando que executa o script sem alterar a políti
 | 0.11 | 15/10/2026 | T-04: registro `DatasVersao` e origem dos erros de formato (5.3); `TimeProvider` como parâmetro das operações da `Versao` (5.6); ADR-33; MSG-11 e MSG-13 a MSG-30 aprovadas pela autora (14). |
 | 0.12 | 15/10/2026 | T-05: proteção do banco contra nome e rótulo vazios ou com espaço nas pontas, e `criado_em` (seção 6); `DB_HOST` (9); modelo de dados aprovado (14); ADR-34. |
 | 0.13 | 15/10/2026 | Catálogo de mensagens completo aprovado pela autora (seções 7.6 e 14). |
+| 0.14 | 15/10/2026 | T-06: MSG-42 aprovada (7.6, 14); formato do Problem Details com `title` e `mensagens` e respostas padrão do .NET (7.4); projeto `Timeline.Api.Tests` (4, 11); ADR-35. O cabeçalho do documento foi corrigido para a versão do histórico. |
