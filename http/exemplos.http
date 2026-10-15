@@ -1,0 +1,64 @@
+# Exemplos de uso da API, na ordem de uso. Dados fictícios (aplicações Alfa, Beta, Gama e Delta).
+# Cada bloco começa em "###" e traz o resultado esperado. Os mesmos testes podem ser feitos pela
+# página de documentação da API, no navegador: http://localhost:8080/scalar
+# A API precisa estar no ar (ver "Instalação e execução local" no README).
+
+@api = http://localhost:8080/api
+
+# ============================================================
+# Aplicações (RF-01, RN-01, RN-04)
+# ============================================================
+
+### 1. Lista as aplicações. Com o banco vazio: 200 e a lista vazia []
+GET {{api}}/aplicacoes
+
+### 2. Cadastra a aplicação Alfa. Esperado: 201 e {"id": ..., "nome": "Alfa"}
+POST {{api}}/aplicacoes
+Content-Type: application/json
+
+{ "nome": "Alfa" }
+
+### 3. Cadastra a Beta. Esperado: 201
+POST {{api}}/aplicacoes
+Content-Type: application/json
+
+{ "nome": "Beta" }
+
+### 4. Tenta cadastrar "alfa" (CA-33). Esperado: 409 "Já existe uma aplicação com esse nome."
+POST {{api}}/aplicacoes
+Content-Type: application/json
+
+{ "nome": "alfa" }
+
+### 5. Nome em branco. Esperado: 400 "Informe o nome da aplicação."
+POST {{api}}/aplicacoes
+Content-Type: application/json
+
+{ "nome": "   " }
+
+### 6. Lista de novo. Esperado: 200 com Alfa e Beta, em ordem alfabética
+GET {{api}}/aplicacoes
+
+### 7. Renomeia a Beta para Gama (troque o 2 pelo "id" da Beta devolvido no passo 3). Esperado: 200
+PUT {{api}}/aplicacoes/2
+Content-Type: application/json
+
+{ "nome": "Gama" }
+
+### 8. Tenta renomear a Gama para "ALFA". Esperado: 409 "Já existe uma aplicação com esse nome."
+PUT {{api}}/aplicacoes/2
+Content-Type: application/json
+
+{ "nome": "ALFA" }
+
+### 9. Renomeia uma aplicação que não existe. Esperado: 404 "Aplicação não encontrada."
+PUT {{api}}/aplicacoes/999
+Content-Type: application/json
+
+{ "nome": "Delta" }
+
+### 10. Exclui a Gama, com as suas versões (CA-38, RN-04). Esperado: 204, sem corpo
+DELETE {{api}}/aplicacoes/2
+
+### 11. Exclui de novo a mesma aplicação. Esperado: 404 "Aplicação não encontrada."
+DELETE {{api}}/aplicacoes/2

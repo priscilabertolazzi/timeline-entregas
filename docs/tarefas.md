@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.14 |
+| Versão | 0.16 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -134,7 +134,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** você abre o banco (o Claude Code indica como) e confere as duas tabelas, as colunas e as restrições contra a seção 6 do `arquitetura.md`.
 
-### [ ] T-06 — API de aplicações (1 h)
+### [x] T-06 — API de aplicações (1 h)
 - Listar, cadastrar, renomear e excluir (RF-01, RN-01, RN-04).
 - Validação de entrada e erros no padrão Problem Details, com as mensagens MSG-01 a MSG-04, e o tratamento do erro inesperado (MSG-41), válido para toda a API.
 - Critérios de aceite: CA-33 e CA-38 (parte do cadastro).
@@ -314,3 +314,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.13 | 15/10/2026 | Revisão independente só nas tarefas T-08, T-13, T-15 e T-22, alinhada ao `processo-desenvolvimento.md` versão 0.9 ("Entrega em degraus", T-10, T-14, T-16 e T-19). |
 | 0.14 | 15/10/2026 | T-04 marcada como concluída. |
 | 0.15 | 15/10/2026 | T-05 marcada como concluída. |
+| 0.16 | 15/10/2026 | T-06 marcada como concluída. |
