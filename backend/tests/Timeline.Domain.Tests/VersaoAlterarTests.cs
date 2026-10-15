@@ -278,6 +278,49 @@ public class VersaoAlterarTests
     }
 
     [Fact]
+    public void ADR39_RotuloEmBrancoDepoisDeFaseEDatas_DesfazTudoTambemNesseTipoDeFalha()
+    {
+        // Revisão independente: o rótulo é o último passo, e a falha dele não é uma RegraNegocioException.
+        var relogio = Relogio(15, 10);
+        var versao = new Versao(1, "v3");
+
+        Assert.ThrowsAny<ArgumentException>(
+            () => versao.Alterar("   ", null, null, Fase.Desenvolvimento, DatasAlfaV1, relogio));
+
+        Assert.Equal(Fase.Backlog, versao.Fase);
+        Assert.True(versao.Datas.EstaVazia);
+        Assert.Equal("v3", versao.Rotulo);
+    }
+
+    [Fact]
+    public void CA32_FaseRecusada_NaoMudaSituacaoObservacaoNemRotulo()
+    {
+        var relogio = Relogio(14, 10);
+        var datasOriginais = DatasAlfaV1 with { DataEntrega = Dia(28, 10) };
+        var versao = Criar("v1", Fase.Homologacao, datasOriginais, relogio);
+
+        Assert.Throws<RegraNegocioException>(
+            () => versao.Alterar("outro", Situacao.Risco, "Dependência de outra equipe.", Fase.Producao, datasOriginais, relogio));
+
+        Assert.Equal(Fase.Homologacao, versao.Fase);
+        Assert.Equal(Situacao.OnTrack, versao.Situacao);
+        Assert.Null(versao.Observacao);
+        Assert.Equal("v1", versao.Rotulo);
+        Assert.Equal(datasOriginais, versao.Datas);
+    }
+
+    [Fact]
+    public void RN07_ProducaoComEntregaNoProprioDia_AlterarDatasAceita()
+    {
+        var relogio = Relogio(14, 10);
+        var versao = Criar("v0", Fase.Producao, DatasBetaV0, relogio);
+
+        versao.AlterarDatas(DatasBetaV0 with { DataEntrega = Dia(14, 10) }, relogio);
+
+        Assert.Equal(Dia(14, 10), versao.Datas.DataEntrega);
+    }
+
+    [Fact]
     public void RN21_SituacaoRecusadaNoFim_DesfazFaseEDatas()
     {
         var relogio = Relogio(14, 10);

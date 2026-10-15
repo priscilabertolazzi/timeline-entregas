@@ -12,8 +12,9 @@ public sealed class AlterarVersaoCompleta(IVersaoRepository versoes, TimeProvide
     /// <summary>
     /// Confere se a versão existe (MSG-08) e valida o formato (MSG-05, 06, 09, 10, 12 e 26). Recusa rótulo de
     /// outra versão da mesma aplicação (MSG-07). As regras de fase, datas e situação (MSG-11 a MSG-30) são do
-    /// domínio, que grava tudo ou nada. Corpo sem fase ou sem datas é requisição ilegível (MSG-42): o
-    /// formulário sempre as envia, e uma omissão não pode apagar as datas sem querer.
+    /// domínio, que grava tudo ou nada. Corpo sem o bloco de datas é requisição ilegível (MSG-42), para que uma
+    /// omissão não apague as datas sem querer; fase ausente ou desconhecida dá a MSG-26. O formulário sempre
+    /// envia os dois.
     /// </summary>
     public async Task<VersaoResposta> ExecutarAsync(long id, AlterarVersaoCompletaEntrada? entrada, CancellationToken cancellationToken)
     {

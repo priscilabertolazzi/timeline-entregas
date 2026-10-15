@@ -256,8 +256,9 @@ public sealed class Versao
         {
             passos();
         }
-        catch (RegraNegocioException)
+        catch
         {
+            // Qualquer falha desfaz tudo (regra violada ou valor recusado, como um rótulo em branco).
             Fase = faseAnterior;
             SituacaoInformada = situacaoAnterior;
             Datas = datasAnteriores;
