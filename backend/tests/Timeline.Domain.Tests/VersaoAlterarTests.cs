@@ -143,9 +143,64 @@ public class VersaoAlterarTests
         var relogio = Relogio(15, 10);
         var versao = new Versao(1, "v3");
 
-        versao.Alterar("v3", Situacao.Risco, null, Fase.Analise, DatasAlfaV1, relogio);
+        versao.Alterar("v3", Situacao.Risco, "Dependência de outra equipe.", Fase.Analise, DatasAlfaV1, relogio);
 
         Assert.Equal(Situacao.Risco, versao.Situacao);
+    }
+
+    // RN-22: versão em Risco exige observação
+
+    [Theory]
+    [InlineData(null)]
+    [InlineData("")]
+    [InlineData("   ")]
+    public void RN22_RiscoSemObservacao_RecusaComMsg43ENaoMudaNada(string? observacao)
+    {
+        var relogio = Relogio(15, 10);
+        var versao = Criar("v1", Fase.Desenvolvimento, DatasAlfaV1, relogio);
+
+        var erro = Assert.Throws<RegraNegocioException>(
+            () => versao.Alterar("v1 nova", Situacao.Risco, observacao, Fase.Desenvolvimento, DatasAlfaV1, relogio));
+
+        Assert.Equal(["Informe a observação quando a situação for Risco."], erro.Mensagens);
+        Assert.Equal(Situacao.OnTrack, versao.Situacao);
+        Assert.Equal("v1", versao.Rotulo);
+    }
+
+    [Fact]
+    public void RN22_OnTrackSemObservacao_Aceita()
+    {
+        var relogio = Relogio(15, 10);
+        var versao = Criar("v1", Fase.Desenvolvimento, DatasAlfaV1, relogio);
+
+        versao.Alterar("v1", Situacao.OnTrack, null, Fase.Desenvolvimento, DatasAlfaV1, relogio);
+
+        Assert.Equal(Situacao.OnTrack, versao.Situacao);
+    }
+
+    [Fact]
+    public void RN22_VersaoEmRiscoApagandoAObservacao_RecusaComMsg43()
+    {
+        var relogio = Relogio(15, 10);
+        var versao = Criar("v1", Fase.Desenvolvimento, DatasAlfaV1, relogio);
+        versao.AlterarDados("v1", Situacao.Risco, "Dependência de outra equipe.");
+
+        var erro = Assert.Throws<RegraNegocioException>(() => versao.AlterarDados("v1", null, ""));
+
+        Assert.Equal(["Informe a observação quando a situação for Risco."], erro.Mensagens);
+        Assert.Equal("Dependência de outra equipe.", versao.Observacao);
+    }
+
+    [Fact]
+    public void RN22_AlterarDadosDeRiscoComObservacao_Aceita()
+    {
+        var relogio = Relogio(15, 10);
+        var versao = Criar("v1", Fase.Desenvolvimento, DatasAlfaV1, relogio);
+
+        versao.AlterarDados("v1.1", Situacao.Risco, "Dependência de outra equipe.");
+
+        Assert.Equal(Situacao.Risco, versao.Situacao);
+        Assert.Equal("v1.1", versao.Rotulo);
     }
 
     [Fact]
@@ -155,7 +210,7 @@ public class VersaoAlterarTests
         var versao = Criar("v1", Fase.Desenvolvimento, DatasAlfaV1, relogio);
         versao.AlterarSituacao(Situacao.Risco);
 
-        versao.Alterar("v1", null, null, Fase.Desenvolvimento, DatasAlfaV1, relogio);
+        versao.Alterar("v1", null, "Dependência de outra equipe.", Fase.Desenvolvimento, DatasAlfaV1, relogio);
 
         Assert.Equal(Situacao.Risco, versao.Situacao);
     }

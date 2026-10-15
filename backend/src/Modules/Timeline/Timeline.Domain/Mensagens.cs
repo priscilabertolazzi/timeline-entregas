@@ -96,6 +96,9 @@ public static class Mensagens
     /// <summary>Mudança de fase a partir de Produção (RN-08).</summary>
     public const string Msg30 = "Uma versão em Produção não muda mais de fase.";
 
+    /// <summary>Versão em Risco sem observação (RN-22). Erro 422.</summary>
+    public const string Msg43 = "Informe a observação quando a situação for Risco.";
+
     /// <summary>Erro inesperado (arquitetura.md, seção 10). Erro 500, sem detalhes internos.</summary>
     public const string Msg41 = "Ocorreu um erro inesperado. Tente novamente.";
 

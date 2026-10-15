@@ -165,6 +165,39 @@ describe('TelaVersao', () => {
     requisicao.flush(V3_EM_BACKLOG);
   });
 
+  it('RN-08: versão em Produção não muda mais de fase, e o campo Fase fica desabilitado', async () => {
+    await abrir({ ...V1_EM_HOMOLOGACAO, fase: 'Producao', situacao: 'Entregue' });
+
+    expect(fixture.componentInstance.formulario.controls.fase.disabled).toBe(true);
+    expect(tela().textContent).toContain('Produção');
+  });
+
+  it('RN-08: versão em Homologação só oferece Homologação e Produção, e o campo continua habilitado', async () => {
+    await abrir(V1_EM_HOMOLOGACAO);
+
+    expect(fixture.componentInstance.formulario.controls.fase.enabled).toBe(true);
+    expect(fixture.componentInstance.opcoesDeFase().map((f) => f.rotulo)).toEqual(['Homologação', 'Produção']);
+  });
+
+  it('RN-08: versão em Desenvolvimento oferece as seis fases', async () => {
+    await abrir({ ...V1_EM_HOMOLOGACAO, fase: 'Desenvolvimento' });
+
+    expect(fixture.componentInstance.opcoesDeFase()).toHaveLength(6);
+  });
+
+  it('RN-21: ao escolher Backlog ou Produção, o campo Situação já mostra Não iniciado ou Entregue', async () => {
+    await abrir(V1_EM_HOMOLOGACAO);
+    const situacao = () => tela().querySelector<HTMLInputElement>('input[disabled]')?.value;
+
+    fixture.componentInstance.formulario.controls.fase.setValue('Backlog');
+    await fixture.whenStable();
+    expect(situacao()).toBe('Não iniciado');
+
+    fixture.componentInstance.formulario.controls.fase.setValue('Producao');
+    await fixture.whenStable();
+    expect(situacao()).toBe('Entregue');
+  });
+
   it('RN-21: ao escolher uma fase em andamento, a situação passa a poder ser escolhida', async () => {
     await abrir(V3_EM_BACKLOG);
 

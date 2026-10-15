@@ -398,6 +398,13 @@ Copie o bloco abaixo para cada nova sessão.
 
 **Tag `v0.1.0`:** a autora decidiu criá-la agora, no commit que fechou a etapa 1 (T-08), **antes da revisão independente da T-08**, que segue pendente (`processo-desenvolvimento.md`, seção 7.3). Ela pode ser feita a qualquer momento, em nova sessão do Claude Code.
 
+**Alterações pedidas pela autora depois do commit da T-10** (ao testar as telas):
+
+- **Campo Situação:** estranhava não poder escolher. Passou a mostrar já "Não iniciado" ao escolher Backlog e "Entregue" ao escolher Produção, sem esperar o salvamento; continua só de leitura (RN-21). Um teste novo das telas cobre isso.
+- **Observação obrigatória em Risco (nova regra, RN-22):** a autora decidiu que, quando a situação for Risco, a observação é obrigatória. Aprovados por ela: o texto da **MSG-43**, "Informe a observação quando a situação for Risco.", e duas consequências: a Beta v1 dos dados de exemplo ganhou uma observação fictícia, e versões que já estão em Risco sem observação só voltam a ser salvas depois de ganharem uma observação. A regra vale na API (nova `Versao.AlterarDados`, usada por `PUT /api/versoes/{id}` e por `/completo`); texto só com espaços conta como vazio. Documentos: `requisitos-mvp.md` 0.7 (RN-22), `arquitetura.md` 0.19 (catálogo, MSG-43).
+- **Testes:** 9 testes novos da regra. Dois testes **que eu criei na T-10** ganharam uma observação, por serem afetados pela regra. Dois testes **antigos** (`RF10_SituacaoEmDesenvolvimento_E_Aceita`, com "Risco" e "risco") passavam a falhar, porque gravam Risco sem observação; **a autora aprovou a alteração** (passaram a informar uma observação). Resultado final pelos scripts oficiais: 182 testes da API (59 regras, 116 casos de uso, 7 API) e 42 das telas passando, lint limpo.
+- **Campo Fase:** a autora pediu para não habilitar o campo Fase em Homologação e Produção. Em Produção o campo fica desabilitado (a fase não muda mais, RN-08). Em Homologação ele continua habilitado, mas só oferece Homologação e Produção, porque desabilitá-lo por inteiro impediria avançar para Produção (RN-08, CA-39, CA-40). Conveniência da tela; a API continua validando (MSG-27 e MSG-30). 3 testes novos das telas.
+
 **Riscos mitigados:** regra de ordem entre fase e datas fora da tela (ficou na API, ADR-39); data digitada errada apagando um valor sem aviso (campos só de leitura, escolha pelo calendário); datas trocando de dia por fuso (conversão pelos componentes locais); nenhum teste existente alterado; nenhuma dependência nova.
 
 **Aprendizados:** quando uma decisão de tela (um só botão) conflita com como a API grava, resolver na API e não na tela. Pedir a revisão de UX antes do commit custou pouco e evitou retrabalho nas próximas telas. Conferir o envio de acentos pelo `curl` no Windows antes de suspeitar da API.
@@ -450,3 +457,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.12 | 15/10/2026 | Registrada a Sessão 08 (T-08), com o pedido P-24 e a lacuna do conjunto de dados de exemplo. |
 | 0.13 | 15/10/2026 | Registrada a Sessão 09 (T-09), com o pedido P-25. |
 | 0.14 | 15/10/2026 | Registrada a Sessão 10 (T-10), com o pedido P-26, a mudança para um só botão Salvar, a revisão de UX e a tag `v0.1.0` criada antes da revisão independente da T-08. |
+| 0.15 | 15/10/2026 | Sessão 10: registradas as alterações pedidas depois do commit (campo Situação, observação obrigatória em Risco e MSG-43). |

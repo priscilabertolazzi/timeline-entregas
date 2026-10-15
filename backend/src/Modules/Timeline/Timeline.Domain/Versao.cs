@@ -192,13 +192,7 @@ public sealed class Versao
         ArgumentNullException.ThrowIfNull(datas);
         ArgumentNullException.ThrowIfNull(relogio);
 
-        var faseAnterior = Fase;
-        var situacaoAnterior = SituacaoInformada;
-        var datasAnteriores = Datas;
-        var rotuloAnterior = Rotulo;
-        var observacaoAnterior = Observacao;
-
-        try
+        TudoOuNada(() =>
         {
             if (fase > Fase)
             {
@@ -211,17 +205,52 @@ public sealed class Versao
                 AlterarDatas(datas, relogio);
             }
 
-            if (situacao is not null && situacao != SituacaoInformada)
-            {
-                AlterarSituacao(situacao.Value);
-            }
+            AplicarDados(rotulo, situacao, observacao);
+        });
+    }
 
-            Renomear(rotulo);
-            AlterarObservacao(observacao);
+    /// <summary>
+    /// Altera rótulo, situação e observação de uma vez (RF-03, RF-09, RF-10), tudo ou nada. Em Risco, a
+    /// observação é obrigatória (RN-22, MSG-43). Situação nula mantém a atual.
+    /// </summary>
+    public void AlterarDados(string rotulo, Situacao? situacao, string? observacao)
+    {
+        TudoOuNada(() => AplicarDados(rotulo, situacao, observacao));
+    }
+
+    // Situação, rótulo e observação, nesta ordem, e depois a regra do Risco, que olha o resultado final.
+    private void AplicarDados(string rotulo, Situacao? situacao, string? observacao)
+    {
+        if (situacao is not null && situacao != SituacaoInformada)
+        {
+            AlterarSituacao(situacao.Value);
+        }
+
+        Renomear(rotulo);
+        AlterarObservacao(observacao);
+
+        // RN-22: versão em Risco exige observação (texto só com espaços conta como vazio).
+        if (Situacao == Situacao.Risco && string.IsNullOrWhiteSpace(Observacao))
+        {
+            throw new RegraNegocioException([Mensagens.Msg43]);
+        }
+    }
+
+    // Se qualquer passo violar uma regra, desfaz o que os passos anteriores já tinham mudado.
+    private void TudoOuNada(Action passos)
+    {
+        var faseAnterior = Fase;
+        var situacaoAnterior = SituacaoInformada;
+        var datasAnteriores = Datas;
+        var rotuloAnterior = Rotulo;
+        var observacaoAnterior = Observacao;
+
+        try
+        {
+            passos();
         }
         catch (RegraNegocioException)
         {
-            // Desfaz o que o primeiro passo já tinha mudado: a operação é tudo ou nada.
             Fase = faseAnterior;
             SituacaoInformada = situacaoAnterior;
             Datas = datasAnteriores;

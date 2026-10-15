@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.6 (rascunho para refinamento) |
+| Versão | 0.7 (rascunho para refinamento) |
 | Data | 15/10/2026 |
 | Status | Em elaboração |
 | Documento de origem | `docs/negocio/requisitos-negocio.md` (visão completa do produto, versão 0.68) |
@@ -230,7 +230,7 @@ Quando nenhuma versão aparece na timeline, o eixo de meses e a coluna "Sem prev
 
 No MVP, a situação On track ou Risco é sempre definida pelo usuário. A sugestão automática de Risco é uma evolução futura (seção 12).
 
-**RN-22: Observação.** *Aplica-se a: cadastro.* Cada versão possui uma observação em texto livre, editável a qualquer momento pelo usuário. A tabela de status das aplicações mostra a observação atual, na coluna "Observação"; ela não aparece na timeline. O histórico de observações é uma evolução futura (seção 12).
+**RN-22: Observação.** *Aplica-se a: cadastro.* Cada versão possui uma observação em texto livre, editável a qualquer momento pelo usuário. **Quando a situação da versão for Risco, a observação é obrigatória:** o sistema não salva uma versão em Risco sem observação (texto só com espaços conta como vazio). A tabela de status das aplicações mostra a observação atual, na coluna "Observação"; ela não aparece na timeline. O histórico de observações é uma evolução futura (seção 12).
 
 ### 7.6 Contadores
 
@@ -553,3 +553,4 @@ O MVP foi desenhado para crescer sem retrabalho: o cadastro já guarda todas as 
 | 0.4 | 14/10/2026 | Versão em Produção somente com data de entrega até a data atual (RN-07, CA-39); intervalos pontilhados também em Produção (RN-06, RN-15, CA-03); rótulo dentro da barra (RN-14, RN-18). Alinhada à versão 0.66 do documento completo. |
 | 0.5 | 14/10/2026 | Tela de consulta às semanas anteriores renomeada para Histórico de Status Reports e incluída no glossário (escopo, RN-28, RN-30, RF-16, CA-26, CA-30). Alinhada à versão 0.67 do documento completo. |
 | 0.6 | 15/10/2026 | Revisão de arquitetura: avanço para qualquer fase seguinte, sem passar pelas intermediárias (RN-08, CA-40); nomes e rótulos comparados sem diferença entre maiúsculas e minúsculas e sem os espaços das pontas (RN-01, RN-02, CA-33, CA-34); prorrogação já registrada pode ser alterada ou removida também em Produção (RN-24, CA-42); Histórico de Status Reports antes do primeiro congelamento (RN-30, CA-41); "versões ativas", termo do arquivamento, substituído por "versões cadastradas" (CA-28, CA-29). Alinhada à versão 0.68 do documento completo. |
+| 0.7 | 15/10/2026 | T-10: observação obrigatória quando a situação for Risco (RN-22), decisão da autora; MSG-43 no catálogo. |

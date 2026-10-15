@@ -27,14 +27,9 @@ public sealed class AlterarVersao(IVersaoRepository versoes)
             throw new ConflitoException(Mensagens.Msg07);
         }
 
-        // A regra que pode falhar vem primeiro, para que nada mude se ela falhar (arquitetura.md, 5.3).
-        if (situacao is not null && situacao != versao.SituacaoInformada)
-        {
-            versao.AlterarSituacao(situacao.Value);
-        }
-
-        versao.Renomear(rotulo);
-        versao.AlterarObservacao(observacao);
+        // O domínio grava situação, rótulo e observação de uma vez; se uma regra falhar (MSG-11, MSG-43),
+        // nada muda (arquitetura.md, 5.3).
+        versao.AlterarDados(rotulo, situacao, observacao);
         await versoes.SalvarAsync(versao, cancellationToken);
         return VersaoResposta.De(versao);
     }
