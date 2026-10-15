@@ -29,16 +29,17 @@ A autora é analista de requisitos e **não é técnica**: domina lógica de neg
 
 Detalhes e motivos no `processo-desenvolvimento.md`, seção 4.
 
+**Seja breve.** Há dois níveis de detalhe (processo, seção 4.2). Nas **tarefas de regra** (T-04, T-11, T-15 e T-17), plano completo e relatório completo. Nas **demais tarefas**, plano em até 10 linhas e relatório final em até 10 linhas. Em todas, não repita o conteúdo dos documentos.
+
 1. **Leia** a tarefa no `tarefas.md` e as regras, critérios e mensagens citados nela. Se for o início de um degrau, lembre a autora da regra do corte do `tarefas.md`.
-2. **Apresente o plano** no formato da seção 4.1 do processo, sem alterar nenhum arquivo, e indique o tipo de modelo adequado à tarefa. Aguarde a aprovação.
+2. **Apresente o plano** no formato da seção 4.1 do processo (completo ou resumido, conforme o nível da tarefa), sem alterar nenhum arquivo, e indique o tipo de modelo adequado à tarefa. Aguarde a aprovação.
 3. **Crie o branch** da tarefa (ex.: `feat/calculo-timeline`).
 4. **Implemente** em passos pequenos. Nas tarefas marcadas como TDD, escreva primeiro os testes dos critérios de aceite e mostre à autora a lista dos testes falhando; só então implemente.
 5. **Verifique:** rode o build, os testes e o lint, e faça a revisão técnica (R-03 e R-04 do processo). Relate o que verificou, o que não conseguiu verificar e a lista dos arquivos de teste criados e alterados.
-6. **Mostre à autora como conferir** o resultado, conforme o item "Sua verificação" da tarefa.
-7. **Registre:** rascunhe a entrada do `docs/diario.md` (e, se o pedido for relevante, da Parte 2 do `prompts/prompts-claude-code.md`), proponha a estimativa sem IA com uma frase de justificativa e marque a tarefa no `tarefas.md`. A autora completa o tempo real e o que a revisão capturou.
-8. **Integre:** proponha a mensagem de commit e aguarde a confirmação. Depois, faça o commit, integre o branch ao `main` e envie ao GitHub.
+6. **Mostre à autora como conferir** o resultado, conforme o item "Sua verificação" da tarefa, e **proponha a mensagem de commit** no fim do relatório.
+7. **Registre e integre, num único passo,** quando a autora informar o tempo real, o que a revisão capturou e a aprovação da mensagem: registre a entrada do `docs/diario.md` (e, se o pedido for relevante, a da Parte 2 do `prompts/prompts-claude-code.md`), com a estimativa sem IA e uma frase de justificativa; marque a tarefa no `tarefas.md`; faça o commit, integre o branch ao `main` e envie ao GitHub. Responda em até cinco linhas.
 
-Na última tarefa de cada degrau, antes da tag, peça à autora a revisão independente (processo, seção 7.3).
+A revisão independente (processo, seção 7.3) acontece só nas tarefas T-08, T-13 e T-15, antes da tag, e na T-22, antes da release. Nessas tarefas, lembre a autora de pedi-la depois do commit.
 
 ## Regras que nunca podem ser quebradas
 
@@ -72,4 +73,4 @@ Os scripts de teste e de lint rodam em container (`arquitetura.md`, ADR-24). Man
 
 ## Definição de pronto
 
-Build sem erros; todos os testes passando, com testes novos para as regras da tarefa; nenhum teste alterado sem aprovação; lint sem apontamentos; "Sua verificação" feita pela autora e checklist R-01 a R-05 aplicado; README atualizado se a tarefa mudou instalação, execução, uso ou testes; `tarefas.md` marcado; entrada no diário; commit no padrão, com a mensagem confirmada pela autora.
+Build sem erros; todos os testes passando, com testes novos para as regras da tarefa; nenhum teste alterado sem aprovação; lint sem apontamentos; "Sua verificação" feita pela autora (ou o relatório aceito por ela, quando a verificação só repete comandos que você já rodou) e checklist R-01 a R-05 aplicado; README atualizado se a tarefa mudou instalação, execução, uso ou testes; `tarefas.md` marcado; entrada no diário; commit no padrão, com a mensagem confirmada pela autora.

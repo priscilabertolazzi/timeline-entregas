@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.12 |
+| Versão | 0.13 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -42,7 +42,7 @@ O sistema é construído em degraus (`arquitetura.md`, ADR-22). Cada degrau term
 - Antes de começar cada degrau, compare o tempo real acumulado mais a estimativa do degrau com as 26 horas. Se passar, a autora decide entre seguir ou ir direto para a entrega. Pelas estimativas, a decisão aparece no degrau 5 (API da tabela de status das aplicações), que termina em 26,5 horas.
 - Os degraus não concluídos entram no README, em "Limitações e próximos passos". Os requisitos deles já estão escritos.
 
-**Revisão independente:** a última tarefa de cada degrau inclui a revisão independente do código, antes da tag (`processo-desenvolvimento.md`, seção 7.3). Ela leva cerca de 20 minutos e consome a margem das estimativas.
+**Revisão independente:** as tarefas T-08, T-13 e T-15, que fecham as etapas de API, incluem a revisão independente do código antes da tag, e a T-22 a inclui antes da release (`processo-desenvolvimento.md`, seção 7.3). Cada revisão leva cerca de 20 minutos e consome a margem das estimativas. As etapas de telas e de congelamento não têm revisão própria; a da T-22 cobre todo o código.
 
 ---
 
@@ -174,7 +174,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 - Lista de aplicações: cadastro, edição e exclusão, com confirmação antes de excluir (RF-01, RN-04).
 - Tela da versão: rótulo, fase, situação, observação e as sete datas num único formulário, salvo de uma vez (RF-03 a RF-05, RF-09, RF-10, RF-14).
 - Mensagens do catálogo exibidas como vêm da API.
-- Revisão independente. Tag `v0.2.0`.
+- Tag `v0.2.0`.
 
 **Sua verificação:** pela tela, você repete os cenários do CA-25, do CA-32 e do CA-33 e confere as mensagens.
 
@@ -211,7 +211,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 - Tela do status report, começando pela timeline: componente em SVG, com eixo de meses, sub-linhas, trechos, marco, rótulos, linha da data atual, coluna "Sem previsão" e mensagens (`arquitetura.md`, seção 8).
 - Seletor do intervalo de meses (RF-12).
 - Critério de aceite: CA-31.
-- Revisão independente. Tag `v0.4.0`.
+- Tag `v0.4.0`.
 
 **Sua verificação:** com os dados do CA-02, do CA-07 e do CA-31, você confere a timeline desenhada contra o texto dos critérios, inclusive compartilhando a tela numa chamada (RNF-04).
 
@@ -233,7 +233,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 ### [ ] T-16 — Tabela de status das aplicações na tela (1 h)
 - Na tela do status report, abaixo da timeline: tabela com as colunas Aplicação, Versão, Fase, Situação, Data de entrega e Observação, e os contadores acima dela (RF-13).
-- Revisão independente. Tag `v0.6.0`.
+- Tag `v0.6.0`.
 
 **Sua verificação:** com os dados do CA-14 e do CA-21, você confere a linha "Nenhuma versão cadastrada" e os contadores.
 
@@ -255,7 +255,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 ### [ ] T-19 — Telas do Histórico de Status Reports e do congelado (1,5 h)
 - Tela do Histórico de Status Reports, com as ações "Abrir", "Congelar" e "Congelar novamente"; status report congelado somente leitura; confirmação de substituição (RN-28 a RN-30).
-- Revisão independente. Tag `v0.7.0`.
+- Tag `v0.7.0`.
 
 **Sua verificação:** pela tela, você repete o cenário do CA-11 e confere o pedido de confirmação.
 
@@ -311,3 +311,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.10 | 15/10/2026 | A autora não usa o VS Code: retirados o VS Code e a extensão REST Client da T-01; as verificações das APIs passam a ser feitas pela página de documentação da API (Scalar), publicada já na T-06; na T-20, o Claude Code executa o arquivo de exemplos e mostra o resultado. |
 | 0.11 | 15/10/2026 | T-01 e T-02 marcadas como concluídas. |
 | 0.12 | 15/10/2026 | T-03 marcada como concluída. |
+| 0.13 | 15/10/2026 | Revisão independente só nas tarefas T-08, T-13, T-15 e T-22, alinhada ao `processo-desenvolvimento.md` versão 0.9 ("Entrega em degraus", T-10, T-14, T-16 e T-19). |
