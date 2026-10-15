@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.19 |
+| Versão | 0.20 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.5) |
 
@@ -171,10 +171,12 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 **Sua verificação:** `scripts\run.ps1` sobe banco, API e telas, e a página inicial abre no navegador.
 
-### [ ] T-10 — Lista de aplicações e tela da versão (3 h)
+### [x] T-10 — Lista de aplicações e tela da versão (3 h)
 - Lista de aplicações: cadastro, edição e exclusão, com confirmação antes de excluir (RF-01, RN-04).
-- Tela da versão: rótulo, fase, situação, observação e as sete datas num único formulário, salvo de uma vez (RF-03 a RF-05, RF-09, RF-10, RF-14).
+- Tela da versão: rótulo, fase, situação, observação e as sete datas num único formulário, com um só botão Salvar, que grava tudo ou nada (RF-03 a RF-05, RF-09, RF-10, RF-14).
+- API: operação `PUT /api/versoes/{id}/completo` que sustenta esse salvamento único (`arquitetura.md`, ADR-39).
 - Mensagens do catálogo exibidas como vêm da API.
+- Pendências da T-09: provar que `test` e `lint` do frontend falham de verdade e rodar `install.sh` e `run.sh`.
 - Tag `v0.2.0`.
 
 **Sua verificação:** pela tela, você repete os cenários do CA-25, do CA-32 e do CA-33 e confere as mensagens.
@@ -319,3 +321,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.17 | 15/10/2026 | T-07 marcada como concluída; a lista de aplicações passou a trazer as versões. |
 | 0.18 | 15/10/2026 | T-08 marcada como concluída (a tag `v0.1.0` fica para depois da revisão independente). |
 | 0.19 | 15/10/2026 | T-09 marcada como concluída. |
+| 0.20 | 15/10/2026 | T-10 marcada como concluída: a tela da versão passou a ter um só botão Salvar, com a operação única na API (ADR-39); inclui as pendências da T-09. Tag `v0.1.0` criada por decisão da autora antes da revisão independente da T-08, que segue pendente. |

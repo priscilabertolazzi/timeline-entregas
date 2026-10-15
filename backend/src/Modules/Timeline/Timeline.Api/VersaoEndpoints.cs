@@ -71,6 +71,18 @@ public static class VersaoEndpoints
             .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
             .ProducesProblem(StatusCodes.Status500InternalServerError);
 
+        grupo.MapPut("/{id:long}/completo", async (long id, AlterarVersaoCompletaEntrada? entrada, AlterarVersaoCompleta caso, CancellationToken ct) =>
+                TypedResults.Ok(await caso.ExecutarAsync(id, entrada, ct)))
+            .WithName("AlterarVersaoCompleta")
+            .WithSummary("Grava rótulo, situação, observação, fase e as sete datas de uma vez")
+            .WithDescription("É o salvamento do formulário da tela da versão: tudo ou nada. Se qualquer regra falhar, nada é salvo (RN-10). Fase e datas são aplicadas na ordem que a RN-07 permite: avançando de fase, as datas vêm antes; nos demais casos, a fase vem antes. Situação vazia mantém a atual; observação vazia remove a observação; fase e datas são obrigatórias no corpo, e datas todas vazias removem as datas (só em Backlog).")
+            .Produces<VersaoResposta>(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status409Conflict)
+            .ProducesProblem(StatusCodes.Status422UnprocessableEntity)
+            .ProducesProblem(StatusCodes.Status500InternalServerError);
+
         grupo.MapDelete("/{id:long}", async (long id, ExcluirVersao caso, CancellationToken ct) =>
             {
                 await caso.ExecutarAsync(id, ct);

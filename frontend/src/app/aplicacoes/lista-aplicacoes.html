@@ -1,11 +1,41 @@
-<h1>Lista de aplicações</h1>
+<div class="cabecalho">
+  <h1>Lista de aplicações</h1>
+  <button mat-flat-button type="button" (click)="novaAplicacao()">Nova aplicação</button>
+</div>
+
+<app-aviso-erros [mensagens]="erros()" />
+
 @if (aplicacoes(); as lista) {
-  <mat-list>
-    @for (aplicacao of lista; track aplicacao.id) {
-      <mat-list-item>
-        <span matListItemTitle>{{ aplicacao.nome }}</span>
-        <span matListItemLine>{{ aplicacao.versoes.length }} versão(ões)</span>
-      </mat-list-item>
-    }
-  </mat-list>
+  @if (lista.length === 0) {
+    <p class="vazio">Nenhuma aplicação cadastrada.</p>
+  }
+  @for (aplicacao of lista; track aplicacao.id) {
+    <mat-card class="aplicacao" appearance="outlined">
+      <div class="topo">
+        <h2 class="nome">{{ aplicacao.nome }}</h2>
+        <div class="acoes-aplicacao">
+          <button mat-button type="button" (click)="editar(aplicacao)" [attr.aria-label]="'Editar ' + aplicacao.nome">Editar</button>
+          <button mat-button type="button" class="perigo" (click)="excluir(aplicacao)" [attr.aria-label]="'Excluir ' + aplicacao.nome">Excluir</button>
+        </div>
+      </div>
+      <mat-card-content>
+        @if (aplicacao.versoes.length === 0) {
+          <p class="sem-versoes">Nenhuma versão cadastrada</p>
+        }
+        @for (versao of aplicacao.versoes; track versao.id) {
+          <a class="versao" [routerLink]="['/versoes', versao.id]" [attr.aria-label]="'Abrir ' + versao.rotulo + ' de ' + aplicacao.nome">
+            <span class="rotulo">{{ versao.rotulo }}</span>
+            <span class="etiqueta">{{ rotuloFase(versao.fase) }}</span>
+            <span class="etiqueta" [class.risco]="versao.situacao === 'Risco'">{{ rotuloSituacao(versao.situacao) }}</span>
+            <span class="abrir">Abrir ›</span>
+          </a>
+        }
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-stroked-button type="button" (click)="novaVersao(aplicacao)">Nova versão</button>
+      </mat-card-actions>
+    </mat-card>
+  }
+} @else if (erros().length === 0) {
+  <mat-progress-bar mode="indeterminate" aria-label="Carregando" />
 }

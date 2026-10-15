@@ -366,6 +366,44 @@ Copie o bloco abaixo para cada nova sessão.
 
 ---
 
+### Sessão 10 — 15/10/2026 — T-10, Lista de aplicações e tela da versão
+
+| Campo | Registro |
+|---|---|
+| Tarefa | T-10 — Lista de aplicações e tela da versão |
+| Regras e critérios | RF-01, RF-03 a RF-05, RF-09, RF-10, RF-14; RN-04; verificação pela tela: CA-25, CA-32, CA-33 |
+| Modelo usado | Claude Sonnet 5.5, no plano e na implementação. No Claude Code (área Code do aplicativo Claude) |
+| Tempo real | 1h30 a 2 h (informado pela autora; contadas 2 h na regra do corte) |
+| Estimativa sem IA | 8 h (proposta do assistente: um desenvolvedor experiente criaria a operação única da API com testes, 2 telas, os serviços, as janelinhas e 35 testes das telas, e faria o ajuste de layout) |
+
+**O que foi pedido:** a lista de aplicações (cadastro, edição e exclusão com confirmação) e a tela da versão (rótulo, fase, situação, observação e as sete datas), mais as pendências da T-09 (provar que `test` e `lint` falham de verdade e rodar `install.sh` e `run.sh`). Pedido completo na Parte 2 do `prompts/prompts-claude-code.md`, item P-26.
+
+**Resultado:** branch `feat/lista-aplicacoes-tela-versao`. Lista de aplicações e tela da versão com um só botão Salvar; operação nova `PUT /api/versoes/{id}/completo` (ADR-39, tudo ou nada); padrão das telas no ADR-40. 173 testes da API (26 novos) e 38 das telas (35 novos) passando, lint limpo, build sem erros. Conferido de verdade: CA-25 e CA-32 na API com PostgreSQL, e as telas no navegador. Pendências da T-09: `test.ps1` e `lint.ps1` devolveram código 1 com falha provocada (arquivos temporários apagados); `install.sh` e `run.sh` rodaram pelo Git Bash (não conferidos em Linux nem macOS).
+
+**Primeira tentativa:** precisou de ajustes, descritos abaixo.
+
+**Ajustes necessários e por quê:**
+
+- Dois testes novos das telas procuravam a chamada à API cedo demais, antes de a janelinha terminar a animação de fechar; passaram a esperar a chamada.
+- O pacote das telas passou do limite de aviso de 500 kB (calendário e janelinhas); o limite subiu para 1 MB, por rodar só no computador local (ADR-40).
+- A conferência de um cenário pelo `curl` do Windows deu "Requisição inválida" por causa dos acentos no envio, não por defeito da API; repetida com o corpo em arquivo UTF-8, passou.
+- Depois da implementação, uma revisão de usabilidade pedida pela autora trouxe ajustes de layout (abaixo).
+
+**Mudança de plano decidida pela autora durante a aprovação do plano:** o plano propunha três botões na tela da versão (Dados, Fase e Datas), cada um gravando o seu bloco, porque a API gravava essas três coisas em operações separadas e a ordem entre elas importa (sair do Backlog exige as datas antes, MSG-28; remover as datas exige a fase Backlog antes, MSG-24). A autora recusou os três botões: tudo está na mesma tela e deve haver **um só botão Salvar**, também a opção de abas foi descartada. Um botão só, chamando as três operações em sequência, poderia salvar pela metade e contradizer o CA-32 ("nenhuma alteração é salva"), além de colocar uma regra de ordem na tela, o que o `frontend/CLAUDE.md` proíbe. Decisão: criar na API uma operação única (`PUT /api/versoes/{id}/completo`), que recebe rótulo, situação, observação, fase e as sete datas, valida tudo junto e grava tudo ou nada. As três operações existentes continuam. Isso amplia a T-10 além do frontend (cerca de 1 h a mais na estimativa) e será registrado no `arquitetura.md` (seção 7.2 e novo ADR) e no `tarefas.md`.
+
+**O que a revisão humana capturou:**
+
+- O desenho de três botões, aceitável tecnicamente, não servia para o uso: tudo na mesma tela pede um só salvamento.
+- Faltavam boas práticas de UX. Revisão de usabilidade pedida pela autora, aplicada e conferida no navegador: barra de título com a cor do tema; conteúdo com largura máxima; fase e situação como etiquetas, com Risco destacado; linha da versão inteira clicável; "Excluir" em cor de alerta e afastado das demais ações; barra de carregamento; barra fixa no pé com o Salvar e as mensagens da API sempre à vista; datas em grade, uma etapa por linha, com "×" dentro do campo.
+
+**Tag `v0.1.0`:** a autora decidiu criá-la agora, no commit que fechou a etapa 1 (T-08), **antes da revisão independente da T-08**, que segue pendente (`processo-desenvolvimento.md`, seção 7.3). Ela pode ser feita a qualquer momento, em nova sessão do Claude Code.
+
+**Riscos mitigados:** regra de ordem entre fase e datas fora da tela (ficou na API, ADR-39); data digitada errada apagando um valor sem aviso (campos só de leitura, escolha pelo calendário); datas trocando de dia por fuso (conversão pelos componentes locais); nenhum teste existente alterado; nenhuma dependência nova.
+
+**Aprendizados:** quando uma decisão de tela (um só botão) conflita com como a API grava, resolver na API e não na tela. Pedir a revisão de UX antes do commit custou pouco e evitou retrabalho nas próximas telas. Conferir o envio de acentos pelo `curl` no Windows antes de suspeitar da API.
+
+---
+
 ## Resumo acumulado
 
 Atualizado ao final de cada fase do `tarefas.md`.
@@ -375,7 +413,7 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | Planejamento | *(a preencher)* | 16 h | 1 | 15 de 17 pedidos |
 | 0. Preparação | | 4,0 h (T-01 a T-03) | 3 (T-01, T-02 e T-03) | |
 | 1. APIs de cadastro | | | | |
-| 2. Telas de cadastro | | | | |
+| 2. Telas de cadastro | T-09 não medido por inteiro (verificação: 10 min); T-10: 2 h | 10 h (T-09: 2 h; T-10: 8 h) | 2 (T-09 e T-10) | 0 de 2 |
 | 3. API da timeline | | | | |
 | 4. Tela da timeline | | | | |
 | 5. API da tabela de status das aplicações | | | | |
@@ -389,7 +427,7 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | Tópico | Exemplos registrados |
 |---|---|
 | Onde a IA acelerou o desenvolvimento | Sessão 00: revisão cruzada de nove documentos, catálogo de 41 mensagens e roteiro de prompts das 22 tarefas numa única sessão. A revisão de arquitetura encontrou a contradição do CA-02, que viraria um teste errado. |
-| Onde a revisão humana foi decisiva | Sessão 00: a ordem das etapas, com a entrega como primeiro objetivo, e as regras N-01 a N-06 foram decisões da autora; a autora apontou que os prompts precisavam mostrar o modelo CO-STAR. |
+| Onde a revisão humana foi decisiva | Sessão 00: a ordem das etapas, com a entrega como primeiro objetivo, e as regras N-01 a N-06 foram decisões da autora; a autora apontou que os prompts precisavam mostrar o modelo CO-STAR. Sessão 10: a autora recusou os três botões Salvar e pediu um só, o que levou à operação única da API (ADR-39); a revisão de UX pedida por ela trouxe as boas práticas de layout que faltavam. |
 | Quais prompts funcionaram melhor | P-03 (revisão de arquitetura com papel e perguntas objetivas); P-05 e P-07 ("o que você vai fazer?", "o que eu faço?"); P-08 (conferência final antes de começar). |
 | Quais riscos foram mitigados | Sessão 00: teste derivado de exemplo errado; dependências inventadas; informação indevida no repositório público; assistente sem as regras do projeto. |
 
@@ -411,3 +449,4 @@ Atualizado ao final de cada fase do `tarefas.md`.
 | 0.11 | 15/10/2026 | Registrada a Sessão 07 (T-07), com o pedido P-23 e a lacuna da lista de aplicações sem as versões. |
 | 0.12 | 15/10/2026 | Registrada a Sessão 08 (T-08), com o pedido P-24 e a lacuna do conjunto de dados de exemplo. |
 | 0.13 | 15/10/2026 | Registrada a Sessão 09 (T-09), com o pedido P-25. |
+| 0.14 | 15/10/2026 | Registrada a Sessão 10 (T-10), com o pedido P-26, a mudança para um só botão Salvar, a revisão de UX e a tag `v0.1.0` criada antes da revisão independente da T-08. |

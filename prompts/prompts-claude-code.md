@@ -1113,6 +1113,26 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** "dependências só as da seção 12.3" fez o assistente conferir o que o gerador instalou e explicar cada pacote extra, em vez de aceitá-los em silêncio.
 
+### P-26 — 15/10/2026 — T-10
+
+**Pedido (na íntegra):**
+> CONTEXTO: Projeto Timeline de Entregas, etapa 2 (telas de cadastro), última tarefa da etapa. Tarefa T-10 do docs/tarefas.md: Lista de aplicações e tela da versão.
+> Esta tarefa é o padrão de referência das próximas telas. Pontos de atenção:
+> - As sete datas num único formulário, salvo de uma vez.
+> - Confirmação antes de excluir.
+> OBJETIVO: Criar a lista de aplicações (cadastro, edição e exclusão) e a tela da versão (rótulo, fase, situação, observação e as sete datas), atendendo RF-01, RF-03 a RF-05, RF-09, RF-10, RF-14 e RN-04.
+> ESTILO: Siga as convenções do CLAUDE.md e do frontend/CLAUDE.md, com os termos do glossário nas telas e as mensagens exibidas exatamente como vêm da API.
+> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
+> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
+> RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar nenhum arquivo. Depois da minha aprovação: implementação, relatório de verificação (build, testes e lint) e o passo a passo da "Sua verificação".
+> Antes do plano, descreva cada tela em palavras (campos, botões e mensagens) para eu aprovar o layout. Ao final, explique em linguagem simples como as telas estão organizadas (componentes, serviços de acesso à API, exibição de mensagens).
+
+**Resultado:** o assistente descreveu as telas em desenhos de texto e propôs três botões Salvar (Dados, Fase e Datas), porque a API gravava essas coisas em operações separadas. A autora recusou ("não quero 3 botões, um só", e, sobre abas, "na mesma tela nada a ver 3 botões"). O assistente explicou o risco de salvar pela metade (contra o CA-32) e criou uma operação única na API (ADR-39), com a ordem entre fase e datas resolvida no domínio. Depois, a autora pediu uma revisão de usabilidade como designer UX sênior, aplicada nas duas telas. Também fez as pendências da T-09 (falha provocada de `test` e `lint`, `install.sh` e `run.sh`).
+
+**Funcionou de primeira?** Quase: o plano aprovado mudou por decisão da autora, e dois testes novos precisaram esperar a janelinha fechar (ver Sessão 10 do diário).
+
+**Por que é relevante:** descrever as telas em palavras antes do plano fez a autora enxergar o problema dos três botões antes de qualquer código. A pergunta final do pedido ("como as telas estão organizadas") gerou a explicação em linguagem simples. A revisão de UX, pedida depois, mostrou que um pedido explícito de boas práticas de layout vale incluir já no prompt das próximas telas.
+
 ---
 
 ## Histórico do documento
@@ -1131,3 +1151,4 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 | 0.10 | 15/10/2026 | Registro do pedido P-23 (T-07). |
 | 0.11 | 15/10/2026 | Registro do pedido P-24 (T-08). |
 | 0.12 | 15/10/2026 | Registro do pedido P-25 (T-09). |
+| 0.13 | 15/10/2026 | Registro do pedido P-26 (T-10). |

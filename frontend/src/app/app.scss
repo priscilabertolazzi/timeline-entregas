@@ -1,3 +1,14 @@
+// Barra de título na cor principal do tema e conteúdo com largura limitada, para leitura confortável
+// em telas largas e em compartilhamento de tela (RNF-04).
+mat-toolbar {
+  background: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+  font: var(--mat-sys-title-large);
+}
+
 main {
-  padding: 16px;
+  box-sizing: border-box;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px 16px 0;
 }

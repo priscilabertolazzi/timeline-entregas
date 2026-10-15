@@ -1,0 +1,113 @@
+.cabecalho {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 8px 0 16px;
+}
+
+.titulo {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+
+  h1 {
+    margin: 0;
+    font: var(--mat-sys-headline-medium);
+  }
+}
+
+.etiqueta {
+  padding: 2px 12px;
+  border-radius: 12px;
+  background: var(--mat-sys-surface-container-high);
+  font: var(--mat-sys-label-large);
+
+  &.risco {
+    background: var(--mat-sys-error-container);
+    color: var(--mat-sys-on-error-container);
+  }
+}
+
+// Excluir é uma ação destrutiva: cor de alerta e afastada do Salvar.
+.perigo {
+  --mat-button-text-label-text-color: var(--mat-sys-error);
+}
+
+.bloco {
+  margin-bottom: 16px;
+  padding: 16px 16px 4px;
+
+  h2 {
+    margin: 0 0 12px;
+    font: var(--mat-sys-title-large);
+  }
+}
+
+.linha {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+
+  mat-form-field {
+    flex: 1 1 200px;
+  }
+}
+
+.largo {
+  width: 100%;
+}
+
+// Datas: uma etapa por linha, com "Início" e "Fim" lado a lado, na ordem cronológica (RN-10).
+.grade-datas {
+  display: grid;
+  grid-template-columns: 12rem 1fr 1fr;
+  gap: 0 16px;
+  align-items: start;
+}
+
+.grupo {
+  padding-top: 18px;
+  font: var(--mat-sys-title-small);
+}
+
+.campo-calendario {
+  cursor: pointer;
+}
+
+// "×" e calendário lado a lado, dentro do campo.
+.sufixos {
+  display: flex;
+  align-items: center;
+}
+
+.limpar {
+  border: 0;
+  background: none;
+  padding: 0 8px;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--mat-sys-on-surface-variant);
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    color: var(--mat-sys-error);
+  }
+}
+
+.barra-salvar {
+  position: sticky;
+  bottom: 0;
+  z-index: 1;
+  padding: 12px 0;
+  background: var(--mat-sys-surface);
+  border-top: 1px solid var(--mat-sys-outline-variant);
+
+  app-aviso-erros {
+    display: block;
+    max-height: 30vh;
+    overflow-y: auto;
+  }
+}

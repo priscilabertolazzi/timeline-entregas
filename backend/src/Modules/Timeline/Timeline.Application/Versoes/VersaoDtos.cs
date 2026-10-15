@@ -29,6 +29,22 @@ public sealed record DatasVersaoEntrada(
     string? FimProrrogacao,
     string? DataEntrega);
 
+/// <summary>
+/// Entrada de gravar tudo de uma vez, como o formulário da tela da versão (ADR-39): rótulo, situação,
+/// observação, fase e as sete datas.
+/// </summary>
+/// <param name="Rotulo">Rótulo da versão (RN-02).</param>
+/// <param name="Situacao">On track ou Risco (RN-21). Vazia, mantém a situação atual.</param>
+/// <param name="Observacao">Texto livre (RN-22). Vazia, remove a observação.</param>
+/// <param name="Fase">Fase desejada, a atual ou outra (RN-05).</param>
+/// <param name="Datas">As sete datas; todas vazias removem as datas (RN-09).</param>
+public sealed record AlterarVersaoCompletaEntrada(
+    string? Rotulo,
+    string? Situacao,
+    string? Observacao,
+    string? Fase,
+    DatasVersaoEntrada? Datas);
+
 /// <summary>As sete datas devolvidas pela API.</summary>
 public sealed record DatasVersaoResposta(
     DateOnly? InicioAndamento,

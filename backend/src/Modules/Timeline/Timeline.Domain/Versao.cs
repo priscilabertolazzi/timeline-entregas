@@ -178,6 +178,59 @@ public sealed class Versao
         Rotulo = rotulo.Trim();
     }
 
+    /// <summary>
+    /// Grava de uma vez rótulo, situação, observação, fase e as sete datas (ADR-39), como o formulário
+    /// da tela da versão. Tudo ou nada: se qualquer regra falhar, nada muda (CA-32) e a exceção traz as
+    /// mensagens do primeiro passo que falhou. Fase e datas dependem uma da outra (RN-07), por isso a
+    /// ordem é: avançando de fase, as datas vêm antes (sair do Backlog exige datas, e Produção exige a
+    /// entrega até a data atual); nos demais casos, a fase vem antes (voltar ao Backlog libera a
+    /// remoção das datas). A situação vem depois da fase, pois ao sair do Backlog ela recomeça em On track.
+    /// </summary>
+    /// <param name="situacao">Nulo mantém a situação atual.</param>
+    public void Alterar(string rotulo, Situacao? situacao, string? observacao, Fase fase, DatasVersao datas, TimeProvider relogio)
+    {
+        ArgumentNullException.ThrowIfNull(datas);
+        ArgumentNullException.ThrowIfNull(relogio);
+
+        var faseAnterior = Fase;
+        var situacaoAnterior = SituacaoInformada;
+        var datasAnteriores = Datas;
+        var rotuloAnterior = Rotulo;
+        var observacaoAnterior = Observacao;
+
+        try
+        {
+            if (fase > Fase)
+            {
+                AlterarDatas(datas, relogio);
+                AlterarFase(fase, relogio);
+            }
+            else
+            {
+                AlterarFase(fase, relogio);
+                AlterarDatas(datas, relogio);
+            }
+
+            if (situacao is not null && situacao != SituacaoInformada)
+            {
+                AlterarSituacao(situacao.Value);
+            }
+
+            Renomear(rotulo);
+            AlterarObservacao(observacao);
+        }
+        catch (RegraNegocioException)
+        {
+            // Desfaz o que o primeiro passo já tinha mudado: a operação é tudo ou nada.
+            Fase = faseAnterior;
+            SituacaoInformada = situacaoAnterior;
+            Datas = datasAnteriores;
+            Rotulo = rotuloAnterior;
+            Observacao = observacaoAnterior;
+            throw;
+        }
+    }
+
     private static void VerificarPreenchimento(DatasVersao novas, List<string> violacoes)
     {
         // RN-09: as cinco datas do ciclo vêm juntas.
