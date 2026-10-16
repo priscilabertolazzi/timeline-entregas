@@ -10,7 +10,7 @@ Sistema local para manter o status report semanal de um projeto de software a pa
 
 **A solução.** Um cadastro único de aplicações e versões, que passa a ser a fonte das informações do status report, no lugar dos dados repetidos nos slides. Cada versão guarda fase, situação, observação e as datas de cada etapa (andamento, homologação, prorrogação da homologação e entrega), e a API confere as regras de negócio a cada salvamento: datas em ordem, fases em sequência (que, a partir da Homologação, só avançam) e Produção só com a entrega já ocorrida. Com os dados certos num só lugar, os próximos degraus desenham a timeline e a tabela de status a partir deles, e congelam o status report de cada semana.
 
-Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negocio/requisitos-mvp.md).
+Os requisitos desta versão estão em [`docs/negocio/requisitos-mvp.md`](docs/negocio/requisitos-mvp.md).
 
 ## 2. O que foi entregue
 
@@ -430,7 +430,7 @@ Capturas com os dados de exemplo fictícios.
 | 6. Tela da tabela de status das aplicações | T-16 | 1 h |
 | 7. Congelamento semanal e Histórico de Status Reports | T-17 a T-19 | 5 h |
 
-As regras, os requisitos e os critérios de aceite desses degraus já estão escritos no [`requisitos-mvp.md`](docs/negocio/requisitos-mvp.md), e os prompts de cada tarefa estão prontos no roteiro.
+As regras, os requisitos e os critérios de aceite desses degraus já estão escritos no documento completo, [`requisitos-negocio.md`](docs/negocio/requisitos-negocio.md), com os números de cada etapa listados na seção 12 do [`requisitos-mvp.md`](docs/negocio/requisitos-mvp.md), e os prompts de cada tarefa estão prontos no roteiro.
 
 **Evoluções técnicas**, sugeridas pela revisão independente final e pelo processo, para quando o sistema crescer além do uso local e individual:
 
