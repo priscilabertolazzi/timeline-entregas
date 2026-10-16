@@ -1,4 +1,4 @@
-# Timeline de Entregas
+# Timeline de Entregas (MVP)
 
 Sistema local para manter o status report semanal de um projeto de software a partir de um único cadastro de aplicações e versões, no lugar da manutenção manual em slides.
 
