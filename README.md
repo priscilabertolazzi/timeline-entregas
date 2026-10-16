@@ -79,14 +79,14 @@ Para **usar e avaliar** o projeto, basta instalar:
 
 | Ferramenta | Para quê | Onde obter |
 |---|---|---|
-| Git | Baixar o projeto | git-scm.com |
-| Docker (com Docker Compose) | Rodar o banco, a API e as telas, e executar os testes e o lint em container | docker.com |
+| Git | Baixar o projeto | [git-scm.com/downloads](https://git-scm.com/downloads) |
+| Docker (com Docker Compose) | Rodar o banco, a API e as telas, e executar os testes e o lint em container | [docs.docker.com/get-started/get-docker](https://docs.docker.com/get-started/get-docker/) |
 
-O Docker precisa estar **aberto e funcionando** antes dos comandos abaixo.
+O Docker precisa estar **aberto e funcionando** antes dos comandos da [seção 7](#7-instalação-e-execução-local).
 
 > **Sobre a licença do Docker Desktop:** ele é gratuito para uso pessoal e em empresas pequenas, mas exige assinatura em empresas de maior porte. Há alternativas gratuitas, como o Docker Engine no WSL 2.
 
-Só para **desenvolver** (alterar o código), instale também o SDK do .NET 10 (dotnet.microsoft.com) e o Node.js em versão LTS (nodejs.org). Os scripts de teste e de lint **não** exigem o SDK nem o Node.js instalados.
+Só para **desenvolver** (alterar o código), instale também o [SDK do .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) e o [Node.js em versão LTS](https://nodejs.org/pt/download). Os scripts de teste e de lint **não** exigem o SDK nem o Node.js instalados.
 
 ## 6. Dependências e ambiente
 
