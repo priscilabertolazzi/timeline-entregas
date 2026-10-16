@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.21 |
+| Versão | 0.17 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -436,26 +436,30 @@ Copie o bloco abaixo para cada nova sessão.
 
 | Campo | Registro |
 |---|---|
-| Tarefa | Complemento da T-22: conferência dos documentos entre si e contra as diretrizes do curso |
-| Regras e critérios | Checklist de release C-01 a C-11 (`processo-desenvolvimento.md`, seção 14) e seções obrigatórias do README |
+| Tarefa | Complemento da T-22: conferência do README e dos documentos contra as diretrizes do curso |
+| Regras e critérios | Seções obrigatórias do README e checklist C-01 a C-11 |
 | Modelo usado | Claude Opus 5.5, numa conversa no claude.ai |
 | Tempo real | Não medido |
-| Estimativa sem IA | 2 h (proposta do assistente: ler o README, os seis documentos e o histórico do Git atrás de contradições e corrigi-las) |
+| Estimativa sem IA | 2 h |
 
-**O que foi pedido:** conferir o projeto inteiro, com prioridade para as diretrizes do curso, e deixar tudo coerente para a entrega, sem acrescentar trabalho além do necessário.
+**Resultado** (sem alteração de código):
 
-**Resultado:** branch `docs/consistencia-entrega`. No README: a menção à revisão independente como não realizada saiu (ela foi feita, e os seus achados já estavam na seção 14); a seção 1 passou a se chamar "Descrição"; a ordem da lista de exemplo ficou igual à da tela (alfabética); a legenda da captura da tela da versão passou a descrever o que a imagem mostra; a porta da captura da API foi explicada; o passo de instalação ganhou a orientação para quem recebe o projeto em `.zip`; a pedido da autora, a seção 14 passou a separar o escopo do MVP (decisões de planejamento), os próximos degraus e as evoluções técnicas sugeridas pela revisão independente final; o exemplo da seção 1, que repetia o roteiro da seção 8 com datas diferentes das dos dados de exemplo, saiu, e a tabela de degraus da seção 2 deu lugar a um link para a seção 14; na seção 5, os sites das ferramentas viraram links. Em 16/10, revisão final do README contra a tabela de seções das diretrizes do curso, item por item, como a estratégia do README prevê: versões das ferramentas e passo a passo em máquina limpa (seção 5), solução descrita pelo que a v1.0.0 já resolve (seção 1), o `.http` também no Visual Studio (seção 8), o checklist R-01 a R-05 adaptado (seção 12), "Limitações do MVP" com o termo do curso e as práticas previstas para depois (seção 14), referências com links (seção 15) e o bloco de execução da API fora do Docker retirado da seção 7, por ser só de desenvolvimento. Na seção 13, a captura da API (que mostrava a porta 8180) saiu, e entraram dois marcadores para a autora inserir as capturas da página da API na porta 8080 e dos testes em execução, que o item 9a das diretrizes pede. O título do README passou a "Timeline de Entregas (MVP)", igual ao da barra de título das telas.
+- **README**, revisado item por item contra as diretrizes. Entraram as versões das ferramentas e o passo a passo em máquina limpa, a adaptação do checklist R-01 a R-05, as práticas previstas para depois e as referências com links. Saíram a contradição sobre a revisão independente, o exemplo deslocado da seção 1 e o bloco só de desenvolvimento da seção 7. Os pontos técnicos passaram a evoluções, e o título passou a "Timeline de Entregas (MVP)". Na seção 13, marcadores para a autora inserir as capturas da API (porta 8080) e dos testes.
+- **Demais documentos:** lacunas do diário preenchidas (tempos não medidos, Sessão 01 e resumo acumulado), T-20 a T-22 marcadas, regra dos merges no processo e P-27 no registro de prompts.
+- **Auditoria das dependências (R-03):** `npm audit`, 0 vulnerabilidades. No backend, os 52 pacotes NuGet (diretos e indiretos) foram conferidos no GitHub Advisory Database, a mesma base do `dotnet list package --vulnerable`, que não pôde rodar na conversa: nenhum numa versão afetada. Como controle, dois pacotes vulneráveis conhecidos foram detectados.
 
-**Auditoria das dependências (R-03), feita nesta sessão:** frontend, `npm audit` sobre o `package-lock.json`: 0 vulnerabilidades. Backend: como o SDK do .NET não estava disponível no ambiente da conversa, o `dotnet list package --vulnerable` foi substituído pela consulta direta à mesma fonte de dados, o GitHub Advisory Database, com os 52 pacotes NuGet do projeto (9 diretos e 43 indiretos, tirados do `project.assets.json`) contra os 36.886 avisos revisados da base: nenhum pacote numa versão afetada. Controle: dois pacotes antigos sabidamente vulneráveis (`System.Text.Encodings.Web` 4.5.0 e `Npgsql` 8.0.2) foram detectados pela mesma consulta. Quatro pacotes do projeto têm avisos em versões antigas, todas anteriores às usadas aqui (por exemplo, o `Npgsql` usado é o 10.0.3). No diário: tempos não medidos das Sessões 00 a 02 registrados como tais, campos em branco da Sessão 01 preenchidos, a revisão da T-08 dada como coberta pela revisão final e o resumo acumulado completo. No `tarefas.md`: T-20 a T-22 marcadas. No `processo-desenvolvimento.md`: a mensagem dos merges (`Integrar <branch>`). No registro de prompts: o pedido da entrega (P-27). No `arquitetura.md`: aprovação da MSG-43 na tabela da seção 14. Nenhum código alterado.
+**Primeira tentativa:** não; foram várias rodadas, conforme a autora revisava.
 
-**Primeira tentativa:** funcionou.
+**O que a revisão humana capturou:**
 
-**O que a revisão humana capturou:** a autora pediu que a conferência partisse das diretrizes do curso, e não só do código, o que mostrou contradições que só aparecem lendo os documentos lado a lado.
+- A conferência inicial não tinha seguido as diretrizes item por item, e faltava no README o passo a passo em máquina limpa que elas exigem.
+- O exemplo deslocado na abertura do README.
+- Pontos técnicos apresentados como limitações, quando são evoluções.
+- Mudanças além do pedido na seção 5, desfeitas, e o pedido de analisar junto antes de alterar.
 
-**Riscos mitigados:** documentação contraditória chegando à avaliação; item obrigatório das diretrizes faltando no README; dependência com vulnerabilidade conhecida.
+**Riscos mitigados:** item obrigatório faltando no README; documentos contraditórios; dependência vulnerável.
 
-**Aprendizados:** ao final, conferir os documentos entre si, e as legendas contra as imagens, e não só o código e os testes.
-
+**Aprendizados:** conferir o README contra as diretrizes inteiras antes de editar; discutir as mudanças e aplicá-las numa rodada só.
 ---
 
 ## Resumo acumulado
@@ -504,8 +508,4 @@ O tempo de relógio vem dos horários dos commits no Git, porque o tempo de cada
 | 0.14 | 15/10/2026 | Registrada a Sessão 10 (T-10), com o pedido P-26, a mudança para um só botão Salvar, a revisão de UX e a tag `v0.1.0` criada antes da revisão independente da T-08. |
 | 0.15 | 15/10/2026 | Sessão 10: registradas as alterações pedidas depois do commit (campo Situação, observação obrigatória em Risco e MSG-43). |
 | 0.16 | 15/10/2026 | Sessão 10: entrega (T-20 a T-22) e revisão independente final registradas. Sessão 11: conferência final. Tempos não medidos das Sessões 00 a 02 registrados, campos da Sessão 01 completados, revisão da T-08 dada como coberta pela revisão final e resumo acumulado completo. |
-| 0.17 | 15/10/2026 | Sessão 11: seção 14 do README reorganizada em escopo do MVP, próximos degraus e evoluções técnicas. |
-| 0.18 | 16/10/2026 | Sessão 11: abertura do README simplificada (exemplo da seção 1 e tabela de degraus da seção 2). |
-| 0.19 | 16/10/2026 | Sessão 11: links para as ferramentas na seção 5 do README. |
-| 0.20 | 16/10/2026 | Sessão 11: revisão final do README contra as diretrizes do curso e auditoria das dependências (R-03). |
-| 0.21 | 16/10/2026 | Sessão 11: título do README igual ao das telas. |
+| 0.17 | 16/10/2026 | Sessão 11: conferência final contra as diretrizes do curso (README, documentos e auditoria das dependências), registrada de forma resumida. |
