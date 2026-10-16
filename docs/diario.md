@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.17 |
+| Versão | 0.18 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -445,7 +445,7 @@ Copie o bloco abaixo para cada nova sessão.
 **Resultado** (sem alteração de código):
 
 - **README**, revisado item por item contra as diretrizes. Entraram as versões das ferramentas e o passo a passo em máquina limpa, a adaptação do checklist R-01 a R-05, as práticas previstas para depois e as referências com links. Saíram a contradição sobre a revisão independente, o exemplo deslocado da seção 1 e o bloco só de desenvolvimento da seção 7. Os pontos técnicos passaram a evoluções, e o título passou a "Timeline de Entregas (MVP)". Na seção 13, marcadores para a autora inserir as capturas da API (porta 8080) e dos testes.
-- **Demais documentos:** lacunas do diário preenchidas (tempos não medidos, Sessão 01 e resumo acumulado), T-20 a T-22 marcadas, regra dos merges no processo e P-27 no registro de prompts.
+- **Demais documentos:** lacunas do diário preenchidas (tempos não medidos, Sessão 01 e resumo acumulado), T-20 a T-22 marcadas, regra dos merges no processo e P-27 no registro de prompts. O `requisitos-mvp.md` passou a descrever só o entregue; a timeline, a tabela de status e o congelamento foram para a seção 12, com os seus números.
 - **Auditoria das dependências (R-03):** `npm audit`, 0 vulnerabilidades. No backend, os 52 pacotes NuGet (diretos e indiretos) foram conferidos no GitHub Advisory Database, a mesma base do `dotnet list package --vulnerable`, que não pôde rodar na conversa: nenhum numa versão afetada. Como controle, dois pacotes vulneráveis conhecidos foram detectados.
 
 **Primeira tentativa:** não; foram várias rodadas, conforme a autora revisava.
@@ -455,6 +455,7 @@ Copie o bloco abaixo para cada nova sessão.
 - A conferência inicial não tinha seguido as diretrizes item por item, e faltava no README o passo a passo em máquina limpa que elas exigem.
 - O exemplo deslocado na abertura do README.
 - Pontos técnicos apresentados como limitações, quando são evoluções.
+- O `requisitos-mvp.md` descrevia como escopo o que não foi entregue.
 - Mudanças além do pedido na seção 5, desfeitas, e o pedido de analisar junto antes de alterar.
 
 **Riscos mitigados:** item obrigatório faltando no README; documentos contraditórios; dependência vulnerável.
@@ -509,3 +510,4 @@ O tempo de relógio vem dos horários dos commits no Git, porque o tempo de cada
 | 0.15 | 15/10/2026 | Sessão 10: registradas as alterações pedidas depois do commit (campo Situação, observação obrigatória em Risco e MSG-43). |
 | 0.16 | 15/10/2026 | Sessão 10: entrega (T-20 a T-22) e revisão independente final registradas. Sessão 11: conferência final. Tempos não medidos das Sessões 00 a 02 registrados, campos da Sessão 01 completados, revisão da T-08 dada como coberta pela revisão final e resumo acumulado completo. |
 | 0.17 | 16/10/2026 | Sessão 11: conferência final contra as diretrizes do curso (README, documentos e auditoria das dependências), registrada de forma resumida. |
+| 0.18 | 16/10/2026 | Sessão 11: `requisitos-mvp.md` restrito ao entregue. |
