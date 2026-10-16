@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.18 |
+| Versão | 0.19 |
 | Data | 15/10/2026 |
 
 Registro de cada sessão de trabalho com o assistente de código. É a fonte da seção do README sobre o uso de IA: onde a IA acelerou o desenvolvimento, onde a revisão humana foi decisiva, quais prompts funcionaram melhor e quais riscos foram mitigados.
@@ -444,7 +444,7 @@ Copie o bloco abaixo para cada nova sessão.
 
 **O que foi pedido:** conferir o projeto inteiro, com prioridade para as diretrizes do curso, e deixar tudo coerente para a entrega, sem acrescentar trabalho além do necessário.
 
-**Resultado:** branch `docs/consistencia-entrega`. No README: a menção à revisão independente como não realizada saiu (ela foi feita, e os seus achados já estavam na seção 14); a seção 1 passou a se chamar "Descrição"; a ordem da lista de exemplo ficou igual à da tela (alfabética); a legenda da captura da tela da versão passou a descrever o que a imagem mostra; a porta da captura da API foi explicada; o passo de instalação ganhou a orientação para quem recebe o projeto em `.zip`; a pedido da autora, a seção 14 passou a separar o escopo do MVP (decisões de planejamento), os próximos degraus e as evoluções técnicas sugeridas pela revisão independente final; o exemplo da seção 1, que repetia o roteiro da seção 8 com datas diferentes das dos dados de exemplo, saiu, e a tabela de degraus da seção 2 deu lugar a um link para a seção 14. No diário: tempos não medidos das Sessões 00 a 02 registrados como tais, campos em branco da Sessão 01 preenchidos, a revisão da T-08 dada como coberta pela revisão final e o resumo acumulado completo. No `tarefas.md`: T-20 a T-22 marcadas. No `processo-desenvolvimento.md`: a mensagem dos merges (`Integrar <branch>`). No registro de prompts: o pedido da entrega (P-27). No `arquitetura.md`: aprovação da MSG-43 na tabela da seção 14. Nenhum código alterado.
+**Resultado:** branch `docs/consistencia-entrega`. No README: a menção à revisão independente como não realizada saiu (ela foi feita, e os seus achados já estavam na seção 14); a seção 1 passou a se chamar "Descrição"; a ordem da lista de exemplo ficou igual à da tela (alfabética); a legenda da captura da tela da versão passou a descrever o que a imagem mostra; a porta da captura da API foi explicada; o passo de instalação ganhou a orientação para quem recebe o projeto em `.zip`; a pedido da autora, a seção 14 passou a separar o escopo do MVP (decisões de planejamento), os próximos degraus e as evoluções técnicas sugeridas pela revisão independente final; o exemplo da seção 1, que repetia o roteiro da seção 8 com datas diferentes das dos dados de exemplo, saiu, e a tabela de degraus da seção 2 deu lugar a um link para a seção 14; na seção 5, os sites das ferramentas viraram links. No diário: tempos não medidos das Sessões 00 a 02 registrados como tais, campos em branco da Sessão 01 preenchidos, a revisão da T-08 dada como coberta pela revisão final e o resumo acumulado completo. No `tarefas.md`: T-20 a T-22 marcadas. No `processo-desenvolvimento.md`: a mensagem dos merges (`Integrar <branch>`). No registro de prompts: o pedido da entrega (P-27). No `arquitetura.md`: aprovação da MSG-43 na tabela da seção 14. Nenhum código alterado.
 
 **Primeira tentativa:** funcionou.
 
@@ -504,3 +504,4 @@ O tempo de relógio vem dos horários dos commits no Git, porque o tempo de cada
 | 0.16 | 15/10/2026 | Sessão 10: entrega (T-20 a T-22) e revisão independente final registradas. Sessão 11: conferência final. Tempos não medidos das Sessões 00 a 02 registrados, campos da Sessão 01 completados, revisão da T-08 dada como coberta pela revisão final e resumo acumulado completo. |
 | 0.17 | 15/10/2026 | Sessão 11: seção 14 do README reorganizada em escopo do MVP, próximos degraus e evoluções técnicas. |
 | 0.18 | 16/10/2026 | Sessão 11: abertura do README simplificada (exemplo da seção 1 e tabela de degraus da seção 2). |
+| 0.19 | 16/10/2026 | Sessão 11: links para as ferramentas na seção 5 do README. |
