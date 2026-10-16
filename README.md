@@ -8,9 +8,7 @@ Sistema local para manter o status report semanal de um projeto de software a pa
 
 **O problema.** O status report semanal do projeto é mantido à mão, em PowerPoint, com uma timeline de entregas e uma tabela de status das aplicações. A atualização leva pelo menos 1 hora por semana, a timeline nunca fica alinhada às datas reais, a mesma informação é repetida em mais de um slide, e cada mudança de data é redesenhada manualmente.
 
-**A solução.** Um cadastro único de aplicações e versões, com fases, situação, observação e as datas de cada etapa (andamento, homologação, prorrogação da homologação e entrega). As regras de negócio ficam na API e são conferidas a cada salvamento: datas em ordem, fases que só avançam, Produção só com a entrega já ocorrida. A partir desse cadastro, os próximos degraus calculam e desenham a timeline e a tabela de status automaticamente, e congelam o status report de cada semana.
-
-**Exemplo.** A versão v1 da aplicação Alfa está em Homologação, com entrega em 20/10/2026. A usuária registra uma prorrogação até 25/10/2026, sem mudar a entrega, e salva. O sistema recusa e não grava nada: "O fim da prorrogação não pode ser posterior à data de entrega." (critério de aceite CA-32). Se, no mesmo salvamento, ela mudar a entrega para 28/10/2026, tudo é gravado de uma vez.
+**A solução.** Um cadastro único de aplicações e versões, com fases, situação, observação e as datas de cada etapa (andamento, homologação, prorrogação da homologação e entrega). As regras de negócio ficam na API e são conferidas a cada salvamento: datas em ordem, fases em sequência (que, a partir da Homologação, só avançam), Produção só com a entrega já ocorrida. A partir desse cadastro, os próximos degraus calculam e desenham a timeline e a tabela de status automaticamente, e congelam o status report de cada semana.
 
 Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negocio/requisitos-mvp.md).
 
@@ -29,14 +27,7 @@ Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negoci
 - **Dados de exemplo fictícios** (aplicações Alfa, Beta, Gama e Delta), com datas calculadas a partir do dia em que o sistema é executado.
 - **Um comando para cada coisa:** instalar, executar, testar e verificar o padrão do código, com testes e verificação rodando em container. Scripts em `.ps1` para Windows e em `.sh` para Linux e macOS, conferidos no Windows (PowerShell e Git Bash).
 
-**Ainda não entregue** (especificado nos requisitos, com os critérios de aceite escritos)
-
-| Degrau | O que acrescenta |
-|---|---|
-| 3. API da timeline | Cálculo automático dos trechos, cores e tons de cada versão no período escolhido |
-| 4. Tela da timeline | Desenho da timeline, com eixo de meses, marco de entrega e linha da data atual |
-| 5 e 6. Tabela de status das aplicações | Tabela com fase, situação, entrega e observação de cada versão, e os contadores |
-| 7. Congelamento | Status report congelado de cada semana e o Histórico de Status Reports |
+Os próximos degraus (timeline, tabela de status das aplicações e congelamento semanal) já estão especificados, com os critérios de aceite escritos, e estão descritos na [seção 14](#14-limitações-e-próximos-passos).
 
 ## 3. Tabela de conteúdos
 
