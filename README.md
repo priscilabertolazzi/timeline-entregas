@@ -8,7 +8,7 @@ Sistema local para manter o status report semanal de um projeto de software a pa
 
 **O problema.** O status report semanal do projeto é mantido à mão, em PowerPoint, com uma timeline de entregas e uma tabela de status das aplicações. A atualização leva pelo menos 1 hora por semana, a timeline nunca fica alinhada às datas reais, a mesma informação é repetida em mais de um slide, e cada mudança de data é redesenhada manualmente.
 
-**A solução.** Um cadastro único de aplicações e versões, com fases, situação, observação e as datas de cada etapa (andamento, homologação, prorrogação da homologação e entrega). As regras de negócio ficam na API e são conferidas a cada salvamento: datas em ordem, fases em sequência (que, a partir da Homologação, só avançam), Produção só com a entrega já ocorrida. A partir desse cadastro, os próximos degraus calculam e desenham a timeline e a tabela de status automaticamente, e congelam o status report de cada semana.
+**A solução.** Um cadastro único de aplicações e versões, que passa a ser a fonte das informações do status report, no lugar dos dados repetidos nos slides. Cada versão guarda fase, situação, observação e as datas de cada etapa (andamento, homologação, prorrogação da homologação e entrega), e a API confere as regras de negócio a cada salvamento: datas em ordem, fases em sequência (que, a partir da Homologação, só avançam) e Produção só com a entrega já ocorrida. Com os dados certos num só lugar, os próximos degraus desenham a timeline e a tabela de status a partir deles, e congelam o status report de cada semana.
 
 Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negocio/requisitos-mvp.md).
 
@@ -24,7 +24,7 @@ Os requisitos completos estão em [`docs/negocio/requisitos-mvp.md`](docs/negoci
 - **Regras de fase e datas:** as fases seguem a ordem Backlog, Análise, Desenvolvimento, Testes, Homologação e Produção, podendo ir e voltar até Testes, e a partir da Homologação só avançam; sair do Backlog exige as datas; Produção exige a data de entrega igual ou anterior à data atual; as datas são informadas em conjunto e em ordem; a prorrogação só existe na Homologação (e pode ser informada no mesmo salvamento que passa a versão para Homologação); em Produção o campo Fase fica desabilitado, e em Homologação só oferece Homologação e Produção. Ao salvar, a tela volta para a lista de aplicações.
 - **Mensagens claras:** todo erro chega à tela com o texto exato de um catálogo de mensagens aprovado.
 - **API documentada** numa página no navegador, onde cada operação pode ser testada sem instalar nada.
-- **Dados de exemplo fictícios** (aplicações Alfa, Beta, Gama e Delta), com datas calculadas a partir do dia em que o sistema é executado.
+- **Dados de exemplo fictícios** (aplicações Alfa, Beta, Delta e Gama), com datas calculadas a partir do dia em que o sistema é executado.
 - **Um comando para cada coisa:** instalar, executar, testar e verificar o padrão do código, com testes e verificação rodando em container. Scripts em `.ps1` para Windows e em `.sh` para Linux e macOS, conferidos no Windows (PowerShell e Git Bash).
 
 Os próximos degraus (timeline, tabela de status das aplicações e congelamento semanal) já estão especificados, com os critérios de aceite escritos, e estão descritos na [seção 14](#14-limitações-e-próximos-passos).
@@ -67,7 +67,7 @@ Todas as ferramentas são gratuitas. As versões exatas ficam nos arquivos de de
 
 | Ferramenta | Modelo | Onde foi usado |
 |---|---|---|
-| Conversa no claude.ai | Claude Opus 5.5 | Planejamento: revisão de requisitos e de arquitetura, processo, tarefas e roteiro de prompts |
+| Conversa no claude.ai | Claude Opus 5.5 | Planejamento: revisão de requisitos e de arquitetura, processo, tarefas e roteiro de prompts; conferência final da entrega |
 | [Claude Code](https://docs.claude.com/en/docs/claude-code/overview), pela área Code do aplicativo Claude | Claude Sonnet 5.5 | Planos e implementação das tarefas T-02, T-03 e T-05 a T-10, e a entrega (T-20 a T-22) |
 | Claude Code | Claude Opus 5.5 | Implementação da T-04, as regras de negócio da versão |
 
@@ -77,16 +77,29 @@ A aplicação em si não usa IA: o problema é resolvido por regras previsíveis
 
 Para **usar e avaliar** o projeto, basta instalar:
 
-| Ferramenta | Para quê | Onde obter |
-|---|---|---|
-| Git | Baixar o projeto | [git-scm.com/downloads](https://git-scm.com/downloads) |
-| Docker (com Docker Compose) | Rodar o banco, a API e as telas, e executar os testes e o lint em container | [docs.docker.com/get-started/get-docker](https://docs.docker.com/get-started/get-docker/) |
+| Ferramenta | Versão | Para quê | Onde obter |
+|---|---|---|---|
+| Git | Qualquer versão recente | Baixar o projeto | [git-scm.com/downloads](https://git-scm.com/downloads) |
+| Docker | Com o Docker Compose v2 (o comando `docker compose`, com espaço), que já vem no Docker Desktop | Rodar o banco, a API e as telas, e executar os testes e o lint em container | [docs.docker.com/get-started/get-docker](https://docs.docker.com/get-started/get-docker/) |
 
-O Docker precisa estar **aberto e funcionando** antes dos comandos da [seção 7](#7-instalação-e-execução-local).
+**Numa máquina sem nada instalado**
+
+1. Instale o Git pelo link da tabela, mantendo as opções padrão do instalador (no Windows, elas incluem o Git Bash).
+2. Instale o Docker. No Windows, aceite o WSL 2 quando o instalador pedir e reinicie o computador ao final. No Linux, siga também o passo do guia que permite usar o Docker sem `sudo`.
+3. Abra o Docker Desktop e espere ele indicar que está em execução (no Linux, o Docker Engine já fica em execução depois de instalado).
+4. Abra um terminal (PowerShell, no Windows) e confira a instalação. Cada comando deve responder com um número de versão:
+
+   ```bash
+   git --version
+   docker --version
+   docker compose version
+   ```
+
+5. Siga para a [seção 7](#7-instalação-e-execução-local), com o Docker aberto.
 
 > **Sobre a licença do Docker Desktop:** ele é gratuito para uso pessoal e em empresas pequenas, mas exige assinatura em empresas de maior porte. Há alternativas gratuitas, como o Docker Engine no WSL 2.
 
-Só para **desenvolver** (alterar o código), instale também o [SDK do .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) e o [Node.js em versão LTS](https://nodejs.org/pt/download). Os scripts de teste e de lint **não** exigem o SDK nem o Node.js instalados.
+Só para **desenvolver** (alterar o código), instale também o [SDK do .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0), versão 10.0.302 ou mais recente da linha 10.0 (fixada no `global.json`), e o [Node.js 24](https://nodejs.org/pt/download), versão LTS, a mesma usada nos containers. Os scripts de teste e de lint **não** exigem o SDK nem o Node.js instalados.
 
 ## 6. Dependências e ambiente
 
@@ -140,18 +153,11 @@ Em Linux e macOS, sem o `make`, use `sh scripts/install.sh`, `sh scripts/run.sh`
 - **Executar** sobe o banco de dados (PostgreSQL), a API e as telas, e informa os endereços:
   - **Telas:** `http://localhost:4200` (porta `WEB_PORT` do `.env`).
   - **Página de documentação da API:** `http://localhost:8080` (porta `API_PORT`).
-  - Com o banco vazio, o sistema já vem com as aplicações de exemplo Alfa, Beta, Gama e Delta.
+  - Com o banco vazio, o sistema já vem com as aplicações de exemplo Alfa, Beta, Delta e Gama.
   - Para parar: `docker compose down` (os dados ficam guardados).
 - Se o **Executar** avisar que a porta não está disponível, outro programa (por exemplo, um PostgreSQL já instalado) usa a porta 5432. Troque o valor de `DB_PORT` (ou de `API_PORT` e `WEB_PORT`, se for uma delas) no arquivo `.env` (por exemplo, `DB_PORT` para `5433`) e rode de novo.
 - O arquivo `.env` guarda a configuração local, inclusive a senha do banco, e **nunca é versionado**. O `.env.example` traz só valores fictícios.
-- **A API e o banco:** ao iniciar, a API cria sozinha as tabelas `aplicacao` e `versao` no banco (schema `timeline`) e atualiza o que faltar. Ela lê a conexão das mesmas variáveis do `.env` (`POSTGRES_*` e `DB_PORT`). Para rodá-la no seu computador, em vez de no Docker, com o banco já no ar (antes, pare a API do Docker com `docker compose stop api`), use o bloco abaixo.
-
-  ```powershell
-  Get-Content .env | Where-Object { $_ -match '^\s*[^#\s].*=' } | ForEach-Object { $n, $v = $_ -split '=', 2; Set-Item "env:$n" $v }
-  dotnet run --project backend\src\Host
-  ```
-
-  A primeira linha copia o `.env` para a sessão do PowerShell; a segunda inicia a API (Ctrl+C para parar). Quando aparecer "Now listening on: http://localhost:8080", abra esse endereço no navegador. A API só aceita chamadas do próprio computador. Para conferir o banco: `docker compose exec db psql -U timeline -d timeline_entregas -c "\d+ timeline.versao"`.
+- **A API e o banco:** ao iniciar, a API cria sozinha as tabelas `aplicacao` e `versao` no banco (schema `timeline`) e atualiza o que faltar. Não há nenhum passo manual de banco.
 
 ## 8. Uso e exemplos
 
@@ -207,7 +213,7 @@ curl -i -X PUT http://localhost:8080/api/versoes/5/datas \
 curl http://localhost:8080/api/versoes/5
 ```
 
-**Todas as operações**, na ordem de uso e com o resultado esperado de cada uma, estão em [`http/exemplos.http`](http/exemplos.http), que pode ser executado por ferramentas como a extensão REST Client do VS Code. O arquivo foi escrito para um **banco vazio**: para segui-lo do começo, ponha `SEED_DADOS_EXEMPLO=false` no `.env` e recrie o banco com `docker compose down -v` (isso **apaga** os dados) antes de executar de novo.
+**Todas as operações**, na ordem de uso e com o resultado esperado de cada uma, estão em [`http/exemplos.http`](http/exemplos.http), que pode ser executado no VS Code, com a extensão REST Client, ou no Visual Studio 2022, que abre arquivos `.http` sem extensão. O arquivo foi escrito para um **banco vazio**: para segui-lo do começo, ponha `SEED_DADOS_EXEMPLO=false` no `.env` e recrie o banco com `docker compose down -v` (isso **apaga** os dados) antes de executar de novo.
 
 | Método | Rota | O que faz |
 |---|---|---|
@@ -322,7 +328,7 @@ O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CL
 
 | Tarefa | Estimativa sem IA | Com IA |
 |---|---|---|
-| Planejamento (revisão de nove documentos, catálogo de 41 mensagens, roteiro de 22 tarefas) | 16 h | 1 sessão |
+| Planejamento (revisão de nove documentos, catálogo de 41 mensagens, roteiro de 22 tarefas) | 16 h | 1 sessão de conversa (tempo não medido) |
 | T-04 a T-10 (regras, banco, APIs, Docker, projeto Angular e telas de cadastro) | 28 h | cerca de 5 h de relógio |
 | T-08 — Docker da API e dados de exemplo | 3 h | 30 min |
 | T-10 — Lista de aplicações e tela da versão | 8 h | cerca de 2 h |
@@ -338,9 +344,21 @@ O ganho apareceu mais onde o trabalho é volumoso e bem especificado:
 
 ### Onde a revisão humana foi decisiva
 
+A revisão crítica do código gerado seguiu o checklist do curso, R-01 a R-05, adaptado a uma autora que não lê código: em cada item, o assistente faz e relata a parte técnica, e a autora confere o comportamento contra os critérios de aceite ([`processo-desenvolvimento.md`](docs/tecnico/processo-desenvolvimento.md), seção 7.2).
+
+| Item | O assistente faz e relata | A autora confere |
+|---|---|---|
+| R-01 Compreensão | O que mudou, em quais arquivos e por quê, em linguagem simples e com um exemplo dos dados fictícios | A tarefa só é aceita quando ela consegue explicar o resultado com as próprias palavras |
+| R-02 Regras e critérios | A lista de testes, com o critério de aceite que cada um cobre | O comportamento de cada critério na "Sua verificação" da tarefa e cenários extras pedidos por ela |
+| R-03 Segurança | Nenhum SQL montado por texto, nenhum HTML inserido a partir de dados, nenhuma senha no código. Na entrega, a auditoria das dependências (`npm audit` e a base de avisos de segurança do GitHub) não apontou nenhuma vulnerabilidade | Nenhum dado, nome ou documento real nos arquivos, e o `.env` fora do Git |
+| R-04 Padrões | Camadas, responsabilidade única e nomes do glossário, conferidos contra os `CLAUDE.md`, e o lint | Termos do glossário e mensagens iguais às do catálogo, palavra por palavra |
+| R-05 Execução | Build, testes e lint, com a lista dos testes criados e alterados | Os testes passando, pelo script ou pelo relatório quando a verificação só repete comandos já rodados, e nenhum teste alterado sem a aprovação dela |
+
+O que a autora não consegue conferir sozinha ficou com a revisão independente final do código, feita por um agente separado. Os casos abaixo mostram onde a revisão humana mudou o resultado.
+
 - **Um só botão Salvar.** Na T-10, o plano propunha três botões na tela da versão, porque a API gravava fase, datas e dados em operações separadas. A autora recusou: tudo está na mesma tela. Isso levou à operação única na API, que grava tudo ou nada (ADR-39) e protege o CA-32 ("nenhuma alteração é salva").
 - **Usabilidade.** A autora pediu uma revisão de UX antes do commit, que trouxe etiquetas de fase e situação, Risco em destaque, "Excluir" em cor de alerta e afastado, e a barra fixa com o Salvar e as mensagens sempre à vista.
-- **Ordem da entrega.** O assistente recomendou fazer a API da timeline logo depois das APIs de cadastro. A autora manteve a sua ordem, com a entrega como primeiro objetivo; é essa ordem que permite entregar agora um sistema completo de ponta a ponta, ainda que parcial.
+- **Ordem da entrega.** O assistente recomendou fazer a API da timeline logo depois das APIs de cadastro. A autora manteve a sua ordem, com a entrega como primeiro objetivo; é essa ordem que permite entregar agora um sistema completo de ponta a ponta.
 - **Decisões de negócio.** Avanço direto de fase para a carga inicial, nomes sem diferença de maiúsculas, correção da prorrogação em Produção, o catálogo de mensagens e os limites de tamanho foram decididos pela autora.
 - **Contradições nos próprios documentos.** A autora notou que a regra de commit pedia o imperativo enquanto os exemplos usavam o infinitivo, e que o catálogo de mensagens não tinha passado pela revisão dela antes da primeira tarefa de regras.
 - **Provar, e não só afirmar.** A autora pediu a prova de que testes e lint não dependem do SDK instalado; o assistente demonstrou rodando-os sem o `dotnet` no caminho.
@@ -366,7 +384,7 @@ Os pedidos estão na íntegra em [`prompts/prompts-claude-code.md`](prompts/prom
 
 | Risco do uso de IA | Como foi tratado | O que aconteceu de fato |
 |---|---|---|
-| Dependências inventadas ou fora da lista | Lista de dependências aprovada de uma vez; pacotes só pelas ferramentas oficiais, sem versão escrita de memória | Pacotes que os geradores trazem sozinhos foram retirados (`prettier` no frontend, `coverlet` nos testes); o pacote do OpenAPI passou por aprovação antes de entrar |
+| Dependências inventadas ou fora da lista | Lista de dependências aprovada de uma vez; pacotes só pelas ferramentas oficiais, sem versão escrita de memória | Pacotes que os geradores trazem sozinhos foram retirados (`prettier` no frontend, `coverlet` nos testes); o pacote do OpenAPI passou por aprovação antes de entrar. Na entrega, a auditoria das dependências não apontou nenhuma vulnerabilidade |
 | Teste ajustado para o código passar | Regra: nenhum teste existente muda sem aprovação; lista dos testes alterados em cada tarefa | Três testes antigos foram alterados, sempre com a aprovação da autora, porque regras novas mudaram o resultado esperado: dois casos de Risco passaram a informar uma observação, e o teste da lista de aplicações passou a incluir a data de entrega. Uma mudança no preparo de outro teste também foi informada e aprovada |
 | Código plausível, mas errado | Build, testes e lint obrigatórios; testes derivados dos critérios; testes vistos falhando antes de passar | Testes que falharam pelo motivo errado foram refeitos até reprovar pelo motivo certo |
 | Mensagens inventadas | Catálogo de mensagens com texto exato, conferido pelos testes | Mensagem nova só depois de entrar no catálogo, com aprovação (MSG-42) |
@@ -380,19 +398,23 @@ Capturas com os dados de exemplo fictícios.
 
 **Lista de aplicações**
 
-![Lista de aplicações com Alfa, Beta, Gama e Delta, as etiquetas de fase e situação e a data de entrega](docs/imagens/lista-aplicacoes.jpg)
+![Lista de aplicações com Alfa, Beta, Delta e Gama, as etiquetas de fase e situação e a data de entrega](docs/imagens/lista-aplicacoes.jpg)
 
 **Tela da versão**, com o erro do CA-25 (datas informadas pela metade: falta a data de entrega): nada é gravado, e a mensagem aparece na barra do Salvar
 
 ![Tela da versão com a mensagem do CA-25](docs/imagens/tela-versao.jpg)
 
-**Página de documentação da API** (na captura, a API rodava numa porta alternativa, 8180; o padrão é 8080)
+**Página de documentação da API**
 
-![Página de documentação da API (Scalar)](docs/imagens/documentacao-api.jpg)
+> **INSERIR IMAGEM AQUI — PÁGINA DE DOCUMENTAÇÃO DA API NA PORTA 8080.** Com o sistema no ar (script `run`), abrir `http://localhost:8080` no navegador e capturar a página inicial, com a lista de operações na coluna da esquerda e o servidor `http://localhost:8080` visível. Salvar como `docs/imagens/documentacao-api.jpg` e trocar este aviso por: `![Página de documentação da API (Scalar)](docs/imagens/documentacao-api.jpg)`
+
+**Testes em execução**: os 239 testes passando, 189 do backend e 50 do frontend
+
+> **INSERIR IMAGEM AQUI — RESULTADO DO SCRIPT DE TESTES.** No PowerShell, na pasta do projeto, rodar `powershell -ExecutionPolicy Bypass -File scripts\test.ps1` e capturar o terminal no fim da execução, com os totais de testes aprovados do backend (189) e do frontend (50) e nenhuma falha. Salvar como `docs/imagens/testes.jpg` e trocar este aviso por: `![Resultado do script de testes, com os 239 testes passando](docs/imagens/testes.jpg)`
 
 ## 14. Limitações e próximos passos
 
-**Escopo desta versão** (decisões de planejamento do MVP, registradas no [`requisitos-mvp.md`](docs/negocio/requisitos-mvp.md) e no [`tarefas.md`](docs/tarefas.md))
+**Limitações do MVP** (decisões de escopo, registradas no [`requisitos-mvp.md`](docs/negocio/requisitos-mvp.md) e no [`tarefas.md`](docs/tarefas.md))
 
 - **Entrega em degraus:** esta versão entrega os dois primeiros degraus dos sete planejados, completos de ponta a ponta. A timeline, a tabela de status das aplicações e o congelamento do status report semanal são os próximos degraus. Os documentos em `docs/` já descrevem o MVP completo, inclusive as rotas desses degraus (`/api/timeline`, `/api/tabela-status` e `/api/historico`).
 - **Uso local e individual:** o sistema roda no computador de quem o usa, para um único usuário, sem hospedagem e sem autenticação (RNF-01).
@@ -419,10 +441,12 @@ As regras, os requisitos e os critérios de aceite desses degraus já estão esc
 - **Testes de integração automáticos com o PostgreSQL real** (incremento I-01). As restrições do banco já foram conferidas no banco real durante o desenvolvimento, em 45 cenários.
 - **Conferência dos scripts `.sh` em Linux e macOS**, além do Windows (PowerShell e Git Bash), onde todos foram conferidos.
 
+**Práticas do curso previstas para depois:** organizar a documentação pelo modelo Diátaxis (tutorial de execução, referência da API e explicações) e, se a estrutura crescer, refatorações em vários arquivos com um modelo de maior capacidade.
+
 **Evoluções depois do MVP** (seção 12 do `requisitos-mvp.md`): ordenação manual, filtros de visualização, detalhes ao passar o mouse, sugestão automática de Risco, histórico de alterações, arquivamento, níveis de acesso, fases e cores configuráveis, calendário de dias úteis, backup e a incorporação como aplicação interna do projeto acompanhado.
 
 ## 15. Créditos e licença
 
 - **Autoria:** Priscila Bertolazzi, com o código escrito pelo assistente Claude Code, conforme a [seção 12](#12-como-a-ia-foi-usada-no-desenvolvimento).
-- **Referências:** [Conventional Commits](https://www.conventionalcommits.org/), Problem Details para APIs HTTP (RFC 9457) e a documentação oficial do .NET, do Angular e do Claude Code.
+- **Referências:** [Conventional Commits](https://www.conventionalcommits.org/), [Problem Details para APIs HTTP (RFC 9457)](https://www.rfc-editor.org/rfc/rfc9457), [OWASP Top 10](https://owasp.org/www-project-top-ten/) (riscos de segurança de aplicações web, base da seção 10 do [`arquitetura.md`](docs/tecnico/arquitetura.md)) e a documentação oficial do [.NET](https://learn.microsoft.com/dotnet/), do [Angular](https://angular.dev/) e do [Claude Code](https://docs.claude.com/en/docs/claude-code/overview).
 - **Licença:** [MIT](LICENSE). O código pode ser usado, copiado e modificado, desde que o aviso de licença seja mantido.
