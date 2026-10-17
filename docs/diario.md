@@ -57,7 +57,7 @@ Copie o bloco abaixo para cada nova sessão.
 | Tarefa | Planejamento, antes da T-01: adaptação do processo, revisão de arquitetura, estratégia de entrega em etapas, roteiro de prompts e preparação do repositório |
 | Regras e critérios | RN-01, RN-02, RN-08, RN-24, RN-25, RN-27, RN-30; CA-02, CA-28, CA-29, CA-33, CA-34, CA-40, CA-41, CA-42 |
 | Modelo usado | Claude Opus 5.5, numa conversa no claude.ai (ainda não no Claude Code) |
-| Tempo real | Não medido: a anotação do horário de início e de fim passou a ser feita a partir da Sessão 04. |
+| Tempo real | Cerca de 5 h, informado pela autora. |
 | Estimativa sem IA | 16 h (proposta do assistente: o mesmo trabalho feito por um arquiteto experiente sem IA, somando a revisão cruzada de nove documentos, a reescrita do processo e das tarefas, o catálogo de 41 mensagens e o roteiro de prompts das 22 tarefas) |
 
 **O que foi pedido:** continuar o planejamento a partir do resumo da sessão anterior; adaptar o processo à autora não técnica; mudar a estratégia de entrega; fazer uma revisão de arquitetura antes do código; preparar o repositório e os prompts de cada tarefa. Pedidos completos na Parte 2 do `prompts/prompts-claude-code.md`, itens P-01 a P-17.
@@ -469,13 +469,13 @@ Atualizado ao final de cada fase do `tarefas.md`.
 
 | Etapa | Tempo real | Estimativa sem IA | Sessões | Acertos na primeira tentativa |
 |---|---|---|---|---|
-| Planejamento | Não medido | 16 h | 1 (Sessão 00) | 15 de 17 pedidos |
+| Planejamento | Cerca de 5 h, informado pela autora | 16 h | 1 (Sessão 00) | 15 de 17 pedidos |
 | 0. Preparação | Não medido; verificação da T-03: cerca de 10 min | 6 h (T-01: 2 h; T-02: 1 h; T-03: 3 h) | 3 (Sessões 01 a 03) | 1 de 3 (T-02) |
 | 1. APIs de cadastro | T-08: 30 min; as demais não foram medidas por inteiro | 18 h (T-04: 4 h; T-05: 3 h; T-06: 4 h; T-07: 4 h; T-08: 3 h) | 5 (Sessões 04 a 08) | 2 de 5 (T-07 e T-08); T-05 e T-06 com o desenho certo e pequenos ajustes |
 | 2. Telas de cadastro | T-09 não medido por inteiro (verificação: 10 min); T-10: 2 h | 10 h (T-09: 2 h; T-10: 8 h) | 2 (Sessões 09 e 10) | 0 de 2 |
 | Ajustes pedidos depois da T-10 e entrega (T-20 a T-22) | Cerca de 3,5 h de relógio, entre o commit da T-10 (13:32) e o último commit da release (17:01) | Não estimada | Registrados na Sessão 10; conferência final na Sessão 11 | — |
 | 3 a 7 (timeline, tabela de status e congelamento) | Não iniciadas: próximos passos, por decisão da autora (README, seção 14) | — | — | — |
-| **Total** | **Cerca de 8,5 h de relógio** entre o commit da T-03 (08:32) e o último commit da release (17:01), pelo histórico do Git, com pausas e verificações da autora; mais o planejamento e a preparação, não medidos | **50 h** (planejamento e etapas 0 a 2) | 12 (Sessões 00 a 11) | — |
+| **Total** | **Cerca de 13,5 h:** cerca de 5 h de planejamento, informadas pela autora, e cerca de 8,5 h de relógio entre o commit da T-03 (08:32) e o último commit da release (17:01), pelo histórico do Git, com pausas e verificações da autora; a preparação não foi medida | **50 h** (planejamento e etapas 0 a 2) | 12 (Sessões 00 a 11) | — |
 
 O tempo de relógio vem dos horários dos commits no Git, porque o tempo de cada sessão nem sempre foi anotado. As estimativas sem IA foram propostas pelo assistente e aceitas pela autora.
 

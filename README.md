@@ -125,9 +125,11 @@ Cada parte do sistema declara as suas dependências num arquivo próprio, com as
 | `DB_PORT`, `API_PORT`, `WEB_PORT` | Portas do banco (5432), da API (8080) e das telas (4200) no seu computador |
 | `TZ` | Fuso horário da API (padrão `America/Sao_Paulo`), para a data atual não virar o dia seguinte depois das 21h |
 | `SEED_DADOS_EXEMPLO` | `true` carrega as aplicações de exemplo quando o banco está vazio; `false` não carrega |
-| `DB_HOST` | Opcional: endereço do banco quando a API roda fora do Docker |
+| `DB_HOST` | Já vem desativada no `.env.example` e não precisa ser alterada: dentro do Docker, a API encontra o banco sozinha. Serve só para quem desenvolve e roda a API fora do Docker (padrão `localhost`) |
 
 ## 7. Instalação e execução local
+
+Você não precisa instalar o PostgreSQL nem criar o banco: o **Executar** sobe o banco num container do Docker, e a API cria as tabelas e carrega os dados de exemplo sozinha.
 
 **1. Baixar o projeto** (em qualquer sistema; no Windows, escolha uma pasta fora do OneDrive e sem espaços no caminho):
 
@@ -328,12 +330,12 @@ O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CL
 
 | Tarefa | Estimativa sem IA | Com IA |
 |---|---|---|
-| Planejamento (revisão de nove documentos, catálogo de 41 mensagens, roteiro de 22 tarefas) | 16 h | 1 sessão de conversa (tempo não medido) |
+| Planejamento (revisão de nove documentos, catálogo de 41 mensagens, roteiro de 22 tarefas) | 16 h | cerca de 5 h |
 | T-04 a T-10 (regras, banco, APIs, Docker, projeto Angular e telas de cadastro) | 28 h | cerca de 5 h de relógio |
 | T-08 — Docker da API e dados de exemplo | 3 h | 30 min |
 | T-10 — Lista de aplicações e tela da versão | 8 h | cerca de 2 h |
 
-As estimativas sem IA foram propostas pelo assistente (quanto um desenvolvedor experiente levaria) e aceitas pela autora; são estimativas, não medições. O tempo das T-04 a T-10 é o intervalo entre o commit da T-03 e o da T-10 no histórico do Git, com pausas e verificações da autora incluídas; o tempo real de cada sessão nem sempre foi anotado, e o diário registra isso com transparência.
+As estimativas sem IA foram propostas pelo assistente (quanto um desenvolvedor experiente levaria) e aceitas pela autora; são estimativas, não medições. O tempo do planejamento foi informado pela autora. O tempo das T-04 a T-10 é o intervalo entre o commit da T-03 e o da T-10 no histórico do Git, com pausas e verificações da autora incluídas; o tempo real de cada sessão nem sempre foi anotado, e o diário registra isso com transparência.
 
 O ganho apareceu mais onde o trabalho é volumoso e bem especificado:
 
@@ -375,7 +377,6 @@ Os pedidos estão na íntegra em [`prompts/prompts-claude-code.md`](prompts/prom
   > a arquitetura tem gaps, inconsistências, incoerencias, contradições?
   >
   > o processo de desenvolvimento e as tarefas estão aptas para começar o desenvolvimento?
-- **"O que você vai fazer?" e "o que eu faço?" (P-05 e P-07).** Transformaram recomendações abstratas em propostas que a autora conseguia conferir, e separaram o trabalho do assistente do que ela verifica.
 - **Conferência final aberta (P-08):** "falta mais alguma coisa para eu mudar para o mode de codar com o cloude?" Revelou que a primeira sessão do Claude Code rodaria sem as regras do projeto.
 - **CO-STAR em todas as tarefas.** Cada prompt do roteiro tem Contexto, Objetivo, Estilo, Tom, Audiência e Resposta, apontando para os documentos em vez de repeti-los, e pede o plano antes de qualquer alteração. Na T-10 (P-26), pedir que as telas fossem descritas em palavras antes do plano fez o problema dos três botões aparecer antes de qualquer código.
 - **Contexto num documento de passagem (P-01).** Começar cada conversa apontando para um resumo do projeto e do jeito de trabalhar evitou repetir explicações entre sessões.
