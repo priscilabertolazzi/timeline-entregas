@@ -406,11 +406,15 @@ Capturas com os dados de exemplo fictícios.
 
 **Página de documentação da API**
 
-> **INSERIR IMAGEM AQUI — PÁGINA DE DOCUMENTAÇÃO DA API NA PORTA 8080.** Com o sistema no ar (script `run`), abrir `http://localhost:8080` no navegador e capturar a página inicial, com a lista de operações na coluna da esquerda e o servidor `http://localhost:8080` visível. Salvar como `docs/imagens/documentacao-api.jpg` e trocar este aviso por: `![Página de documentação da API (Scalar)](docs/imagens/documentacao-api.jpg)`
+![Página de documentação da API (Scalar)](docs/imagens/documentacao-api.jpg)
 
 **Testes em execução**: os 239 testes passando, 189 do backend e 50 do frontend
 
-> **INSERIR IMAGEM AQUI — RESULTADO DO SCRIPT DE TESTES.** No PowerShell, na pasta do projeto, rodar `powershell -ExecutionPolicy Bypass -File scripts\test.ps1` e capturar o terminal no fim da execução, com os totais de testes aprovados do backend (189) e do frontend (50) e nenhuma falha. Salvar como `docs/imagens/testes.jpg` e trocar este aviso por: `![Resultado do script de testes, com os 239 testes passando](docs/imagens/testes.jpg)`
+![Resultado do script de testes, parte 1: backend, 65 testes do Domain passando](docs/imagens/testes.jpg)
+
+![Resultado do script de testes, parte 2: backend, 117 testes da Application e 7 da Api passando](docs/imagens/testes2.jpg)
+
+![Resultado do script de testes, parte 3: frontend, 50 testes passando](docs/imagens/testes3.jpg)
 
 ## 14. Limitações e próximos passos
 
