@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.22 |
+| Versão | 0.23 |
 | Data | 15/10/2026 |
 | Documentos base | `docs/negocio/requisitos-mvp.md` (versão 0.6) e `docs/tecnico/arquitetura.md` (versão 0.19) |
 
@@ -15,7 +15,7 @@ Roteiro de desenvolvimento em tarefas pequenas. Cada tarefa segue o ciclo e a de
 
 ## Como usar
 
-- Ao concluir a tarefa, marque `[x]` e registre a sessão no `docs/diario.md`, com o tempo real, a estimativa sem IA, o modelo usado, o que funcionou e o que a revisão capturou.
+- Ao concluir a tarefa, marque `[x]` e registre a sessão com a autora, com o tempo real, a estimativa sem IA, o modelo usado, o que funcionou e o que a revisão capturou.
 - Use os prompts do roteiro (Parte 1 do `prompts/prompts-claude-code.md`) e registre na Parte 2 os pedidos mais relevantes feitos ao Claude Code, com o resultado de cada um.
 - As estimativas consideram desenvolvimento assistido por IA.
 - Tarefas marcadas como **TDD** começam pelos testes derivados dos critérios de aceite.
@@ -40,7 +40,7 @@ O sistema é construído em degraus (`arquitetura.md`, ADR-22). Cada degrau term
 
 **Regra do corte**
 
-- O limite é de cerca de 30 horas. A entrega leva 4 horas e **nunca é cortada**. Por isso, os degraus param quando o **tempo real** acumulado, somado no diário, chegar a **26 horas**.
+- O limite é de cerca de 30 horas. A entrega leva 4 horas e **nunca é cortada**. Por isso, os degraus param quando o **tempo real** acumulado, somado no registro das sessões, chegar a **26 horas**.
 - Antes de começar cada degrau, compare o tempo real acumulado mais a estimativa do degrau com as 26 horas. Se passar, a autora decide entre seguir ou ir direto para a entrega. Pelas estimativas, a decisão aparece no degrau 5 (API da tabela de status das aplicações), que termina em 26,5 horas.
 - Os degraus não concluídos entram no README, em "Limitações e próximos passos". Os requisitos deles já estão escritos.
 
@@ -92,8 +92,7 @@ timeline-entregas\
     ├── negocio\requisitos-negocio.md
     ├── tecnico\arquitetura.md
     ├── tecnico\processo-desenvolvimento.md
-    ├── tarefas.md
-    └── diario.md
+    └── tarefas.md
 ```
 
 O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nomes, ele já conhece as regras do projeto desde a primeira sessão. Documentos de trabalho que não fazem parte do repositório ficam fora desta pasta.
@@ -276,7 +275,7 @@ O Claude Code lê o `CLAUDE.md` da pasta escolhida para trabalhar; com esses nom
 
 ### [x] T-21 — README completo e registro do uso de IA (1,5 h)
 - Todas as seções do README, incluindo dependências, arquitetura, limitações e próximos passos (os degraus não concluídos).
-- Seção sobre o uso de IA, com as quatro subseções (onde a IA acelerou, onde a revisão humana foi decisiva, quais prompts funcionaram melhor, quais riscos foram mitigados), a partir do diário.
+- Seção sobre o uso de IA, com as quatro subseções (onde a IA acelerou, onde a revisão humana foi decisiva, quais prompts funcionaram melhor, quais riscos foram mitigados), a partir do registro das sessões e do registro de prompts.
 - Revisão do `prompts/prompts-claude-code.md`.
 - Demonstração visual com dados fictícios, em `docs/imagens/`: GIF da timeline na tela, se a T-14 foi concluída, ou capturas da API e dos testes em execução.
 
@@ -326,3 +325,4 @@ Incrementos não concluídos são listados em "Limitações e próximos passos" 
 | 0.20 | 15/10/2026 | T-10 marcada como concluída: a tela da versão passou a ter um só botão Salvar, com a operação única na API (ADR-39); inclui as pendências da T-09. Tag `v0.1.0` criada por decisão da autora antes da revisão independente da T-08, que segue pendente. |
 | 0.21 | 15/10/2026 | Preparação da entrega: decisão da autora de encerrar o desenvolvimento depois da etapa 2 e seguir para a entrega; referência à `arquitetura.md` atualizada para a versão 0.19. |
 | 0.22 | 15/10/2026 | T-20 a T-22 marcadas como concluídas; a revisão independente da T-08 foi feita junto com a revisão final da T-22. |
+| 0.23 | 16/10/2026 | Sessões registradas com a autora, fora da entrega. |

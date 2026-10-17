@@ -96,7 +96,6 @@ As três partes sobem juntas com um único comando, pelo Docker Compose (seção
 │   ├── tecnico/arquitetura.md
 │   ├── tecnico/processo-desenvolvimento.md
 │   ├── tarefas.md
-│   ├── diario.md
 │   └── imagens/
 ├── backend/
 │   ├── CLAUDE.md

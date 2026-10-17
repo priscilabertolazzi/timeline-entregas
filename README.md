@@ -247,7 +247,6 @@ timeline-entregas/
 │   ├── negocio/               # Requisitos do MVP e visão completa do produto
 │   ├── tecnico/               # Arquitetura (com o catálogo de mensagens e as decisões) e processo
 │   ├── tarefas.md             # Tarefas em degraus, estimativas e regra do corte
-│   ├── diario.md              # Registro de cada sessão de trabalho com a IA
 │   └── imagens/               # Capturas da demonstração visual
 ├── backend/
 │   ├── CLAUDE.md              # Convenções do backend para o assistente
@@ -324,7 +323,7 @@ A data atual é sempre fixada nos testes, para que o resultado não dependa do d
 
 O projeto foi feito por uma analista de requisitos que **não programa**, com o Claude Code escrevendo todo o código. A divisão de papéis foi fixa: a autora define as regras, aprova cada plano antes de qualquer alteração e confere o resultado **pelo comportamento**, pelos critérios de aceite; o assistente toma as decisões técnicas, sempre registradas no [`arquitetura.md`](docs/tecnico/arquitetura.md), e explica cada passo em linguagem simples.
 
-O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CLAUDE.md` com as regras permanentes (na raiz, no backend e no frontend), os requisitos, a arquitetura, as tarefas e um roteiro de prompts. Cada tarefa seguiu o mesmo ciclo: plano, aprovação, branch, implementação em passos pequenos, build, testes e lint, verificação da autora, registro no [`diario.md`](docs/diario.md), commit e integração ao `main` (os commits `Integrar <branch>` do histórico). Antes da release, um agente separado, que não participou da implementação, fez a revisão independente de todo o código.
+O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CLAUDE.md` com as regras permanentes (na raiz, no backend e no frontend), os requisitos, a arquitetura, as tarefas e um roteiro de prompts. Os números e os exemplos desta seção vêm do registro das sessões, mantido com a autora durante o desenvolvimento e não incluído na entrega, e do registro de prompts ([`prompts/prompts-claude-code.md`](prompts/prompts-claude-code.md)). Cada tarefa seguiu o mesmo ciclo: plano, aprovação, branch, implementação em passos pequenos, build, testes e lint, verificação da autora, registro da sessão, commit e integração ao `main` (os commits `Integrar <branch>` do histórico). Antes da release, um agente separado, que não participou da implementação, fez a revisão independente de todo o código.
 
 ### Onde a IA acelerou o desenvolvimento
 
@@ -335,7 +334,7 @@ O contexto do assistente ficou em documentos, e não em mensagens soltas: um `CL
 | T-08 — Docker da API e dados de exemplo | 3 h | 30 min |
 | T-10 — Lista de aplicações e tela da versão | 8 h | cerca de 2 h |
 
-As estimativas sem IA foram propostas pelo assistente (quanto um desenvolvedor experiente levaria) e aceitas pela autora; são estimativas, não medições. O tempo do planejamento foi informado pela autora. O tempo das T-04 a T-10 é o intervalo entre o commit da T-03 e o da T-10 no histórico do Git, com pausas e verificações da autora incluídas; o tempo real de cada sessão nem sempre foi anotado, e o diário registra isso com transparência.
+As estimativas sem IA foram propostas pelo assistente (quanto um desenvolvedor experiente levaria) e aceitas pela autora; são estimativas, não medições. O tempo do planejamento foi informado pela autora. O tempo das T-04 a T-10 é o intervalo entre o commit da T-03 e o da T-10 no histórico do Git, com pausas e verificações da autora incluídas; o tempo real de cada sessão nem sempre foi anotado.
 
 O ganho apareceu mais onde o trabalho é volumoso e bem especificado:
 
