@@ -3,7 +3,7 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.10 |
+| Versão | 0.11 |
 | Data | 15/10/2026 |
 | Ferramenta principal | Claude Code |
 
@@ -44,7 +44,7 @@ Os termos técnicos usados aqui estão explicados na seção 15.
 | Build, testes, lint e revisão técnica | Roda pessoalmente os comandos da "Sua verificação" | Roda tudo e relata o resultado |
 | Verificação pelo comportamento | Faz, pelos critérios de aceite | Mostra como conferir, com o comando exato para o PowerShell e o resultado esperado |
 | Comandos do Git (branch, commit, merge, envio ao GitHub) | Confirma a mensagem de commit e o envio | Propõe e executa depois da confirmação |
-| Diário e registro de prompts | Informa o tempo real e o que a revisão capturou; revisa depois e ajusta, se quiser | Registra ao fim de cada tarefa (seção 13) |
+| Registro das sessões e de prompts | Informa o tempo real e o que a revisão capturou; revisa depois e ajusta, se quiser | Registra ao fim de cada tarefa (seção 13) |
 
 ---
 
@@ -90,7 +90,7 @@ flowchart LR
 7. **Autoverificação:** o assistente roda o build, os testes e o lint, e faz a revisão técnica (R-03 e R-04 da seção 7.2). Depois relata o que verificou e o que não conseguiu verificar.
 8. **Demonstração:** o assistente mostra à autora como conferir o resultado, conforme a "Sua verificação" da tarefa, com o comando exato e o resultado esperado, e propõe a mensagem de commit (seção 10).
 9. **Verificação da autora:** a autora executa a "Sua verificação" e aplica o checklist R-01 a R-05 (seção 7.2). Quando a verificação só repete comandos que o assistente já rodou e relatou, ela pode aceitar o relatório. Se algo não bate, ela relata no modelo da seção 9.2, e o ciclo volta ao passo 6.
-10. **Registro e integração:** num único pedido, a autora informa o tempo real e o que a revisão capturou e aprova a mensagem de commit. O assistente registra a entrada do diário e, se o pedido for relevante, a do registro de prompts (seção 13); marca a tarefa no `tarefas.md`; faz o commit, integra o branch ao `main` e envia ao GitHub. O diário e o `tarefas.md` entram no mesmo commit da tarefa; um ajuste posterior da autora no diário entra no commit seguinte.
+10. **Registro e integração:** num único pedido, a autora informa o tempo real e o que a revisão capturou e aprova a mensagem de commit. O assistente registra a sessão com a autora e, se o pedido for relevante, o registro de prompts (seção 13); marca a tarefa no `tarefas.md`; faz o commit, integra o branch ao `main` e envia ao GitHub. O registro de prompts e o `tarefas.md` entram no mesmo commit da tarefa.
 
 ### 4.1 O plano: o que contém e o que a autora confere
 
@@ -138,7 +138,7 @@ Uma tarefa está pronta quando:
 - [ ] A autora executou a "Sua verificação" da tarefa, ou aceitou o relatório quando a verificação só repetia comandos já rodados pelo assistente, e aplicou o checklist R-01 a R-05 (seção 7.2).
 - [ ] O README foi atualizado, se a tarefa mudou instalação, execução, uso ou testes.
 - [ ] O `tarefas.md` foi marcado.
-- [ ] A entrada do diário foi registrada e, se o pedido foi relevante, também a do registro de prompts.
+- [ ] A sessão foi registrada com a autora e, se o pedido foi relevante, também no registro de prompts.
 - [ ] O commit segue o padrão (seção 10) e a mensagem foi confirmada pela autora.
 
 ---
@@ -222,7 +222,7 @@ Liste, em linguagem simples, os problemas encontrados, do mais grave para o meno
 indicando o arquivo, a regra ou convenção não seguida e a correção sugerida.
 ```
 
-- **Depois:** a autora leva a lista para a sessão da tarefa. O assistente explica cada problema e corrige, seguindo as regras de sempre: testes não são alterados sem aprovação, e a refatoração começa pela análise de impacto. O que a revisão encontrou vai para o diário, no campo "O que a revisão humana capturou", indicando que veio da revisão independente.
+- **Depois:** a autora leva a lista para a sessão da tarefa. O assistente explica cada problema e corrige, seguindo as regras de sempre: testes não são alterados sem aprovação, e a refatoração começa pela análise de impacto. O que a revisão encontrou entra no registro da sessão, no campo "O que a revisão humana capturou", indicando que veio da revisão independente.
 - **Tempo:** cerca de 20 minutos por revisão, dentro da margem das estimativas.
 
 ---
@@ -281,7 +281,7 @@ O que apareceu: <texto completo do erro ou do resultado, copiado do terminal, ou
 - Explica a causa antes de alterar o código, em linguagem simples e com um exemplo.
 - Diz onde estava o problema: no código, no teste ou em uma lacuna do requisito. Se for lacuna do requisito, pergunta à autora antes de corrigir.
 - Todo erro corrigido ganha um teste que o reproduz, escrito antes da correção, para que o mesmo erro não volte sem ser percebido.
-- Conceitos aprendidos durante a depuração são registrados no diário.
+- Conceitos aprendidos durante a depuração entram no registro das sessões.
 
 ---
 
@@ -351,15 +351,15 @@ Refs: RN-14, RN-25, CA-02, CA-07
 
 Modelos de maior capacidade são usados em planejamento, arquitetura e regras complexas, como o cálculo da timeline (T-11). Modelos mais rápidos são usados em tarefas rotineiras, como cadastros, ajustes e documentação. Na dúvida, usa-se o de maior capacidade, porque a revisão da autora é pelo comportamento e não detecta problemas internos do código.
 
-No plano de cada tarefa, o assistente indica qual tipo de modelo é adequado. O modelo usado é registrado no diário.
+No plano de cada tarefa, o assistente indica qual tipo de modelo é adequado. O modelo usado entra no registro da sessão.
 
 ---
 
 ## 13. Registro e métricas
 
-### 13.1 Diário
+### 13.1 Registro das sessões
 
-Cada sessão de trabalho gera uma entrada no `docs/diario.md`, no modelo do próprio diário. O preenchimento é dividido assim:
+Cada sessão de trabalho é registrada no registro das sessões, mantido com a autora durante o desenvolvimento e não incluído na entrega. O preenchimento é dividido assim:
 
 | Campo | Quem preenche |
 |---|---|
@@ -369,7 +369,7 @@ Cada sessão de trabalho gera uma entrada no `docs/diario.md`, no modelo do pró
 | Estimativa sem IA | O assistente propõe quanto tempo um desenvolvedor experiente levaria sem IA, com uma frase de justificativa. A autora aceita ou ajusta. É uma estimativa e é apresentada como tal no README. |
 | O que a revisão humana capturou | A autora, com suas palavras. Inclui os achados da revisão independente (seção 7.3). |
 
-Ao concluir cada fase do `tarefas.md`, o resumo acumulado do diário é atualizado.
+Ao concluir cada fase do `tarefas.md`, o resumo acumulado do registro é atualizado. Os totais aparecem na seção do README sobre o uso de IA.
 
 ### 13.2 Registro de prompts
 
@@ -398,7 +398,7 @@ Modelo de cada entrada do registro:
 
 ### 13.3 Uso no README
 
-O diário e o registro de prompts são a fonte da seção do README sobre o uso de IA, organizada em quatro pontos:
+O registro das sessões e o registro de prompts são a fonte da seção do README sobre o uso de IA, organizada em quatro pontos:
 
 | Subseção do README | De onde vem |
 |---|---|
@@ -452,7 +452,7 @@ Executado na T-22, antes da publicação da versão final (`v1.0.0`). O assisten
 | Versão | Data | Descrição |
 |---|---|---|
 | 0.1 | 14/10/2026 | Versão inicial. |
-| 0.2 | 15/10/2026 | Adaptado para a autora não técnica. Inclusões: papéis da autora e do assistente (2.2); formato do plano e o que a autora confere nele (4.1); revisão pelo comportamento, com o checklist R-01 a R-05 reescrito para separar o que o assistente verifica do que a autora confere (7); revisão independente ao final de cada fase (7.3); ponto de conferência dos testes no TDD (8); modelo de relato de problemas e teste para todo erro corrigido (9.2); quem executa os comandos do Git e o que conferir no commit (10); novos riscos (11); divisão do preenchimento do diário e modelo do registro de prompts (13); quem verifica cada item do checklist de release (14); termos técnicos (15). Ajustes: registro feito antes do commit e branch criado depois da aprovação do plano (4); lint e "Sua verificação" incluídos na definição de pronto (5); `requisitos-mvp.md` incluído como contexto (3); tarefas TDD indicadas pelo `tarefas.md`, sem a RN-12, que está fora do MVP (8); exemplo de branch fora do MVP substituído; escopos de commit alinhados ao `CLAUDE.md` (10). |
+| 0.2 | 15/10/2026 | Adaptado para a autora não técnica. Inclusões: papéis da autora e do assistente (2.2); formato do plano e o que a autora confere nele (4.1); revisão pelo comportamento, com o checklist R-01 a R-05 reescrito para separar o que o assistente verifica do que a autora confere (7); revisão independente ao final de cada fase (7.3); ponto de conferência dos testes no TDD (8); modelo de relato de problemas e teste para todo erro corrigido (9.2); quem executa os comandos do Git e o que conferir no commit (10); novos riscos (11); divisão do preenchimento do registro das sessões e modelo do registro de prompts (13); quem verifica cada item do checklist de release (14); termos técnicos (15). Ajustes: registro feito antes do commit e branch criado depois da aprovação do plano (4); lint e "Sua verificação" incluídos na definição de pronto (5); `requisitos-mvp.md` incluído como contexto (3); tarefas TDD indicadas pelo `tarefas.md`, sem a RN-12, que está fora do MVP (8); exemplo de branch fora do MVP substituído; escopos de commit alinhados ao `CLAUDE.md` (10). |
 | 0.3 | 15/10/2026 | Alinhado ao `tarefas.md` versão 0.4 (entrega em degraus): números das tarefas, revisão independente em cada degrau, tags e checklist de release; conferência das mensagens pelo catálogo do `arquitetura.md` (R-04); ajuste de redação na seção 13.3. |
 | 0.4 | 15/10/2026 | Números das tarefas alinhados ao `tarefas.md` versão 0.5 (seções 4.1, 8, 9.1, 11 e 12). |
 | 0.5 | 15/10/2026 | Seção 13.2: o `prompts/prompts-claude-code.md` passa a ter o roteiro de prompts e o registro dos pedidos. |
@@ -461,3 +461,4 @@ Executado na T-22, antes da publicação da versão final (`v1.0.0`). O assisten
 | 0.8 | 15/10/2026 | Seção 10: a regra das mensagens de commit diz que a descrição usa o verbo no infinitivo (ex.: calcular, iniciar, corrigir), como nos exemplos; antes dizia "no imperativo". O `CLAUDE.md` da raiz recebeu o mesmo ajuste. |
 | 0.9 | 15/10/2026 | Processo mais leve, para caber no limite de horas: dois níveis de detalhe, com plano e relatório completos só nas tarefas de regra (T-04, T-11, T-15 e T-17) e resumidos nas demais (seções 4.1 e 4.2); registro e commit num único pedido da autora (seções 2.2 e 4); a autora pode aceitar o relatório quando a "Sua verificação" só repete comandos já rodados (seções 4 e 5); revisão independente só nas tarefas T-08, T-13, T-15 e T-22 (seções 7.3 e 11). O `CLAUDE.md` da raiz recebeu os mesmos ajustes. |
 | 0.10 | 15/10/2026 | Seção 10 e checklist C-03: a mensagem dos merges de integração (`Integrar <branch>`) passa a constar da regra. |
+| 0.11 | 16/10/2026 | Seção 13.1: as sessões são registradas com a autora, fora da entrega. |

@@ -13,7 +13,6 @@ Sistema que substitui a manutenção manual do status report semanal de um proje
 | `docs/tecnico/arquitetura.md` | Como construir: stack, camadas, modelo de dados, API, **catálogo de mensagens** (seção 7.6), testes, execução, dependências previstas (seção 12.3) e decisões (ADR). |
 | `docs/tecnico/processo-desenvolvimento.md` | Ciclo de cada tarefa, formato do plano, revisão, commits e release. |
 | `docs/tarefas.md` | Ordem das tarefas em degraus, o que cada uma entrega e a regra do corte. |
-| `docs/diario.md` | Registro de cada sessão. |
 | `prompts/prompts-claude-code.md` | Parte 1: roteiro de prompts de cada tarefa. Parte 2: registro dos pedidos relevantes, com os resultados. |
 
 ## Quem é a autora
@@ -37,7 +36,7 @@ Detalhes e motivos no `processo-desenvolvimento.md`, seção 4.
 4. **Implemente** em passos pequenos. Nas tarefas marcadas como TDD, escreva primeiro os testes dos critérios de aceite e mostre à autora a lista dos testes falhando; só então implemente.
 5. **Verifique:** rode o build, os testes e o lint, e faça a revisão técnica (R-03 e R-04 do processo). Relate o que verificou, o que não conseguiu verificar e a lista dos arquivos de teste criados e alterados.
 6. **Mostre à autora como conferir** o resultado, conforme o item "Sua verificação" da tarefa, e **proponha a mensagem de commit** no fim do relatório.
-7. **Registre e integre, num único passo,** quando a autora informar o tempo real, o que a revisão capturou e a aprovação da mensagem: registre a entrada do `docs/diario.md` (e, se o pedido for relevante, a da Parte 2 do `prompts/prompts-claude-code.md`), com a estimativa sem IA e uma frase de justificativa; marque a tarefa no `tarefas.md`; faça o commit, integre o branch ao `main` e envie ao GitHub. Responda em até cinco linhas.
+7. **Registre e integre, num único passo,** quando a autora informar o tempo real, o que a revisão capturou e a aprovação da mensagem: registre a sessão com a autora (e, se o pedido for relevante, na Parte 2 do `prompts/prompts-claude-code.md`), com a estimativa sem IA e uma frase de justificativa; marque a tarefa no `tarefas.md`; faça o commit, integre o branch ao `main` e envie ao GitHub. Responda em até cinco linhas.
 
 A revisão independente (processo, seção 7.3) acontece só nas tarefas T-08, T-13 e T-15, antes da tag, e na T-22, antes da release. Nessas tarefas, lembre a autora de pedi-la depois do commit.
 
@@ -73,4 +72,4 @@ Os scripts de teste e de lint rodam em container (`arquitetura.md`, ADR-24). Man
 
 ## Definição de pronto
 
-Build sem erros; todos os testes passando, com testes novos para as regras da tarefa; nenhum teste alterado sem aprovação; lint sem apontamentos; "Sua verificação" feita pela autora (ou o relatório aceito por ela, quando a verificação só repete comandos que você já rodou) e checklist R-01 a R-05 aplicado; README atualizado se a tarefa mudou instalação, execução, uso ou testes; `tarefas.md` marcado; entrada no diário; commit no padrão, com a mensagem confirmada pela autora.
+Build sem erros; todos os testes passando, com testes novos para as regras da tarefa; nenhum teste alterado sem aprovação; lint sem apontamentos; "Sua verificação" feita pela autora (ou o relatório aceito por ela, quando a verificação só repete comandos que você já rodou) e checklist R-01 a R-05 aplicado; README atualizado se a tarefa mudou instalação, execução, uso ou testes; `tarefas.md` marcado; sessão registrada; commit no padrão, com a mensagem confirmada pela autora.

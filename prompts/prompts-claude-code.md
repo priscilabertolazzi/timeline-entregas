@@ -3,13 +3,13 @@
 
 | Item | Valor |
 |---|---|
-| Versão | 0.14 |
+| Versão | 0.15 |
 | Data | 15/10/2026 |
 
 Este arquivo tem duas partes:
 
 1. **Roteiro:** os prompts planejados para cada tarefa do `docs/tarefas.md`. É o ponto de partida de cada pedido.
-2. **Registro:** os pedidos realmente enviados que se encaixam nos casos da seção 13.2 do `docs/tecnico/processo-desenvolvimento.md`, na íntegra e com o resultado. É a fonte da seção do README sobre o uso de IA, junto com o `docs/diario.md`.
+2. **Registro:** os pedidos realmente enviados que se encaixam nos casos da seção 13.2 do `docs/tecnico/processo-desenvolvimento.md`, na íntegra e com o resultado. É a fonte da seção do README sobre o uso de IA, junto com o registro das sessões, mantido com a autora durante o desenvolvimento e não incluído na entrega.
 
 ---
 
@@ -74,7 +74,7 @@ O Contexto e o Estilo são curtos porque apontam para os documentos: assim o Cla
 | T-18 Congelamento na API | Maior capacidade | — |
 | T-19 Telas do Histórico | Rápido | — |
 | T-20 Exemplos de uso | Rápido | — |
-| T-21 README | Maior capacidade | Diário em dia |
+| T-21 README | Maior capacidade | Registro das sessões em dia |
 | T-22 Release | Rápido | Revisão independente final |
 
 Na dúvida, use o de maior capacidade: a revisão da autora é pelo comportamento e não detecta problemas internos do código.
@@ -86,7 +86,7 @@ Na dúvida, use o de maior capacidade: a revisão da autora é pelo comportament
 Primeira mensagem de cada sessão. Confirma que o Claude Code leu as regras e sabe onde o projeto está.
 
 ```
-CONTEXTO: Projeto Timeline de Entregas. Vamos trabalhar na tarefa <T-XX> do docs/tarefas.md. As regras do projeto estão no CLAUDE.md; o andamento, no docs/tarefas.md e no docs/diario.md.
+CONTEXTO: Projeto Timeline de Entregas. Vamos trabalhar na tarefa <T-XX> do docs/tarefas.md. As regras do projeto estão no CLAUDE.md; o andamento, no docs/tarefas.md.
 OBJETIVO: Confirmar que você leu as regras e sabe onde o projeto está, antes de começar a tarefa.
 ESTILO: Resumo direto, sem detalhes técnicos.
 TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
@@ -178,7 +178,7 @@ Um único pedido no fim da tarefa, depois de conferir o resultado e a mensagem d
 
 ```
 OBJETIVO: Concluir a tarefa. Tempo real: <X h>. O que a revisão capturou: <o que eu percebi ao conferir, ou "nada">. A mensagem de commit que você propôs está aprovada.
-RESPOSTA: Registre a sessão no docs/diario.md, com a estimativa sem IA e uma frase de justificativa; se algum pedido desta sessão se encaixar na seção 13.2 do processo, registre-o na Parte 2 do prompts/prompts-claude-code.md; marque a tarefa no docs/tarefas.md. Depois, faça o commit, integre o branch ao main e envie ao GitHub. Responda em até cinco linhas, com a lista dos arquivos alterados.
+RESPOSTA: Prepare o registro da sessão para eu revisar, com a estimativa sem IA e uma frase de justificativa; se algum pedido desta sessão se encaixar na seção 13.2 do processo, registre-o na Parte 2 do prompts/prompts-claude-code.md; marque a tarefa no docs/tarefas.md. Depois, faça o commit, integre o branch ao main e envie ao GitHub. Responda em até cinco linhas, com a lista dos arquivos alterados.
 ```
 
 Na última tarefa de uma etapa sem revisão independente (T-10, T-14, T-16 e T-19), acrescente ao fim da RESPOSTA: `Por fim, crie a tag <v0.X.0> e envie ao GitHub.`
@@ -219,13 +219,13 @@ Depois das correções:
 
 ```
 OBJETIVO: Marcar o fim da etapa. A mensagem de commit das correções está aprovada.
-RESPOSTA: Acrescente à entrada desta tarefa no docs/diario.md, no campo "O que a revisão humana capturou", o que a revisão independente encontrou. Depois, faça o commit, integre ao main, crie a tag <v0.X.0> e envie ao GitHub. Responda em até cinco linhas.
+RESPOSTA: Acrescente ao registro desta sessão, no campo "O que a revisão humana capturou", o que a revisão independente encontrou. Depois, faça o commit, integre ao main, crie a tag <v0.X.0> e envie ao GitHub. Responda em até cinco linhas.
 ```
 
 ### A15 — Início de etapa (regra do corte)
 
 ```
-CONTEXTO: Projeto Timeline de Entregas. Vamos começar a etapa <N — nome> do docs/tarefas.md. Tempo real acumulado, pelo diário: <X h>.
+CONTEXTO: Projeto Timeline de Entregas. Vamos começar a etapa <N — nome> do docs/tarefas.md. Tempo real acumulado, pelo registro das sessões: <X h>.
 OBJETIVO: Decidir se a etapa cabe antes do corte das 26 h (regra do corte do docs/tarefas.md).
 ESTILO: Conta simples, mostrando os números.
 TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
@@ -241,7 +241,7 @@ OBJETIVO: Saber o estado da tarefa antes de continuar.
 ESTILO: Siga as convenções do CLAUDE.md.
 TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
 AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
-RESPOSTA: Pelo branch atual, pelas alterações ainda não registradas no Git e pelo docs/diario.md: o que já foi feito, o que falta e se algo ficou pela metade. Não altere nada antes de eu confirmar o próximo passo.
+RESPOSTA: Pelo branch atual, pelas alterações ainda não registradas no Git e pelo docs/tarefas.md: o que já foi feito, o que falta e se algo ficou pela metade. Não altere nada antes de eu confirmar o próximo passo.
 ```
 
 ## B — Preparação (T-01 a T-03)
@@ -653,11 +653,11 @@ RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar n
 
 ### T-21 — README completo e registro do uso de IA
 
-Antes de começar: diário em dia, com o resumo acumulado atualizado.
+Antes de começar: registro das sessões em dia, com o resumo acumulado atualizado.
 
 ```
 CONTEXTO: Projeto Timeline de Entregas, entrega. Tarefa T-21 do docs/tarefas.md: README completo e registro do uso de IA.
-Fontes: os documentos do projeto, o docs/diario.md e a Parte 2 do prompts/prompts-claude-code.md.
+Fontes: os documentos do projeto, o registro das sessões e a Parte 2 do prompts/prompts-claude-code.md.
 OBJETIVO: Preencher todas as seções do README. A seção sobre o uso de IA traz exemplos reais em cada uma das quatro subseções e o tempo real comparado à estimativa sem IA. Em "Limitações e próximos passos", listar as etapas não concluídas, as evoluções da seção 12 do requisitos-mvp.md e as limitações conhecidas (uso local, sem autenticação, exclusão definitiva, licença do Docker Desktop em empresas de maior porte).
 ESTILO: Siga as convenções do CLAUDE.md. Não invente números nem exemplos: use só o que está registrado.
 TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
@@ -666,7 +666,7 @@ RESPOSTA: Primeiro o plano, no formato da seção 4.1 do processo, sem alterar n
 Diga também quais capturas de tela ou GIF preciso gravar, com os dados de exemplo, e onde salvar.
 ```
 
-**Confira no resultado:** você lê o README inteiro como se fosse alguém de fora. Cada número da seção sobre IA tem que estar no diário.
+**Confira no resultado:** você lê o README inteiro como se fosse alguém de fora. Cada número da seção sobre IA tem que estar no registro das sessões.
 
 ### T-22 — Release 1.0
 
@@ -731,7 +731,7 @@ Modelo de cada entrada:
 
 ## Entradas
 
-Pedidos da conversa de planejamento (Sessão 00 do diário), na ordem em que foram feitos. Respostas dadas por botões aparecem no resultado do pedido que as gerou. Mensagens sem pedido não entram.
+Pedidos da conversa de planejamento, na ordem em que foram feitos. Os pedidos P-14 e P-20 foram retirados do registro; a numeração dos demais foi mantida. Respostas dadas por botões aparecem no resultado do pedido que as gerou. Mensagens sem pedido não entram.
 
 ### P-01 — 15/10/2026 — Planejamento: adaptação do processo
 
@@ -909,27 +909,6 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Por que é relevante:** repetir a pergunta depois de várias mudanças obrigou uma conferência atualizada.
 
-### P-14 — 15/10/2026 — Planejamento: registros da sessão
-
-**Pedido (na íntegra):**
-> atualize o resumo da sessão
->
-> faça isso aqui que voce sugeriu também
->
-> Uma sugestão para o diário: registre uma "Sessão 00 — Planejamento" com o trabalho feito aqui. Há bons exemplos para a seção do README sobre o uso de IA:
->
-> * Onde a IA ajudou: a revisão de arquitetura encontrou a contradição do CA-02, que viraria um teste errado.
-> * Onde a decisão humana foi decisiva: a ordem dos degraus e as regras N-01 a N-05 foram suas.
->
->
-> e no doc prompts, faça tudo desde o zero
-
-**Resultado:** este registro, desde o primeiro pedido; a Sessão 00 do diário; o resumo da sessão atualizado (documento de passagem, fora do repositório); e a correção das datas dos históricos para 15/10/2026.
-
-**Funcionou de primeira?** Sim.
-
-**Por que é relevante:** registrar o planejamento desde o início dá ao README exemplos reais também da fase de requisitos e arquitetura, não só da programação.
-
 ### P-15 — 15/10/2026 — Planejamento: todos os documentos para baixar
 
 **Pedido (na íntegra):**
@@ -981,7 +960,7 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Resultado:** o assistente apresentou o plano sem alterar arquivos e perguntou sobre o pacote `Microsoft.AspNetCore.OpenApi`, que o Scalar precisa e que não estava na seção 12.3. Depois da aprovação, criou o esqueleto do backend, o banco no Docker Compose e os oito scripts. A frase final do pedido virou um experimento: `test.ps1` e `lint.ps1` rodaram com o `dotnet` fora do caminho do terminal e passaram.
 
-**Funcionou de primeira?** O plano, sim. A implementação precisou de três ajustes: a porta 5432 já ocupada por outro PostgreSQL, a quebra de linha do Windows que reprovava o lint numa cópia limpa e os acentos dos `.ps1` (ver Sessão 03 do diário). Nenhum deles mudou o pedido.
+**Funcionou de primeira?** O plano, sim. A implementação precisou de três ajustes: a porta 5432 já ocupada por outro PostgreSQL, a quebra de linha do Windows que reprovava o lint numa cópia limpa e os acentos dos `.ps1`. Nenhum deles mudou o pedido.
 
 **Por que é relevante:** evitou um risco: o assistente parou e pediu aprovação em vez de adicionar um pacote fora da lista. A última frase ("Confirme que... sem depender do SDK instalado") transformou uma promessa do documento em algo provado por experimento, e não só afirmado.
 
@@ -998,22 +977,6 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 **Funcionou de primeira?** Sim.
 
 **Por que é relevante:** a autora respondeu às perguntas do plano com decisões numeradas e já disse onde registrá-las. Sem o teste de estrutura, a tarefa terminaria com "0 testes", sem prova de que o caminho de testes funciona de ponta a ponta.
-
-### P-20 — 15/10/2026 — T-04
-
-**Pedido (na íntegra):**
-> CONTEXTO: Projeto Timeline de Entregas. Continuação da sessão anterior. A T-03 está concluída e no GitHub (commit 9025163). O registro do diário da T-03 está só no branch local docs/registro-t03 (commit 7d6c3b3), ainda sem integrar ao main. Vamos começar a T-04 do docs/tarefas.md. As regras do projeto estão no CLAUDE.md e no backend/CLAUDE.md; o andamento, no docs/tarefas.md e no docs/diario.md.
-> OBJETIVO: Antes de qualquer alteração, (1) integrar o branch docs/registro-t03 ao main e enviar ao GitHub, e (2) apresentar o plano da T-04 no formato da seção 4.1 do processo, com o tipo de modelo adequado.
-> ESTILO: Siga o CLAUDE.md. A T-04 é TDD: o plano traz a lista dos testes, um por critério de aceite (CA-05, 06, 13, 20, 25, 32, 35, 36, 39, 40, 42), com o nome e uma frase. Mensagens do catálogo (arquitetura.md, seção 7.6) com o texto exato (MSG-11 e MSG-13 a MSG-30). Nomes do glossário.
-> TOM: Comigo, português simples, sem jargão, com exemplos dos dados fictícios (Alfa, Beta, Gama, Delta).
-> AUDIÊNCIA: Eu, analista de requisitos não técnica, que confiro o resultado pelo comportamento e pelos critérios de aceite.
-> RESPOSTA: Primeiro integre o branch docs/registro-t03 ao main e envie. Depois, o plano da T-04 sem alterar nenhum arquivo, e a lembrança da regra do corte, já que a T-04 abre a Etapa 1 (7 h estimadas; o tempo real das sessões 00 a 02 está em branco no diário). Não crie o branch da T-04 nem escreva testes até eu aprovar o plano.
-
-**Resultado:** o assistente conferiu que o registro da T-03 já estava no `main` e no GitHub, integrado junto com o processo enxuto, e não repetiu a integração. O plano trouxe 13 testes para os 11 critérios, mais 24 testes das regras sem critério próprio, quatro decisões técnicas e a lembrança da regra do corte. O plano foi aprovado sem ajustes. A autora trocou para o modelo de maior capacidade, como o plano indicava.
-
-**Funcionou de primeira?** O plano, sim. A implementação precisou de um ajuste no cenário de um teste novo (ver Sessão 04 do diário). O plano deixou de avisar que o catálogo de mensagens ainda não tinha sido revisado pela autora.
-
-**Por que é relevante:** o pedido foi preparado numa sessão anterior, num arquivo de apoio, e retomou o trabalho sem perder o contexto. A lista de critérios e de mensagens no próprio pedido deu à autora uma referência direta para conferir o plano.
 
 ---
 
@@ -1035,7 +998,7 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Resultado:** o assistente leu a seção 6, a T-05 e o código atual e apresentou o modelo de dados em tabelas simples, com exemplos da Alfa e da Beta, o que o banco recusa e o que ele não vigia. O plano trouxe seis partes e uma pergunta: uma proteção extra contra nome e rótulo vazios ou com espaço nas pontas, que a seção 6 não previa. A autora aprovou tudo, e a tarefa foi implementada, verificada em 45 cenários no PostgreSQL real e entregue com o passo a passo para abrir o banco.
 
-**Funcionou de primeira?** Sim. O desenho não mudou depois da aprovação. Os ajustes foram só de ordem das colunas, de lint da migration gerada e de um passo desnecessário na inicialização (ver Sessão 05 do diário).
+**Funcionou de primeira?** Sim. O desenho não mudou depois da aprovação. Os ajustes foram só de ordem das colunas, de lint da migration gerada e de um passo desnecessário na inicialização.
 
 **Por que é relevante:** pedir o modelo de dados em linguagem simples antes do plano deu à autora a chance de revisar a seção 6, que estava marcada como "A revisar", e levou à proteção extra no banco. O pedido final de "como eu abro o banco" produziu um passo a passo que ela mesma executou.
 
@@ -1052,7 +1015,7 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Resultado:** o assistente apresentou o plano em seis partes e duas perguntas de negócio, com recomendação: a ordem da lista (alfabética) e uma mensagem nova para o JSON quebrado (MSG-42), que o catálogo não previa. A autora aprovou as duas, e a API foi implementada com testes, conferida no PostgreSQL real e pela página Scalar. O pedido final produziu a explicação das camadas, com a imagem de uma recepção.
 
-**Funcionou de primeira?** Sim quanto ao desenho. Ajustes: o JSON quebrado devolvia corpo vazio fora do ambiente de desenvolvimento, e o exemplo da página aparecia como `null` (ver Sessão 06 do diário). Na verificação pelo navegador, a autora precisou de um passo a passo mais detalhado do uso da página.
+**Funcionou de primeira?** Sim quanto ao desenho. Ajustes: o JSON quebrado devolvia corpo vazio fora do ambiente de desenvolvimento, e o exemplo da página aparecia como `null`. Na verificação pelo navegador, a autora precisou de um passo a passo mais detalhado do uso da página.
 
 **Por que é relevante:** pedir a página de documentação já na primeira API, e explicar que a autora não usa um editor de código, fez o assistente testar a própria página no navegador antes de entregar. A instrução "padrão de referência" levou a um único tratador de erros e a uma decisão registrada (ADR-35) que as próximas APIs vão repetir.
 
@@ -1072,7 +1035,7 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Resultado:** o assistente apresentou o plano resumido, com as fugas do padrão da T-06 justificadas (datas e fase recebidas como texto, para devolver a MSG-12 e a MSG-26) e uma pergunta de negócio: a lista de aplicações devia trazer as versões, como diz a `arquitetura.md`, ou isso ficava para a T-10? A autora decidiu incluir já na T-07. A API foi implementada com 68 testes novos, conferida no PostgreSQL real (CA-34, CA-39 e CA-40) e pela página Scalar.
 
-**Funcionou de primeira?** Sim. A verificação pela página gerou perguntas sobre o corpo de exemplo (editável), a falta de uma operação de listar versões e a diferença entre fase e situação (ver Sessão 07 do diário).
+**Funcionou de primeira?** Sim. A verificação pela página gerou perguntas sobre o corpo de exemplo (editável), a falta de uma operação de listar versões e a diferença entre fase e situação.
 
 **Por que é relevante:** a instrução "se precisar fugir do padrão da T-06, explique o motivo no plano" fez o assistente justificar cada diferença antes de implementar, e a leitura da arquitetura ao lado da tarefa anterior revelou a lacuna da lista de aplicações, que a autora resolveu na hora.
 
@@ -1109,7 +1072,7 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Resultado:** o assistente fez a conta da regra do corte (A15) antes do plano: 5,6 h a 15 h contra 26 h, cabe. O plano trouxe duas decisões técnicas (Node.js no container de ferramentas e nginx para servir as telas), aprovadas e registradas como ADR-38. Implementou, rodou tudo em container e conferiu telas e API no Docker e no `npm start`.
 
-**Funcionou de primeira?** Quase: um teste novo precisou de correção, e o gerador trouxe o `prettier`, fora da lista aprovada, que foi retirado (ver Sessão 09 do diário).
+**Funcionou de primeira?** Quase: um teste novo precisou de correção, e o gerador trouxe o `prettier`, fora da lista aprovada, que foi retirado.
 
 **Por que é relevante:** "dependências só as da seção 12.3" fez o assistente conferir o que o gerador instalou e explicar cada pacote extra, em vez de aceitá-los em silêncio.
 
@@ -1129,7 +1092,7 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 **Resultado:** o assistente descreveu as telas em desenhos de texto e propôs três botões Salvar (Dados, Fase e Datas), porque a API gravava essas coisas em operações separadas. A autora recusou ("não quero 3 botões, um só", e, sobre abas, "na mesma tela nada a ver 3 botões"). O assistente explicou o risco de salvar pela metade (contra o CA-32) e criou uma operação única na API (ADR-39), com a ordem entre fase e datas resolvida no domínio. Depois, a autora pediu uma revisão de usabilidade como designer UX sênior, aplicada nas duas telas. Também fez as pendências da T-09 (falha provocada de `test` e `lint`, `install.sh` e `run.sh`).
 
-**Funcionou de primeira?** Quase: o plano aprovado mudou por decisão da autora, e dois testes novos precisaram esperar a janelinha fechar (ver Sessão 10 do diário).
+**Funcionou de primeira?** Quase: o plano aprovado mudou por decisão da autora, e dois testes novos precisaram esperar a janelinha fechar.
 
 **Por que é relevante:** descrever as telas em palavras antes do plano fez a autora enxergar o problema dos três botões antes de qualquer código. A pergunta final do pedido ("como as telas estão organizadas") gerou a explicação em linguagem simples. A revisão de UX, pedida depois, mostrou que um pedido explícito de boas práticas de layout vale incluir já no prompt das próximas telas.
 
@@ -1137,12 +1100,12 @@ O trecho omitido cita o contexto externo do projeto, que não pode aparecer no r
 
 ### P-27 — 15/10/2026 — T-20 a T-22
 
-**Pedido (trecho registrado no diário):**
+**Pedido (trecho):**
 > faça tudo na ordem que julgar melhor
 
 O pedido veio depois do roteiro da entrega (T-20 a T-22, nesta Parte 1), com a revisão independente final (A13 e A14) antes da release.
 
-**Resultado:** revisão independente do código por um agente separado, só leitura (nenhum problema grave; 10 apontamentos, corrigidos ou registrados no README); execução dos 42 exemplos do `exemplos.http` num banco vazio; instalação limpa a partir de um clone novo, com os 239 testes passando; busca dos termos de terceiros (C-11) em todo o histórico; README e imagens refeitos; tag `v1.0.0`. Detalhes na Sessão 10 do diário.
+**Resultado:** revisão independente do código por um agente separado, só leitura (nenhum problema grave; 10 apontamentos, corrigidos ou registrados no README); execução dos 42 exemplos do `exemplos.http` num banco vazio; instalação limpa a partir de um clone novo, com os 239 testes passando; busca dos termos de terceiros (C-11) em todo o histórico; README e imagens refeitos; tag `v1.0.0`.
 
 **Funcionou de primeira?** Sim. As correções vieram dos achados da revisão independente, que é o esperado dela.
 
@@ -1168,3 +1131,4 @@ O pedido veio depois do roteiro da entrega (T-20 a T-22, nesta Parte 1), com a r
 | 0.12 | 15/10/2026 | Registro do pedido P-25 (T-09). |
 | 0.13 | 15/10/2026 | Registro do pedido P-26 (T-10). |
 | 0.14 | 15/10/2026 | Registro do pedido P-27 (entrega, T-20 a T-22); versão no cabeçalho atualizada. |
+| 0.15 | 16/10/2026 | Retirados os pedidos P-14 e P-20; sessões registradas com a autora, fora da entrega. |
